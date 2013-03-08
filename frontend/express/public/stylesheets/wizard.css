@@ -1,0 +1,144 @@
+/* = STEPS CONTAINER
+----------------------------*/
+.wizard-steps-content{
+    /*margin-left: 224px;*/
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 50;
+}
+.wizard-steps {
+   /* margin:20px 10px 0px 10px;
+    padding:0px;
+    position: relative;
+    clear:both;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: bold;*/
+    bottom: 0;
+    clear: both;
+    font:13px 'Ubuntu';
+    font-weight: bold;
+    width: 890px;
+    margin-left: auto;
+    margin-right: auto;
+
+    /*margin: 6px 438px 13px;
+    position: fixed;*/
+}
+.wizard-steps .step {
+    position:relative;
+}
+.wizard-steps div {
+    float: left;
+    margin-left: -2px;
+}
+/* = STEP NUMBERS
+----------------------------*/
+.wizard-steps span {
+    display: block;
+    float: left;
+    font-size: 12px;
+    text-align:center;
+    width:15px;
+    margin: 11px 5px 0px 0px;
+    line-height:15px;
+    color: #ccc;
+    background: #FFF;
+    border: 3px solid #CCC;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+}
+/* = DEFAULT STEPS
+----------------------------*/
+.wizard-steps a {
+    position:relative;
+    display:block;
+    height:42px;
+    padding:0px 10px 0px 3px;
+    float: left;
+    font:13px 'Ubuntu';
+    line-height:42px;
+    color:#666;
+    background: #F0EEE3;
+    text-decoration:none;
+    text-shadow:1px 1px 1px rgba(255,255,255, 0.8);
+}
+.wizard-steps .a-before {
+    width:0px;
+    height:0px;
+    border-top: 21px solid #F0EEE3;
+    border-bottom: 21px solid #F0EEE3;
+    border-left:21px solid transparent;
+
+}
+.wizard-steps .a-after {
+    width: 0;
+    height: 0;
+    border-top: 21px solid transparent;
+    border-bottom: 21px solid transparent;
+    border-left:21px solid #F0EEE3;
+    margin-left: 0;
+}
+
+/* = COMPLETED STEPS
+----------------------------*/
+
+.wizard-steps .completed-step a {
+    color:#EC8C45;
+    background: #A3C1C9;
+}
+.wizard-steps .completed-step .a-before {
+    border-top: 21px solid #A3C1C9;
+    border-bottom: 21px solid #A3C1C9;
+}
+.wizard-steps .completed-step .a-after {
+    border-left: 21px solid #A3C1C9;
+}
+.wizard-steps .completed-step span {
+    border: 3px solid #EC8C45;
+    color: #EC8C45;
+    text-shadow:none;
+}
+/* = ACTIVE STEPS
+----------------------------*/
+.wizard-steps .active-step a {
+    /*color:#A3C1C9;*/
+    color:#fff;
+    background: #EC8C45;
+    text-shadow:1px 1px 1px rgba(0,0,0, 0.8);
+}
+.wizard-steps .active-step .a-before {
+    border-top: 21px solid #EC8C45;
+    border-bottom: 21px solid #EC8C45;
+}
+.wizard-steps .active-step .a-after {
+    border-left: 21px solid #EC8C45;
+}
+.wizard-steps .active-step span {
+    color: #EC8C45;
+    -webkit-box-shadow:0px 0px 2px rgba(0,0,0, 0.8);
+    -moz-box-shadow:0px 0px 2px rgba(0,0,0, 0.8);
+    box-shadow:0px 0px 2px rgba(0,0,0, 0.8);
+    text-shadow:none;
+    border: 2px solid #A3C1C9;
+}
+/* = HOVER STATES
+----------------------------*/
+.wizard-steps .completed-step:hover a, .wizard-steps .active-step:hover a {
+    /*color:#fff;*/
+    color:#A3C1C9;
+    background: #EC8C45;
+    text-shadow:1px 1px 1px rgba(0,0,0, 0.8);
+}
+.wizard-steps .completed-step:hover span, .wizard-steps .active-step:hover span {
+    color:#EC8C45;
+}
+.wizard-steps .completed-step:hover .a-before, .wizard-steps .active-step:hover .a-before {
+    border-top: 21px solid #EC8C45;
+    border-bottom: 21px solid #EC8C45;
+}
+.wizard-steps .completed-step:hover .a-after, .wizard-steps .active-step:hover .a-after {
+    border-left: 21px solid #EC8C45;
+}
