@@ -1,0 +1,5 @@
+GetDashboardReportMap:
+
+- data kismi remove edilebilir
+- bir tane bos row olarak header gelsin
+

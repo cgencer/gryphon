@@ -1,0 +1,21 @@
+#infopopup {
+	margin-bottom:20px;
+	border:1px solid #fff;
+	background-color:#2f2f2f;
+	padding:4px;
+	height:90px;
+}
+#infopopup div div {
+	color:#888888;
+	font:15px Ubuntu,Helvetica,sans-serif;
+	text-shadow:0 1px #222222;
+}
+#infopopup div.indicator {
+	font:18px Ubuntu,Helvetica,sans-serif;
+	width:100%;
+	text-align:right;
+}
+.cllf {
+	float:left;
+	clear:both;
+}

@@ -1,0 +1,308 @@
+body {
+	background: #a1a1a1;
+  
+}
+label {
+	display:inline;
+}
+#contTable tr:hover {
+	background: none;
+}
+#contTable td {
+	padding:20px;
+}
+/* 
+	TagBox table styles
+	written by TagBox http://www.tagbox.de
+*/
+table {
+  border-collapse: collapse;
+  border: 1px solid #03476F;
+  font: normal 16px 'Monda', verdana, arial, helvetica, sans-serif;
+  color: #363636;
+	background-color:#d3d3d3;
+  }
+caption {
+  text-align: center;
+  font: bold 18px arial, helvetica, sans-serif;
+  background: transparent;
+  padding:6px 4px 8px 0px;
+  color: #03476F;
+  text-transform: uppercase;
+  }
+td, th {
+  border: 1px dotted #03476F;
+  padding: .4em;
+  color: #363636;
+vertical-align:top;
+  }
+
+thead th, tfoot th {
+  font: bold 16px 'Monda', verdana, arial, helvetica, sans-serif;
+  border: 1px solid #03476F;;
+  text-align: left;
+  background: #4591AD;
+  color: #FFFFFF;
+  padding-top:3px;
+  }
+tbody td a {
+  background: transparent;
+  text-decoration: none;
+  color: #363636;
+  }
+tbody td a:hover {
+  background: #C2F64D;
+  color: #363636;
+  }
+tbody th a {
+  font: normal 11px 'Monda', verdana, arial, helvetica, sans-serif;
+  background: transparent;
+  text-decoration: none;
+  font-weight:normal;
+  color: #363636;
+  }
+tbody th a:hover {
+  background: transparent;
+  color: #363636;
+  }
+tbody th, tbody td {
+  vertical-align: top;
+  text-align: left;
+  }
+tfoot td {
+  border: 1px solid #03476F;
+  background: #4591AD;
+  padding-top:3px;
+  color: #FFFFFF;
+  }
+.odd {
+  background: #AEE239;
+  }
+tbody tr:hover {
+  background: #f36f21;
+  border: 1px solid #03476F;
+  color: #FFFFFF;
+  }
+tbody#devices tr:hover {
+	border: 1px dotted #03476F;
+	color: #363636;
+	background-color: #D3D3D3;
+  }
+tbody tr:hover th,
+tbody tr.odd:hover th {
+  background: #FFD800;
+  color: #FFFFFF;
+  }
+#contTable tr:hover {
+	background: none;
+}
+.ui-widget-header, .ui-widget-header:hover {
+	background-image: linear-gradient(to bottom, #faa61a 6%, #f36f21 100%);
+	border-color: -moz-use-text-color -moz-use-text-color #f36f21;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    background: url("/images/ui-bg_glass_65_ffffff_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
+    border: 1px solid #AAAAAA;
+    color: #212121;
+    text-align: left;
+    font-weight: normal;
+    font-size: 16px;
+	padding-left:28px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    text-align: left;
+    font-weight: normal;
+    font-size: 15px;
+	padding-left:28px;
+}
+.ui-progressbar .ui-progressbar-value {
+    margin: -1px;
+}
+#accpack {
+	height:450px;
+	text-align:left;
+}
+#progressbar {
+	height:10px;
+}
+#accpack p, #conpack p {
+	font: normal 16px 'Monda', verdana, arial, helvetica, sans-serif;
+    text-align: left;
+	padding:10px;
+}
+.inarow {
+	display:inline;
+	float:left;
+	margin-right:10px;
+}
+.dashboard-summary.inarow .item {
+	width:100%;
+}
+.clx {
+	display:block;
+	clear:both;;
+}
+.seperatedpd {
+	margin-left:50px;
+}
+.marker {
+}
+#pcarea {
+	border:none;
+	padding:10px;
+}
+.makinaTables {
+	font: normal 12px 'Monda', verdana, arial, helvetica, sans-serif;
+}
+.makinaTables thead th, #makinaTable tfoot th {
+	font: normal 13px 'Monda', verdana, arial, helvetica, sans-serif;
+}
+.makinaTables td {
+	background-position:right center;
+	background-repeat:no-repeat;
+}
+.makinaTables td.editMex {
+	background-image:url('/images/dashboard/editMe.png');
+}
+.drillDown {
+	background-repeat:no-repeat;
+	background-image:url('/images/dashboard/drilldown.png');
+	width:32px;
+	height:32px;
+}
+
+#sidebar-menu { margin-top:-2px; }
+	#sidebar-menu>.item { 
+		margin-top:-1px; margin-left:-1px; width:223px; text-overflow:ellipsis; white-space:nowrap; 
+		overflow:hidden; height:43px; padding-top:3px; display:block; cursor:pointer; 
+	}
+	#sidebar-menu>.item { background-image:url('/images/dashboard/menu_button.png'); }
+		#sidebar-menu .item:hover { background-position:446px; }
+		#sidebar-menu .item.active { background-position:223px; }
+		#sidebar-menu .item .text { margin-left:15px; float:left; padding-top:11px; 
+			font:15px Ubuntu,Helvetica,sans-serif; color:#888; text-shadow:0 1px #222; }
+			#sidebar-menu .item.active .text { color:#FFF; text-shadow:0 1px #666; }
+	#sidebar-menu .sidebar-submenu { width:222px; display:none; background-image:url('/images/dashboard/submenu_bg.png'); }
+		#sidebar-menu .sidebar-submenu .item,
+		#sidebar-menu .sidebar-submenu .disabled-item { 
+			text-overflow:ellipsis; white-space:nowrap; overflow:hidden; height:34px; 
+			display:block; padding-left:8px; cursor:pointer; background-position:bottom; background-repeat:no-repeat; 
+			background-image:url('/images/dashboard/submenu_seperator.png'); 
+		}
+		#sidebar-menu .sidebar-submenu .disabled-item { cursor:default; }
+		#sidebar-menu .sidebar-submenu .item:hover { opacity:0.6; }
+		#sidebar-menu .sidebar-submenu .item.active:hover { opacity:1; }
+		#sidebar-menu .sidebar-submenu .item:last-child { background-image:none; }
+			#sidebar-menu .sidebar-submenu .item .logo { width:30px; height:30px; float:left; margin-left:8px; margin-top:1px; }
+			#sidebar-menu .sidebar-submenu .item .text { 
+				margin-left:17px; float:left; padding-top:8px; color:#666; 
+				text-shadow:none; font:13px Ubuntu,Helvetica,sans-serif; }
+				#sidebar-menu .sidebar-submenu .item.active .text { color:#FAA440; }
+				#sidebar-menu .sidebar-submenu .item.help-toggle.active { color:#666; }
+
+				#management-submenu.sidebar-submenu .disabled-item  { opacity:0.3; }
+				#management-submenu.sidebar-submenu .disabled-item .logo { 
+					width:30px; height:30px; float:left; margin-left:8px; margin-top:1px; }
+				#management-submenu.sidebar-submenu .disabled-item .logo { background-image:url('/images/dashboard/management_icons.png'); background-position:-90px; }
+				#management-submenu.sidebar-submenu .disabled-item .text { 
+					margin-left:17px; float:left; padding-top:8px; font:13px Ubuntu,Helvetica,sans-serif; color:#666; text-shadow:none; }
+#sidebar-menu .item .logo { color:#888; width:40px; height:40px; float:left; margin-left:9px; }
+#sidebar-menu .item .logo { background-image:url('/images/dashboard/menu_icons.png'); }
+    #sidebar-menu .item.active .logo { color:#FFF; }
+    #sidebar-menu .item .logo.welcome { background-position:0; }
+	#sidebar-menu .item.active .logo.welcome { background-position:-40px; }
+	#sidebar-menu .item .logo.users { background-position:-80px; }
+	#sidebar-menu .item.active .logo.users { background-position:-120px; }
+	#sidebar-menu .item .logo.loyalty { background-position:-80px; }
+	#sidebar-menu .item.active .logo.loyalty { background-position:-120px; }
+	#sidebar-menu .item .logo.events { background-position:-160px; }
+	#sidebar-menu .item.active .logo.events { background-position:-200px; }
+	#sidebar-menu .item .logo.mcommerce { background-position:-240px; }
+	#sidebar-menu .item.active .logo.mcommerce { background-position:-280px; }
+	#sidebar-menu .item .logo.sources { background-position:-320px; }
+	#sidebar-menu .item.active .logo.sources { background-position:-360px; }
+    #sidebar-menu .item .logo.qrcodeman { background-position:-400px; }
+    #sidebar-menu .item.active .logo.qrcodeman { background-position:-440px; }
+    #sidebar-menu .item .logo.management { background-position:-480px; }
+    #sidebar-menu .item.active .logo.management { background-position:-520px; }
+    #sidebar-menu .item .logo.sdkwizard { background-position:-560px; }
+    #sidebar-menu .item.active .logo.sdkwizard { background-position:-600px; }
+
+	#sidebar-menu #users-submenu .item .logo { background-image:url('/images/dashboard/users_icons.png'); }
+		#sidebar-menu #users-submenu .item .logo.users { background-position:-30px; }
+		#sidebar-menu #users-submenu .item.active .logo.users { background-position:0; }
+		#sidebar-menu #users-submenu .item .logo.sessions { background-position:-90px; }
+		#sidebar-menu #users-submenu .item.active .logo.sessions { background-position:-60px; }
+		#sidebar-menu #users-submenu .item .logo.frequency { background-position:-150px; }
+		#sidebar-menu #users-submenu .item.active .logo.frequency { background-position:-120px; }
+		#sidebar-menu #users-submenu .item .logo.country { background-position:-210px; }
+		#sidebar-menu #users-submenu .item.active .logo.country { background-position:-180px; }
+		#sidebar-menu #users-submenu .item .logo.devices { background-position:-270px; }
+		#sidebar-menu #users-submenu .item.active .logo.devices { background-position:-240px; }
+		#sidebar-menu #users-submenu .item .logo.carrier { background-position:-330px; }
+		#sidebar-menu #users-submenu .item.active .logo.carrier { background-position:-300px; }
+		#sidebar-menu #users-submenu .item .logo.loyalty { background-position:-390px; }
+		#sidebar-menu #users-submenu .item.active .logo.loyalty { background-position:-360px; }
+		#sidebar-menu #users-submenu .item .logo.app-versions { background-position:-450px; }
+		#sidebar-menu #users-submenu .item.active .app-versions { background-position:-420px; }
+		#sidebar-menu #users-submenu .item .logo.platforms { background-position:-510px; }
+		#sidebar-menu #users-submenu .item.active .logo.platforms { background-position:-480px; }
+
+	#sidebar-menu #mcommerce-submenu .item .logo { background-image:url('/images/dashboard/mcommerce_icons.png'); }
+		#sidebar-menu #mcommerce-submenu .item .logo.overview { background-position:0; }
+		#sidebar-menu #mcommerce-submenu .item.active .logo.overview { background-position:-30px; }
+		#sidebar-menu #mcommerce-submenu .item .logo.drilldown { background-position:-60px; }
+		#sidebar-menu #mcommerce-submenu .item.active .logo.drilldown { background-position:-90px; }
+		#sidebar-menu #mcommerce-submenu .item .logo.multichannel { background-position:-120px; }
+		#sidebar-menu #mcommerce-submenu .item.active .logo.multichannel { background-position:-150px; }
+		#sidebar-menu #mcommerce-submenu .item .logo.funnel { background-position:-180px; }
+		#sidebar-menu #mcommerce-submenu .item.active .logo.funnel { background-position:-210px; }
+
+	#sidebar-menu #sources-submenu .item .logo { background-image:url('/images/dashboard/sources_icons.png'); }
+		#sidebar-menu #sources-submenu .item .logo.overview { background-position:0; }
+		#sidebar-menu #sources-submenu .item.active .logo.overview { background-position:-30px; }
+		#sidebar-menu #sources-submenu .item .logo.assisted { background-position:-60px; }
+		#sidebar-menu #sources-submenu .item.active .logo.assisted { background-position:-90px; }
+		#sidebar-menu #sources-submenu .item .logo.drilldown { background-position:-120px; }
+		#sidebar-menu #sources-submenu .item.active .logo.drilldown { background-position:-150px; }
+		#sidebar-menu #sources-submenu .item .logo.users { background-position:-180px; }
+		#sidebar-menu #sources-submenu .item.active .logo.users { background-position:-210px; }
+		#sidebar-menu #sources-submenu .item .logo.events { background-position:-240px; }
+		#sidebar-menu #sources-submenu .item.active .logo.events { background-position:-270px; }
+		#sidebar-menu #sources-submenu .item .logo.mcommerce { background-position:-300px; }
+		#sidebar-menu #sources-submenu .item.active .logo.mcommerce { background-position:-330px; }
+		#sidebar-menu #sources-submenu .item .logo.products { background-position:-360px; }
+		#sidebar-menu #sources-submenu .item.active .logo.products { background-position:-390px; }
+
+	#sidebar-menu #qrcodeman-submenu .item .logo { background-image:url('/images/dashboard/qrcodeman_icons.png'); }
+		#sidebar-menu #qrcodeman-submenu .item .logo.campaigns { background-position:0; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.campaigns { background-position:-30px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.drilldown { background-position:-60px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.drilldown { background-position:-90px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.overview { background-position:-120px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.overview { background-position:-150px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.users { background-position:-180px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.users { background-position:-210px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.events { background-position:-240px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.events { background-position:-270px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.mcommerce { background-position:-300px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.mcommerce { background-position:-330px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.susers { background-position:-360px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.susers { background-position:-390px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.sdrilldown { background-position:-420px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.sdrilldown { background-position:-450px; }
+		#sidebar-menu #qrcodeman-submenu .item .logo.products { background-position:-480px; }
+		#sidebar-menu #qrcodeman-submenu .item.active .logo.products { background-position:-510px; }
+
+	#management-submenu.sidebar-submenu .item .logo { background-image:url('/images/dashboard/management_icons.png'); }
+		#sidebar-menu #management-submenu  .item .logo.applications { background-position:-30px; }
+		#sidebar-menu #management-submenu  .item.active .logo.applications { background-position:0; }
+		#sidebar-menu #management-submenu  .item .logo.mgmt-users { background-position:-90px; }
+		#sidebar-menu #management-submenu  .item.active .logo.mgmt-users { background-position:-60px; }
+		#sidebar-menu #management-submenu  .item .logo.help { background-position:-120px; }
+
+	#sdk-submenu.sidebar-submenu .item .logo { background-image:url('/images/dashboard/users_icons.png'); }
+		#sidebar-menu #sdk-submenu  .item .logo.ios { background-position:-510px; }
+		#sidebar-menu #sdk-submenu  .item.active .logo.ios { background-position:-480px; }
+		#sidebar-menu #sdk-submenu  .item .logo.android { background-position:-510px; }
+		#sidebar-menu #sdk-submenu  .item.active .logo.android { background-position:-480px; }
