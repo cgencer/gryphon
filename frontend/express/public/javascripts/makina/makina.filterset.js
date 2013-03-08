@@ -2,9 +2,54 @@ var filterTable = {
 	'_ts': {},
 	'cfdata': {},
 	'tables': {'root':{'name':''}},
+	'tableDef': [],
+	'tableVisibleCols': [],
+
+	prepData: function () {
+		this.tableDef = [
+		    { name : 'kids', type : 'number' },
+		    { name : 'anumber', type : 'number' },
+		    { name : 'weight', type : 'number' },
+		    { name : 'moviespermonth', type : 'number' },
+		    { name : 'wantchild', type : 'boolean' },
+		    { name : 'ownhouse', type : 'boolean' },
+		    { name : 'haspets', type : 'boolean' },
+		    { name : 'bothwork', type : 'boolean' },
+		    { name : 'yearlyholiday', type : 'boolean' },
+		    { name : 'privateschool', type : 'boolean' },
+		    { name : 'privateinsurance', type : 'boolean' },
+		    { name : 'playlottary', type : 'boolean' },
+		    { name : 'lottarybig', type : 'boolean' },
+		    { name : 'playgames', type : 'boolean' },
+		    { name : 'playgambling', type : 'boolean' },
+		    { name : 'watchporn', type : 'boolean' },
+		    { name : 'watchvideos', type : 'boolean' },
+		    { name : 'ownlaptop', type : 'boolean' },
+		    { name : 'owntablet', type : 'boolean' },
+		    { name : 'ownsmartphone', type : 'boolean' },
+		    { name : 'usesms', type : 'boolean' },
+		    { name : 'usemms', type : 'boolean' },
+		    { name : 'digitalphotos', type : 'boolean' },
+		    { name : 'sharephotos', type : 'boolean' },
+		    { name : 'usesocial', type : 'boolean' },
+		    { name : 'usetwitter', type : 'boolean' },
+		    { name : 'useecommerce', type : 'boolean' },
+		    { name : 'ownasecondhouse', type : 'boolean' },
+		    { name : 'ownstocks', type : 'boolean' },
+		];
+		this.tableVisibleCols = [
+			{'mData':'city'},
+			{'mData':'country'},
+			{'mData':'zip'},
+			{'mData':'music'},
+			{'mData':'eyecolor'},
+			{'mData':'ownsmartphone'},
+		];
+	},
 
 	init: function () {
 		_ts = this;
+		this.prepData();
 		$('#content').text('booting up...');
 		tables = {'root':{'name':''}};
 		tables.root.name = GryphonHelpers.randomId();		
@@ -50,37 +95,7 @@ var filterTable = {
 		$('#content').text('loaded the file...');
 		tables.root.dataset = new Miso.Dataset( {
 			'data': dp,
-			'columns': [
-			    { name : 'kids', type : 'number' },
-			    { name : 'anumber', type : 'number' },
-			    { name : 'weight', type : 'number' },
-			    { name : 'moviespermonth', type : 'number' },
-			    { name : 'wantchild', type : 'boolean' },
-			    { name : 'ownhouse', type : 'boolean' },
-			    { name : 'haspets', type : 'boolean' },
-			    { name : 'bothwork', type : 'boolean' },
-			    { name : 'yearlyholiday', type : 'boolean' },
-			    { name : 'privateschool', type : 'boolean' },
-			    { name : 'privateinsurance', type : 'boolean' },
-			    { name : 'playlottary', type : 'boolean' },
-			    { name : 'lottarybig', type : 'boolean' },
-			    { name : 'playgames', type : 'boolean' },
-			    { name : 'playgambling', type : 'boolean' },
-			    { name : 'watchporn', type : 'boolean' },
-			    { name : 'watchvideos', type : 'boolean' },
-			    { name : 'ownlaptop', type : 'boolean' },
-			    { name : 'owntablet', type : 'boolean' },
-			    { name : 'ownsmartphone', type : 'boolean' },
-			    { name : 'usesms', type : 'boolean' },
-			    { name : 'usemms', type : 'boolean' },
-			    { name : 'digitalphotos', type : 'boolean' },
-			    { name : 'sharephotos', type : 'boolean' },
-			    { name : 'usesocial', type : 'boolean' },
-			    { name : 'usetwitter', type : 'boolean' },
-			    { name : 'useecommerce', type : 'boolean' },
-			    { name : 'ownasecondhouse', type : 'boolean' },
-			    { name : 'ownstocks', type : 'boolean' },
-			]
+			'columns': _ts.tableDefinitions
 		} );
 		tables.root.dataset.fetch({ 
 			success : function() {
@@ -102,16 +117,19 @@ var filterTable = {
 		tables.root.ref = $('#'+tables.root.name).dataTable({
 			'aaData': df.toJSON(),
 			'bJQueryUI': true,
-			'bProcessing': true,
+//			'bProcessing': true,
 			'sPaginationType': "full_numbers",
-			'aoColumns': [
-				{'mData':'city'},
-				{'mData':'country'},
-				{'mData':'zip'},
-				{'mData':'music'},
-				{'mData':'eyecolor'},
-				{'mData':'ownsmartphone'},
-			]
+			'aoColumns': this.tableVisibleCols,
+			'aoColumnDefs': { "bSearchable": true, "aTargets": [ '_all' ] },		// TOCHECK
+			'oColumnFilterWidgets': {												// TOCHECK
+			        'aiExclude': [ 0, 6 ],
+			        'sSeparator': ',  ',
+			        'bGroupTerms': true,
+			        'aoColumnDefs': [
+			            { 'bSort': false, 'sSeparator': ' / ', 'aiTargets': [ 6 ] },
+//			            { fnSort: function( a, b ) { return a-b; }, 'aiTargets': [ 3 ] }
+					]
+			},
 		});
 /*
 		tables.root.keys = new KeyTable({
@@ -119,11 +137,12 @@ var filterTable = {
 			"datatable": tables.root.ref
 	    });
 */
-	    tables.root.buttons = new TableTools( tables.root.ref, {
+	    tables.root.buttons = new TableTools( tables.root.ref, {					// SWF for downloading the files to be added
 			"buttons": [
 				"copy", "csv", "xls", "pdf", { "type": "print", "buttonText": "Print this" }
 	        ]
 	    });
+		$( '#'+tables.root.name ).before( tables.root.buttons.dom.container );
 
 	}
 };
