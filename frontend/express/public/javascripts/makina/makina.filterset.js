@@ -45,13 +45,64 @@ var filterTable = {
 			}
 		});
 	},
-	build: function (data) {
+	build: function (dp) {
+		_ts = this;
 		$('#content').text('loaded the file...');
-		cfdata = crossfilter(data);
+		tables.root.dataset = new Miso.Dataset( {
+			'data': dp,
+			'columns': [
+			    { name : 'kids', type : 'number' },
+			    { name : 'anumber', type : 'number' },
+			    { name : 'weight', type : 'number' },
+			    { name : 'moviespermonth', type : 'number' },
+			    { name : 'wantchild', type : 'boolean' },
+			    { name : 'ownhouse', type : 'boolean' },
+			    { name : 'haspets', type : 'boolean' },
+			    { name : 'bothwork', type : 'boolean' },
+			    { name : 'yearlyholiday', type : 'boolean' },
+			    { name : 'privateschool', type : 'boolean' },
+			    { name : 'privateinsurance', type : 'boolean' },
+			    { name : 'playlottary', type : 'boolean' },
+			    { name : 'lottarybig', type : 'boolean' },
+			    { name : 'playgames', type : 'boolean' },
+			    { name : 'playgambling', type : 'boolean' },
+			    { name : 'watchporn', type : 'boolean' },
+			    { name : 'watchvideos', type : 'boolean' },
+			    { name : 'ownlaptop', type : 'boolean' },
+			    { name : 'owntablet', type : 'boolean' },
+			    { name : 'ownsmartphone', type : 'boolean' },
+			    { name : 'usesms', type : 'boolean' },
+			    { name : 'usemms', type : 'boolean' },
+			    { name : 'digitalphotos', type : 'boolean' },
+			    { name : 'sharephotos', type : 'boolean' },
+			    { name : 'usesocial', type : 'boolean' },
+			    { name : 'usetwitter', type : 'boolean' },
+			    { name : 'useecommerce', type : 'boolean' },
+			    { name : 'ownasecondhouse', type : 'boolean' },
+			    { name : 'ownstocks', type : 'boolean' },
+			]
+		} );
+		tables.root.dataset.fetch({ 
+			success : function() {
+				console.log( this.columnNames() );
+				_ts.filterThem( this );
+			}
+		});
+	},
+	filterThem: function (df) {
+		this.dataFiltered(
+			df.rows( function (row) {
+				return row.ownsmartphone === true;
+			})
+		);
+	},
+	dataFiltered: function (df) {
+		console.log('>>>'+df.length);
 		$('#content').html( '<table id="' + tables.root.name + '" width="100%" />' );
 		tables.root.ref = $('#'+tables.root.name).dataTable({
-			'aaData': data,
+			'aaData': df.toJSON(),
 			'bJQueryUI': true,
+			'bProcessing': true,
 			'sPaginationType': "full_numbers",
 			'aoColumns': [
 				{'mData':'city'},
@@ -59,7 +110,20 @@ var filterTable = {
 				{'mData':'zip'},
 				{'mData':'music'},
 				{'mData':'eyecolor'},
+				{'mData':'ownsmartphone'},
 			]
 		});
-	},
+/*
+		tables.root.keys = new KeyTable({
+			"table": document.getElementById('#' + tables.root.name + '_wrapper'),
+			"datatable": tables.root.ref
+	    });
+*/
+	    tables.root.buttons = new TableTools( tables.root.ref, {
+			"buttons": [
+				"copy", "csv", "xls", "pdf", { "type": "print", "buttonText": "Print this" }
+	        ]
+	    });
+
+	}
 };
