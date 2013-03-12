@@ -51,6 +51,8 @@ var filterTable = (function(filterTable, $, undefined){
 	init = function () {
 		_ts = this;
 		this.prepData();
+
+
 		$('#content').text('booting up...');
 		tables = {'root':{'name':''}};
 		tables.root.name = GryphonHelpers.randomId();		
@@ -64,9 +66,13 @@ var filterTable = (function(filterTable, $, undefined){
 			}
 		});
 
+		this.loadFromJSON('dataset.json');
+	};
+	
+	loadFromJSON = function (file) {
 		_ts = this;
 		$.ajax({
-			url : "dataset.json",
+			url : file,
 			dataType: "json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 0) {
@@ -90,7 +96,7 @@ var filterTable = (function(filterTable, $, undefined){
 				_ts.build(data);
 			}
 		});
-	};
+	}
 
 	build = function (dp) {
 		_ts = this;
