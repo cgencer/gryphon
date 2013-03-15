@@ -3,24 +3,26 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
+	<string>frontend/express/views/index.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>frontend/express/public/javascripts/_baseIIEFclass.js</string>
+			<key>lastUsed</key>
+			<date>2013-03-15T14:17:57Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>frontend/express/public/filterset.html</string>
 			<key>lastUsed</key>
-			<date>2013-03-14T09:32:47Z</date>
+			<date>2013-03-14T14:46:14Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>frontend/express/public/javascripts/makina/gryphon.helpers.js</string>
 			<key>lastUsed</key>
-			<date>2013-03-14T09:31:37Z</date>
+			<date>2013-03-14T13:49:06Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -36,11 +38,15 @@
 		</dict>
 		<dict>
 			<key>filename</key>
+			<string>frontend/express/public/javascripts/makina/makina.mongollback.js</string>
+			<key>lastUsed</key>
+			<date>2013-03-14T13:53:04Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
 			<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
 			<key>lastUsed</key>
-			<date>2013-03-14T09:32:47Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2013-03-15T14:24:22Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -59,11 +65,36 @@
 			<array>
 				<dict>
 					<key>filename</key>
+					<string>frontend/express/views/index.html</string>
+					<key>lastUsed</key>
+					<date>2013-03-15T14:29:10Z</date>
+					<key>selected</key>
+					<true/>
+				</dict>
+			</array>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>views</string>
+		</dict>
+		<dict>
+			<key>children</key>
+			<array>
+				<dict>
+					<key>filename</key>
 					<string>frontend/express/config.js</string>
 				</dict>
 				<dict>
 					<key>filename</key>
+					<string>frontend/express/public/javascripts/makina/makina.frontend.js</string>
+					<key>lastUsed</key>
+					<date>2013-03-15T14:29:10Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
 					<string>frontend/express/gryphon.js</string>
+					<key>lastUsed</key>
+					<date>2013-03-15T14:26:03Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -76,6 +107,20 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
+		<key>frontend/express/gryphon.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>88</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>frontend/express/public/filterset.html</key>
 		<dict>
 			<key>caret</key>
@@ -90,14 +135,14 @@
 			<key>firstVisibleLine</key>
 			<integer>5</integer>
 		</dict>
-		<key>frontend/express/public/javascripts/makina/gryphon.helpers.js</key>
+		<key>frontend/express/public/javascripts/makina/makina.frontend.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>38</integer>
+				<integer>28</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>18</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -109,21 +154,37 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>114</integer>
+				<integer>5</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>103</integer>
+			<integer>0</integer>
+		</dict>
+		<key>frontend/express/views/index.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>frontend/express/public/filterset.html</string>
 		<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
-		<string>frontend/express/public/javascripts/makina/gryphon.helpers.js</string>
+		<string>frontend/express/gryphon.js</string>
+		<string>frontend/express/public/javascripts/makina/makina.frontend.js</string>
+		<string>frontend/express/views/index.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
@@ -138,8 +199,15 @@
 			<key>subItems</key>
 			<dict/>
 		</dict>
+		<key>views</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict/>
+		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{97, 27}, {1300, 841}}</string>
+	<string>{{95, 4}, {1300, 841}}</string>
 </dict>
 </plist>

@@ -27,20 +27,6 @@ var toRadix = function (N) {
 }
 grabMetas();
 
-exports.findById = function(req, res) {
-	var id = req.params.id;
-	console.log('Retrieving matrix: ' + id);
-	db.collection('matrix', function(err, collection) {
-		collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-			res.send(item);
-		});
-	});
-};
-
-
-exports.getRow = function(req, res) {
-}
-
 exports.addRow = function(req, res) {
 	var nrow = {};
 	var row = req.body;
@@ -81,15 +67,6 @@ exports.addRow = function(req, res) {
 		
 
 }
-
-
-exports.getIds = function(req, res) {
-	db.collection('matrix', function(err, collection) {
-		collection.getIndexes().toArray( function(err, items) {
-			res.send(items);
-		});
-	});
-};
 
 exports.findAll = function(req, res) {
 	db.collection('matrix', function(err, collection) {
