@@ -5,15 +5,25 @@ var Server = mongo.Server,
 	  BSON = mongo.BSONPure;
 
 var db = require('mongo-lite').connect('mongodb://localhost/makina', ['metalib', 'matrix']);
-var metalib = [];
-
-function grabMetas() {
+var metalib;
+var grabMetas = function () {
 	metalib = [];
 	db.metalib.all(function(err, docs){
 		for(var i in docs){
 			metalib[i] = docs[i];
 		}
 	});
+};
+var toRadix = function (N) {
+	var HexN = "", Q = Math.floor(Math.abs(N)), R;
+	var str = "abcdefghijklmnopqrstuvwxyz";
+	while (true) {
+		R = Q % str.length;
+		HexN = str.charAt(R) + HexN;
+		Q = (Q - R) / str.length; 
+		if (Q == 0) break;
+	}
+	return (HexN);
 }
 grabMetas();
 
@@ -27,16 +37,8 @@ exports.findById = function(req, res) {
 	});
 };
 
-function toRadix(N) {
-	var HexN = "", Q = Math.floor(Math.abs(N)), R;
-	var str = "abcdefghijklmnopqrstuvwxyz";
-	while (true) {
-		R = Q % str.length;
-		HexN = str.charAt(R) + HexN;
-		Q = (Q - R) / str.length; 
-		if (Q == 0) break;
-	}
-	return (HexN);
+
+exports.getRow = function(req, res) {
 }
 
 exports.addRow = function(req, res) {
@@ -46,25 +48,38 @@ exports.addRow = function(req, res) {
 	var newkey = '';
 
 	for(var key in row){
-		newkey = '';
-		for(var mi in metalib) {
-			if(metalib[mi].real === key){
-				newkey = metalib[mi].meta;
-				break;
+
+		if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot'){
+			nrow[key] = row[key];												// copy these 3 columns directly
+
+		}else{
+			newkey = '';
+			for(var mi in metalib) {
+				if(metalib[mi].real === key){
+					newkey = metalib[mi].meta;
+					break;
+				}
+			}
+			if(newkey === ''){												// insert new key into db and fetch new metalib
+				newkey = toRadix(metalib.length);
+				var insobj = {'meta': newkey, 'real':key};
+				db.metalib.insert(insobj, function(err, doc){})
+				grabMetas();
+			}
+			if(newkey !== ''){
+				nrow[newkey] = row[key];
 			}
 		}
-		if(newkey === ''){
-			// insert new key into db and fetch new metalib
-			newkey = toRadix(metalib.length);
-			var insobj = {'meta': newkey, 'real':key};
-			db.metalib.insert(insobj, function(err, doc){})
-			grabMetas();
-		}
-		if(newkey !== ''){
-			nrow[newkey] = row[key];
-		}
 	}
-	db.matrix.insert(row, function(err, doc){})
+	db.matrix.insert(nrow, function(err, doc){
+		theId = doc._id;
+	})
+
+
+
+//		row.keyTimeSlot
+		
+
 }
 
 
@@ -85,38 +100,3 @@ exports.findAll = function(req, res) {
 };
 
 
-exports.updateRow = function(req, res) {
-
-// http://docs.mongodb.org/manual/applications/create/#crud-create-update
-
-	var id = req.params.id;
-	var row = req.body;
-	console.log('Updating matrix: ' + id);
-	console.log(JSON.stringify(row));
-	db.collection('matrix', function(err, collection) {
-		collection.update({'_id':new BSON.ObjectID(id)}, row, {safe:true}, function(err, result) {
-			if (err) {
-				console.log('Error updating wine: ' + err);
-				res.send({'error':'An error has occurred'});
-			} else {
-				console.log('' + result + ' document(s) updated');
-				res.send(row);
-			}
-		});
-	});
-}
-
-exports.deleteRow = function(req, res) {
-	var id = req.params.id;
-	console.log('Deleting row: ' + id);
-	db.collection('matrix', function(err, collection) {
-		collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
-			if (err) {
-				res.send({'error':'An error has occurred - ' + err});
-			} else {
-				console.log('' + result + ' document(s) deleted');
-				res.send(req.body);
-			}
-		});
-	});
-}

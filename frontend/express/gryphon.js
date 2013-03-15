@@ -22,13 +22,7 @@ var Gryphon = (function(Gryphon, undefined){
 // FOR USING AUTH add private as middleware:
 //	app.get('/api/getAll', private, matrix.findAll);
 
-	app.get('/api/getAll', matrix.findAll);
-	app.get('/api/getids', matrix.findAll);
-	app.get('/api/getById/:id', matrix.findById);
 	app.post('/api/addRow', matrix.addRow);
-	app.put('/api/updateRow/:id', matrix.updateRow);
-	app.delete('/api/deleteRow/:id', matrix.deleteRow);
-
 	app.listen(7001);
 
 }(Gryphon = Gryphon || {}));
