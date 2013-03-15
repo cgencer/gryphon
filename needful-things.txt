@@ -1,0 +1,29 @@
+dashboard
+		total sessions			total count, timeslot (e.g. 10 days), change rate to last timeslot
+		total users				total count, timeslot (e.g. 10 days)
+		new users				total count, timeslot (e.g. 10 days)
+		avg. time spent			total count, timeslot (e.g. 10 days)
+		events served			total count, timeslot (e.g. 10 days)
+		avg. events served		total count, timeslot (e.g. 10 days)
+		
+		detailed selected one's timeslot
+		
+		top platforms, 3
+		top resolution, 3
+		top carrier, 3
+		top users, 3 days
+		
+		map of overall users, split by country, 7=10
+		
+
+matrix
+		a:... b:... c:... d:...   ...   abc:...	timeslotcode_click timeslotcode_install timeslotcode_action
+		...
+		...
+		...
+metalib
+		a: name (of column)
+		b: name (of column)
+		...
+		...
+		...

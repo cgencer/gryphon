@@ -1,58 +1,34 @@
 var Gryphon = (function(Gryphon, undefined){
 
-	var http = require('http'),
-	    express = require('express'),
-		$ = require('jquery');
-	    mongoStore = require('connect-mongodb'),
-	    expose = require('express-expose'),
-	    crypto = require('crypto'),
-	    fs = require('fs'),
-	    im = require('imagemagick'),
-	    request = require('request');
+	var express = require('express');
+	var app = express.createServer();
+	var matrix = require('./public/javascripts/makina/makina.matrix.js');
+	var realm = require('express-http-auth').realm('Private Area');
 
-	var mongo = require('mongoskin');
-	var makinaConfig = require('./config');
-	var makinaDb = mongo.db(makinaConfig.mongodb.host + ':' + makinaConfig.mongodb.port + '/' + makinaConfig.mongodb.db + '?auto_reconnect');
-	var db = require('mongodb').db;
-	var Server = require('mongodb').Server;
-
-	var app = module.exports = express.createServer();
-
-	app.configure(function () {
-	    app.register('.html', require('ejs'));
-	    app.set('views', __dirname + '/views');
-	    app.set('view engine', 'html');
-	    app.set('view options', {layout:false});
-	    app.use(express.bodyParser({uploadDir:__dirname + '/uploads'}));
-	    app.use(express.cookieParser());
-	    app.use(express.methodOverride());
-	    app.use(express.csrf());
-	    app.use(app.router);
-	    var oneYear = 31557600000;
-	    app.use(express.static(__dirname + '/public'), { maxAge:oneYear });
-	});
-
-	app.configure('development', function () {
-	    app.use(express.errorHandler({ dumpExceptions:true, showStack:true }));
-	});
-
-	app.configure('production', function () {
-	    app.use(express.errorHandler());
-	});
-
-	app.get('/api/entry', function (req, res) {
-		res.send('<b>its okay dude!</b>');
-	});
-
-	app.post('/inject', this.insertSet);
-	app.put('/inject/:id', this.updateSet);
-
-	app.listen(makinaConfig.web.port, 'localhost');
-
-	insertSet = function () {
+	var checkUser = function(req, res, next) {
+		if (req.username == 'Foo' && req.password == 'Bar') {
+			next();
+		} else {
+			req.send(403);
+		}
 	}
+	var private = [realm, checkUser];
 
-	updateSet = function () {
-	}
+	app.configure( function () {
+		app.use(express.logger('dev'));			/* 'default', 'short', 'tiny', 'dev' */
+		app.use(express.bodyParser());
+	});
+
+// FOR USING AUTH add private as middleware:
+//	app.get('/api/getAll', private, matrix.findAll);
+
+	app.get('/api/getAll', matrix.findAll);
+	app.get('/api/getids', matrix.findAll);
+	app.get('/api/getById/:id', matrix.findById);
+	app.post('/api/addRow', matrix.addRow);
+	app.put('/api/updateRow/:id', matrix.updateRow);
+	app.delete('/api/deleteRow/:id', matrix.deleteRow);
+
+	app.listen(7001);
 
 }(Gryphon = Gryphon || {}));
