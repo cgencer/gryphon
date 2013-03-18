@@ -1,0 +1,330 @@
+body {
+  background: #000000;
+  padding: 0;
+  margin: 0;
+}
+
+#sidebar {
+  -moz-user-select: none;
+  background-position: 0 400px;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  width: 235px;
+  z-index: 10;
+  background: #414042;
+  margin-left: 7px;
+}
+
+#content {
+  margin-left: 250px;
+  min-width: 768px;
+  padding: 16px;
+  background-color: #e9e3d5;
+}
+
+.sidebar-top {
+  background-color: white;
+  height: 60px;
+  margin: 5px 0px 0px 10px;
+  padding: 0px;
+}
+.sidebar-top .makina-logo {
+  background-image: url("/images/k/makina-logo.png");
+  background-repeat: no-repeat;
+  width: 156px;
+  height: 50px;
+  margin-left: 30px;
+}
+
+.sidebar-menu {
+  padding: 0px;
+  margin: 0px 0px 0px 10px;
+}
+.sidebar-menu .active {
+  background-color: #119692 !important;
+}
+.sidebar-menu .active > .text {
+  color: white !important;
+}
+.sidebar-menu .active > .select-app {
+  background-image: url("/images/k/left_menu_icons/selectappA.png") !important;
+}
+.sidebar-menu .active > .dashboards {
+  background-image: url("/images/k/left_menu_icons/dashboardA.png") !important;
+}
+.sidebar-menu .active > .events {
+  background-image: url("/images/k/left_menu_icons/eventsA.png") !important;
+}
+.sidebar-menu .active > .sources {
+  background-image: url("/images/k/left_menu_icons/sourcesA.png") !important;
+}
+.sidebar-menu .active > .management {
+  background-image: url("/images/k/left_menu_icons/management_A.png") !important;
+}
+.sidebar-menu .menu-item {
+  margin: 3px 0px 3px 0px;
+  padding: 10px 0px 8px 1px;
+  list-style: none;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 223px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: #575757;
+}
+.sidebar-menu .menu-item .text {
+  margin-left: 5px;
+  padding-top: 4px;
+  color: #acacac;
+  float: left;
+  font: 13px Ubuntu, Helvetica, sans-serif;
+  text-shadow: none;
+}
+.sidebar-menu .menu-item .logo {
+  width: 26px;
+  height: 26px;
+  background-repeat: no-repeat;
+  float: left;
+  margin-left: 9px;
+}
+.sidebar-menu .menu-item .select-app {
+  background-image: url("/images/k/left_menu_icons/selectapp.png");
+}
+.sidebar-menu .menu-item .dashboards {
+  background-image: url("/images/k/left_menu_icons/dashboard.png");
+}
+.sidebar-menu .menu-item .events {
+  background-image: url("/images/k/left_menu_icons/events.png");
+}
+.sidebar-menu .menu-item .sources {
+  background-image: url("/images/k/left_menu_icons/sources.png");
+}
+.sidebar-menu .menu-item .management {
+  background-image: url("/images/k/left_menu_icons/management.png");
+}
+.sidebar-menu .menu-item:hover {
+  background-color: #119692;
+}
+.sidebar-menu .menu-item:hover .text {
+  color: white;
+}
+.sidebar-menu .menu-item:hover .select-app {
+  background-image: url("/images/k/left_menu_icons/selectappA.png");
+}
+.sidebar-menu .menu-item:hover .dashboards {
+  background-image: url("/images/k/left_menu_icons/dashboardA.png");
+}
+.sidebar-menu .menu-item:hover .events {
+  background-image: url("/images/k/left_menu_icons/eventsA.png");
+}
+.sidebar-menu .menu-item:hover .sources {
+  background-image: url("/images/k/left_menu_icons/sourcesA.png");
+}
+.sidebar-menu .menu-item:hover .management {
+  background-image: url("/images/k/left_menu_icons/management_A.png");
+}
+.sidebar-menu .sub-menu {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  display: none;
+}
+.sidebar-menu .sub-menu ul {
+  margin: 0px;
+  padding: 0px;
+}
+.sidebar-menu .sub-menu .menu-item {
+  margin: 3px 0px 3px 0px;
+  padding: 5px 0px 5px 1px;
+  list-style: none;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 223px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: #8e8e8e;
+}
+.sidebar-menu .sub-menu .menu-item .text {
+  margin-left: 15px;
+  padding-top: 4px;
+  color: white;
+  float: left;
+  font: 13px Ubuntu, Helvetica, sans-serif;
+  text-shadow: none;
+}
+
+.makina-data-table {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+}
+.makina-data-table th {
+  text-align: left;
+  color: white;
+  background-color: #b3b3b3;
+}
+.makina-data-table tr:nth-child(even) {
+  background-color: white;
+}
+.makina-data-table tr:nth-child(odd) {
+  background-color: #f4f1ea;
+}
+.makina-data-table td {
+  color: #464646;
+}
+
+.makina-form {
+  padding: 0px;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.makina-form .form-title {
+  background-color: #b3b3b3;
+  color: white;
+  line-height: 30px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
+.makina-form .row {
+  clear: both;
+}
+.makina-form .row .title {
+  float: left;
+  min-width: 150px;
+  margin-left: 10px;
+}
+.makina-form .row .detail {
+  float: left;
+}
+.makina-form .row:after {
+  clear: both;
+}
+.makina-form .makina-form-table {
+  padding-left: 10px;
+  background-color: #f4f1ea;
+}
+
+.makina-btn {
+  border: 1px solid #575757;
+  padding: 4px;
+  color: #fff;
+  position: relative;
+  margin: 0 0 0 5px;
+  background: #575757;
+  cursor: pointer;
+}
+.makina-btn.orange {
+  background-color: #ef9539;
+  border: 1px solid #ef9539;
+}
+.makina-btn.green {
+  background-color: #119692;
+  border: 1px solid #119692;
+}
+
+.makina-select-box ul {
+  font-family: Arial, Verdana;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.makina-select-box ul:first-child > li {
+  border: 1px solid #000000;
+}
+.makina-select-box .makina-select-box-options {
+  z-index: 10;
+}
+.makina-select-box ul li {
+  display: block;
+  position: relative;
+  float: left;
+}
+.makina-select-box li ul {
+  display: none;
+}
+.makina-select-box .makina-selected {
+  background-image: url("/images/k/select-box-icon-right.png");
+  background-repeat: no-repeat;
+  background-position: right;
+}
+.makina-select-box ul li a {
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+  padding: 5px 40px 5px 25px;
+  background: #B3B3B3;
+  white-space: nowrap;
+}
+.makina-select-box ul ul li {
+  padding: 0px;
+}
+.makina-select-box ul ul li a {
+  border-top: 1px solid #000000;
+}
+.makina-select-box li:hover ul {
+  display: block;
+  position: absolute;
+}
+.makina-select-box li:hover li {
+  float: none;
+  font-size: 14px;
+}
+.makina-select-box li:hover li a:hover {
+  background: #EF9539;
+}
+
+.makina-box-content {
+  border: 1px solid  #D2CBC1;
+  background-color: white;
+  text-align: center;
+  float: left;
+  margin: 1px;
+  width: 170px;
+}
+.makina-box-content .icon {
+  width: 26px;
+  height: 26px;
+  margin-top: 10px;
+  float: left;
+}
+.makina-box-content .total-clicks {
+  background-image: url("/images/k/header_icons/totalclicks.png");
+}
+.makina-box-content .total-installs {
+  background-image: url("/images/k/header_icons/totalinstalls.png");
+}
+.makina-box-content .avg-rank {
+  background-image: url("/images/k/header_icons/avgrank.png");
+}
+.makina-box-content .avg-con-rate {
+  background-image: url("/images/k/header_icons/avg.con.rate.png");
+}
+.makina-box-content .highestrank {
+  background-image: url("/images/k/header_icons/highestrank.png");
+}
+.makina-box-content .makina-box-header {
+  background-color: #EDEDED;
+  height: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bolder;
+}
+.makina-box-content .text {
+  padding-top: 17px;
+}
+.makina-box-content .makina-box-body {
+  line-height: 70px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bolder;
+  color: #464646;
+  font-size: 30px;
+}
+.makina-box-content:after {
+  clear: both;
+}
