@@ -19,6 +19,8 @@ var Gryphon = (function(Gryphon, undefined){
 
 	app.configure( function () {
 		app.use(express.logger('dev'));			/* 'default', 'short', 'tiny', 'dev' */
+	    var oneYear = 31557600000;
+	    app.use(express.static(__dirname + '/public'), { maxAge:oneYear });
 		app.use(express.bodyParser());
 	});
 

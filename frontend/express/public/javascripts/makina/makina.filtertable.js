@@ -122,15 +122,19 @@ var filterTable = (function(filterTable, $, undefined){
 	};
 
 	dataFiltered = function (df) {
-		console.log('>>>'+df.length);
+		console.log('>>> filtered result has '+df.length+' entries...');
 		$('#content').html( '<table id="' + tables.root.name + '" width="100%" />' );
 		tables.root.ref = $('#'+tables.root.name).dataTable({
 			'aaData': df.toJSON(),
 			'bJQueryUI': true,
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+				"sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+	        },
 //			'bProcessing': true,
-			'sPaginationType': "full_numbers",
+			'sPaginationType': 'full_numbers',
 			'aoColumns': filterTable.tableVisibleCols,
-			'aoColumnDefs': { "bSearchable": true, "aTargets": [ '_all' ] },		// TOCHECK
+			'aoColumnDefs': { 'bSearchable': true, 'aTargets': [ '_all' ] },		// TOCHECK
 			'oColumnFilterWidgets': {												// TOCHECK
 		        'aiExclude': [ 0, 6 ],
 		        'sSeparator': ',  ',
@@ -147,12 +151,14 @@ var filterTable = (function(filterTable, $, undefined){
 			"datatable": tables.root.ref
 	    });
 */
+/*
 	    tables.root.buttons = new TableTools( tables.root.ref, {					// SWF for downloading the files to be added
 			"buttons": [
 				"copy", "csv", "xls", "pdf", { "type": "print", "buttonText": "Print this" }
 	        ]
 	    });
 		$( '#'+tables.root.name ).before( tables.root.buttons.dom.container );
+*/
 	};
 
 	this.init();

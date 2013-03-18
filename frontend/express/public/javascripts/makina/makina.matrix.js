@@ -35,7 +35,7 @@ exports.addRow = function(req, res) {
 
 	for(var key in row){
 
-		if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot'){
+		if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp'){
 			nrow[key] = row[key];												// copy these 3 columns directly
 
 		}else{
@@ -57,8 +57,9 @@ exports.addRow = function(req, res) {
 			}
 		}
 	}
-	db.matrix.insert(nrow, function(err, doc){
+	db.matrix.insert(nrow, {'safe': true}, function(err, doc){
 		theId = doc._id;
+		res.send(doc[0]);
 	})
 
 
