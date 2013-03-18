@@ -28,148 +28,112 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 	}
 */
 });
+var cuteNSexy = (function (cuteNSexy, $, undefined) {
 
-	var cuteNSexy = {
-		_this: 				this,
-		_cfg: 				Object.create(handsomeCfg),
-		_domain: 			"http://mkevt.nmdapps.com",
-//		_domain: 			"http://192.168.1.24",
-		_service: 			"makinaweb",
-		_schemaNo: 			0,
-		urlSchemas: 		{
-			0: 				"http://%domain%/%parts%/?request=%data%&callback=%callback%",	// data is a json_stringified object
+		return {						// only these methods are accessible from the outside
+			'init': init,
+			'runChainedEvents': runChainedEvents,
+										// and these variables
+			'response': buffer.rp
+		};
 
-			1: 				"http://%domain%/o?callback=%callback%&%data%",					// data is url parameters (x=...), seperated with &
-// http://127.0.0.1/o?callback=jQuery183015059415370880203_1361203292166&api_key=0e77607d70b3f136a0204489754a4298&app_id=50fff50ba72286a97200000d&method=events&events=%5B%22MKTABLE_C_0.000021%40APP_0.00002P%40CAMP_0.000035%40MAKILINK%22%5D&_=1361203333801
-		},
-		credentials : 		{
+		var _this = this;
+		var _domain = "http://mkevt.nmdapps.com";
+		var _service = "makinaweb";
+		var credentials = {
 			'pass': 		'demo',
 			'userName': 	'demo'
-		},
-		about : {
+		};
+		var about = {
 			name: 				"Cute'n Sexy", 
 	        author: 			"Cem Gencer",
-			version: 			"0.2"
-		},
-		buffer : {
-			salt: 				'',
-			jqxhrs: 			[],
-			rq: 				{},
-			rp: 				{},
-			callStack: 				[],
-			aid: 				'',
-			uid: 				'',
-			sid: 				'',
-		},
-		grabHandsome: function() {},
+			version: 			"0.3"
+		};
+		var buffer = {};
+		var _cfg = {};
+		function grabHandsome () {};
 
-		init: function() {
-			this.cleanUp();
-			this.createUUID();
-		},
-		cleanUp: function() {
-			this.buffer.jqxhr = {};
-			this.buffer.uid = ''; this.buffer.sid = ''; this.buffer.aid = '';
-		},
-/*
-	TODO build url's to use different schemas & bind it with countly.event.js
-*/
-		buildUrl: function(cmd, data) {
-			var dasModel = this.urlSchemas[this._schemaNo];
-			return( this._domain + '/' + this._service + '/' + cmd + '/?request=' + JSON.stringify(data) );
-		},
+		function init () {
+			cleanUp();
+			createUUID();
+		};
+		function cleanUp () {
+			buffer = {
+				salt: 				'',
+				jqxhrs: 			[],
+				rq: 				{},
+				rp: 				{},
+				_sss: 				[],
+				aid: 				'',
+				uid: 				'',
+				sid: 				'',
+			};
+		};
 //=========================================================================================================
-		runChainedEvents: function( arr, fail ) {
-			var nextEvent = arr.shift();
-			cuteNSexy.run(nextEvent[0], nextEvent[1], nextEvent[2], fail);
+		// calls chained methods as such:
+		// runChainedEvents([ ['ListApps', {}, countlyHandsome.ListAppsDone],
+		//   				  ['ListApps', {}, countlyHandsome.ListAppsDone] , globalFailMethod]);
+		function runChainedEvents ( arr ){
+			var nextEventItem = arr.shift();
+			run(nextEventItem.cmd, nextEventItem.payload, nextEventItem.success, nextEventItem.fail);
 
-			$(document).one( nextEvent[0] + "ReceivedAndProccessedChainedSet", function () {
+			$(document).one(nextEventItem.cmd + "ReceivedAndProccessedChainedSet", function () {
 				if(arr.length > 0){
-					cuteNSexy.runChainedEvents( arr );
+					runChainedEvents( arr );
 				}
-			} );
-		},
-		get: function(payLoad, _s, _f) { // does the same as run, but uses different url schema
-			this.cleanUp();
-			this.buffer.salt = $.base64.encode( this.createUUID() + $.now() );
-			this.fetchIt( {
-				'command': cmd, 
-				'data': $.extend( this.baseObj(this.getSessionID()), payLoad)
-			}, _s, _f );
+			});
+		};
+		function run (cmd, payLoad, _s, _f) {
+			cleanUp();
+			_cfg = Object.create( handsomeCfg );
+			buffer.salt = $.base64.encode( createUUID() );
 
-		},
-		run: function(cmd, payLoad, _s, _f) {
-			this.cleanUp();
-			this.buffer.salt = $.base64.encode( this.createUUID() + $.now() );
-			for(var cfk in this._cfg) {
-				if(this.type(this._cfg[cfk]) == 'array'){
+			for(var cfk in _cfg) {
+				if(type (_cfg[cfk] ) == 'array'){
 					var _e = "Command does not exist in the config-file, exitting...";
-					break;
-//					_f(_e);
+					_f(_e);
 				}
 			}
-
-			if(this.type(_e) == 'undefined') {				// checks for cfg-data exists
-				var set = this._cfg[cmd];
+			if(type(_e) == 'undefined') {				// checks for cfg-data exists
+				var set = _cfg[cmd];
 				for(var ck in set.clean) {
 					delete payLoad[set.clean[ck]];
 				}
 
 				for(var mk in set.mandatory) {
-					if(payLoad[set.mandatory[mk]] === undefined) {
+					if(payLoad[set.mandatory[mk]] == undefined) {
 						var _e = "Key " + set.mandatory[mk] + " does not exist, exitting...";
-						break;
 					}
 				}
 			}
-
-			if(this.type(_e) == 'undefined') {				// checks for key exists
+			if(type(_e) == 'undefined') {				// checks for key exists
 				payLoad['_type'] = cmd + 'Request';
-				if(this.type(_s) == 'function') {
-					this.fetchIt( {
+				if(type(_s) == 'function') {
+					fetchIt( {
 						'command': cmd, 
-						'data': $.extend( this.baseObj(this.getSessionID()), payLoad)
+						'data': $.extend( baseObj( getSessionID() ), payLoad)
 					}, _s, _f );
 				}else{
 					_e = 'No Function supplied as callback!';
-/*
-					if(this.type(_s) == 'function') {
+					if(type(_s) == 'function') {
 						_f(_e);
 					}
-*/
 				}
 			} else {
-//				_f(_e);
-			}
-		},
-		killThem: function(cmd) {
-			for(var i in this.buffer.jqxhrs) {
-				if(this.buffer.jqxhrs[i] == cmd) {
-					this.buffer.jqxhrs[i].abort();
-					delete this.buffer.jqxhrs[i];
+				if(type(_f) == 'function') {
+					_f(_e);
 				}
 			}
-		},
-		killAll: function() {
-			for(var i in this.buffer.jqxhrs) {
-				this.buffer.jqxhrs[i].abort();
-				delete this.buffer.jqxhrs[i];
-			}
-		},
+		};
 //=========================================================================================================
-		fetchIt: function(payLoad, _s, _f) {
+		function fetchIt (payLoad, _s, _f) {
 			var _t = this;
-			cuteNSexy.buffer.callStack[cuteNSexy.buffer.callStack.length] = {'s': _s, 'f': _f, 'i': this.buffer.salt, 'c': payLoad.command};
-//			payLoad.signature = signature;
+			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
-			cuteNSexy.Logger.info('Connecting: ' + this._service + ' on ' + this._domain + ' with the command ' + payLoad.command);
-//			cuteNSexy.Logger.dir(payLoad);
+			console.dir(payLoad);
+			buffer.jqxhrs.push( $.ajax({
 
-			var cmd = payLoad.command;
-			var call = {};
-			call[cmd] = $.ajax({
-
-				url: cuteNSexy.buildUrl(payLoad.command, payLoad.data),
+				url: _domain + '/' + _service + '/' + payLoad.command + '/?request=' + JSON.stringify(payLoad.data),
 				accepts: 'application/json',
 				dataType: 'jsonp',
 				jsonpCallback: 'grabHandsome',
@@ -180,41 +144,28 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 
 			}).done( function(data, textStatus, jqXHR) {
 
-				cuteNSexy.doTheTwist(data);
-//				$('#ajaxLoader').html('');
+				cuteNSexy.doTheTwist(data, textStatus, jqXHR);
 
-			}).always( function() {
-/*
-	TODO check ajax loader...
-*/
-//				$('#pcarea').html( $('#ajaxLoader').html );
-
-			});
-			this.buffer.jqxhrs[this.buffer.jqxhrs.length] = call;
-		},
-		doTheTwist: function(data) {
-
-			// hide the loader
-
+			}));
+		};
+		function doTheTwist (data, textStatus, jqXHR) {
 			var cmd = (data._type.slice(-8) == 'Response') ? data._type.replace('Response', '') : 'err';
 
 			// prechecks
 			var found = false;
-			var realCallbackS;
-			var realCallbackF;
-			var callStackP = '';
+			var realCallbackS, realCallbackF, _sssP;
 			itCameBack = data.callbackTag;
 			
-			for(var sz in cuteNSexy.buffer.callStack) {
-				var pointer = cuteNSexy.buffer.callStack[sz];
+			for(var sz in cuteNSexy.buffer._sss) {
+				var pointer = cuteNSexy.buffer._sss[sz];
 				if(itCameBack == pointer.i) {
 					found = true;
 					realCallbackS = pointer.s;
 					realCallbackF = pointer.f;
-					callStackP = sz;
+					_sssP = sz;
 				}
 			}
-
+			
 			var cfgP = cuteNSexy._cfg[cmd];
 			for(var cfk in cfgP.check) {
 				var ea = cfgP.check[cfk];
@@ -233,7 +184,7 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 					}
 				}
 				var resString = cuteNSexy._cfg[ cmd ].result;
-//				console.info("> retrieved " + cmd + " command, the result label is " + resString);
+				console.info("> retrieved " + cmd + " command, the result label is " + resString);
 
 				// postchecks
 /*
@@ -264,35 +215,22 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 				}
 				*/
 
-if(cmd=='GetDashboardReportMap'){
-//console.log("===> package had " + Object.keys(data[resString]).length + " items");
-//console.dir(data);
-//console.log('type is '+typeof data.rowList);
-}
 				// use the right callback for the command!
-				if(typeof realCallbackS == 'function') {
-					var set = [];
-					for( var i in data[resString] ) {
-					    set[i] = data[resString][i];
-					}
-					realCallbackS( set, cmd );
-//					delete cuteNSexy.buffer.callStack[ callStackP ];
-				}else{
-//					console.dir(realCallbackS);
-					console.error('DAMNED! it seems the callback function is not a function afterall...');
+				if(this.type( realCallbackS ) == 'function') {
+					realCallbackS( data[resString], cmd );
+					delete cuteNSexy.buffer._sss[ _sssP ];
 				}
 
 				$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
-				$.event.trigger({'type': cmd + "ReceivedAndProccessedData", 'message': '', 'time': new Date()});
 				
 			}
-		},
+		};
 //=========================================================================================================
-		setService: function(newService) {
+		function setService (newService) {
 			this._service = newService;
 			return true;
-		},
-		setDomain: function(newDomain) {
+		};
+		function setDomain (newDomain) {
 			if( (newDomain.substr(0,7) === 'http://') && (newDomain.length > 10) ) {
 				if(newDomain.substr(-1,1) === '/') {
 					newDomain = newDomain.substr(0,newDomain.length-1);
@@ -302,14 +240,14 @@ if(cmd=='GetDashboardReportMap'){
 				return false;
 			}
 			return true;
-		},
-		getSessionID: function() {
-			if(this.buffer.sid == '') {
-				this.buffer.sid = this.createUUID();
+		};
+		function getSessionID () {
+			if(buffer.sid == '') {
+				buffer.sid = createUUID();
 			}
-			return this.buffer.sid;
-		},
-		createUUID: function() {
+			return buffer.sid;
+		};
+		function createUUID () {
 		    // http://www.ietf.org/rfc/rfc4122.txt
 			var s = [];
 			var hexDigits = "0123456789abcdef";
@@ -321,8 +259,8 @@ if(cmd=='GetDashboardReportMap'){
 			s[8] = s[13] = s[18] = s[23] = "-";
 
 			return(s.join(""));
-		},
-		type: function(o) {
+		};
+		function type (o) {
 			var types = {
 			    'undefined'        : 'undefined',
 			    'number'           : 'number',
@@ -336,12 +274,12 @@ if(cmd=='GetDashboardReportMap'){
 			},
 			tostring = Object.prototype.toString;
 		    return types[typeof o] || types[tostring.call(o)] || (o ? 'object' : 'null');
-		},
-		baseObj: function(sid) { return ({'callTag': "", 'registerId': "", 'verb': "", 
-				'session': sid, 'callbackTag': this.buffer.salt });},
-		isDefined: function(v) {
+		};
+		function baseObj (sid) { return ({'callTag': "", 'registerId': "", 'verb': "", 
+				'session': sid, 'callbackTag': buffer.salt });};
+		function isDefined (v) {
 		    return (typeof(window[v]) == "undefined")?  false: true;
-		},
-		K : function() { return this; },
-		Logger : window.console || { log: cuteNSexy.K, warn: cuteNSexy.K, error: cuteNSexy.K },
-	};
+		};
+		function K () { return this; };
+
+}(window.cuteNSexy = window.cuteNSexy || {}, jQuery));

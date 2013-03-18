@@ -69,6 +69,12 @@ exports.addRow = function(req, res) {
 
 }
 
+exports.getEntries = function(req, res) {
+	db.matrix.all(function(err, docs){
+		res.send(docs);		
+	})
+}
+
 exports.findAll = function(req, res) {
 	db.collection('matrix', function(err, collection) {
 		collection.find().toArray( function(err, items) {

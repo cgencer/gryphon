@@ -29,6 +29,7 @@ var Gryphon = (function(Gryphon, undefined){
 
 //	einhorn.saveapp(app);
 	app.post('/api/addRow', matrix.addRow);
+	app.get('/api/getEntries', matrix.getEntries);
 	app.get('/stern', einhorn.stern);
 	app.listen(7001);
 
