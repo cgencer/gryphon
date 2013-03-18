@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+
+    <title>MAKINA</title>
+
+    <!-- loxodonta -->
+
+
+
+
+
+    <link rel="stylesheet" href="frontend/stylesheets/css/dashboard.css"  />
+
+
+    <script type="text/javascript" src="https://www.google.com/jsapi" charset="utf-8" ></script>
+
+    <script type="text/javascript" src="frontend/javascript/third_party/goog/closure/goog/base.js" charset="utf-8" ></script>
+    <script type="text/javascript" src="frontend/javascript/deps.js" charset="utf-8"  ></script>
+    <script type="text/javascript" src="frontend/javascript/makina/Bootstrapper.js" charset="utf-8"  ></script>
+
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8" ></script>
+
+
+    <!--
+      <script type="text/javascript" src="frontend/javascript/compiled/compiled.js" ></script>
+     -->
+
+<script>
+
+    $(document).ready(function(){
+
+        $(".menu-item").click(function(){
+
+
+            if($(this).next(".sub-menu").hasClass('sub-menu')){
+
+                $(".sub-menu").hide();
+                $(".menu-item").removeClass("active");
+
+
+                if($(this).next(".sub-menu").is(':visible')){
+                    $(this).removeClass("active");
+                    $(this).next(".sub-menu").hide();
+                }else {
+                    $(this).next(".sub-menu").show();
+                    $(this).addClass("active");
+                }
+            }
+
+        });
+
+
+        $(".makina-menu").each(function(){
+            var idd = this.id;
+            $("#"+idd+" .makina-select-box-options> li a").click(function(){
+                var val=$(this).attr("rel");
+                var txt=$(this).text();
+                $("#"+idd).find('.makina-selected').text(txt);
+                $("#"+idd).find('.makina-menu-hidden').text(val);
+            });
+        });
+
+
+    });
+
+</script>
+
+
+
+
+    <script type="text/javascript">
+
+
+
+        var dataJson ={"2013":{"c":1359,"3":{"c":28,"19":{"c":2,"7":{"c":2}},"22":{"c":5,"5":{"c":5}},"25":{"c":6,"3":{"c":6}},"28":{"c":7,"1":{"c":7}},"30":{"c":8,"23":{"c":8}}},"4":{"c":132,"2":{"c":9,"21":{"c":9}},"5":{"c":10,"19":{"c":10}},"8":{"c":11,"17":{"c":11}},"11":{"c":12,"15":{"c":12}},"14":{"c":13,"13":{"c":13}},"17":{"c":14,"11":{"c":14}},"20":{"c":15,"9":{"c":15}},"23":{"c":15,"7":{"c":15}},"26":{"c":16,"5":{"c":16}},"29":{"c":17,"3":{"c":17}}},"5":{"c":253,"2":{"c":18,"1":{"c":18}},"4":{"c":19,"23":{"c":19}},"7":{"c":20,"21":{"c":20}},"10":{"c":21,"19":{"c":21}},"13":{"c":22,"17":{"c":22}},"16":{"c":23,"15":{"c":23}},"19":{"c":24,"13":{"c":24}},"22":{"c":25,"11":{"c":25}},"25":{"c":26,"9":{"c":26}},"28":{"c":27,"7":{"c":27}},"31":{"c":28,"5":{"c":28}}},"6":{"c":328,"3":{"c":29,"3":{"c":29}},"6":{"c":30,"1":{"c":30}},"8":{"c":31,"23":{"c":31}},"11":{"c":31,"21":{"c":31}},"14":{"c":32,"19":{"c":32}},"17":{"c":33,"17":{"c":33}},"20":{"c":34,"15":{"c":34}},"23":{"c":35,"13":{"c":35}},"26":{"c":36,"11":{"c":36}},"29":{"c":37,"9":{"c":37}}},"7":{"c":471,"2":{"c":38,"7":{"c":38}},"5":{"c":39,"5":{"c":39}},"8":{"c":40,"3":{"c":40}},"11":{"c":41,"1":{"c":41}},"13":{"c":42,"23":{"c":42}},"16":{"c":43,"21":{"c":43}},"19":{"c":44,"19":{"c":44}},"22":{"c":45,"17":{"c":45}},"25":{"c":46,"15":{"c":46}},"28":{"c":46,"13":{"c":46}},"31":{"c":47,"11":{"c":47}}},"8":{"c":147,"3":{"c":48,"9":{"c":48}},"6":{"c":49,"7":{"c":49}},"9":{"c":50,"5":{"c":50}}}}};
+
+
+
+
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', {'packages':['corechart']});
+
+        var visualization = {};
+
+        google.setOnLoadCallback(function(){
+            visualization = google.visualization;
+            drawChart();
+        });
+
+
+
+
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        //google.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            drawMakinaLine();
+
+
+
+
+        }
+
+
+
+
+
+
+        function drawMakinaLine(){
+
+            //dataJson
+
+            var title =['Month', 'Click'];
+
+            var arrNewData = [];
+
+            arrNewData.push(title);
+
+            for(var i=1;i<=12;i++){
+
+                if(dataJson[2013][i] != undefined){
+                    var m =[];
+                    var mCount =dataJson[2013][i]["c"];
+                    var date =""+i;
+                    m.push(date);
+                    m.push(mCount);
+
+                    arrNewData.push(m);
+
+                }else{
+
+                    var m =[];
+                    var mCount =0;
+                    var date =""+i;
+                    m.push(date);
+                    m.push(mCount);
+                    arrNewData.push(m);
+                }
+
+            }
+
+
+            var data = google.visualization.arrayToDataTable(arrNewData);
+
+            var options={
+                width: 800,
+                height: 200
+                /*,
+                 animation:{
+                 duration: 2000,
+                 easing: 'out'
+                 },
+                 vAxis: {title: "Cups"},
+                 hAxis: {title: "Month"}*/
+            };
+
+
+
+            var chart1 = new google.visualization.AreaChart(document.getElementById('chart_line_area_makina'));
+            chart1.draw(data,options );
+
+            options = {
+                title: 'App Click',
+                isStacked: true,
+                hAxis: {title: 'Year', titleTextStyle: {color: 'red'}},
+                chartArea:{left:1},
+                vAxis: {textPosition: 'in'}
+            };
+
+
+
+
+
+
+            var chart2 = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart2.draw(data, options);
+
+/*
+            new google.visualization.LineChart(document.getElementById('visualization')).
+                    draw(data, {curveType: "function",
+                        width: 500, height: 400,
+                        vAxis: {maxValue: 10}}
+            );*/
+
+/*
+
+            var options = {
+                title: 'Company Performance',
+                hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+            */
+
+
+        }
+
+
+
+
+
+
+    </script>
+
+
+
+</head>
+<body>
+
+
+<div id="sidebar">
+
+    <div class="sidebar-top">
+
+        <div class="makina-logo"></div>
+
+    </div>
+    <ul class="sidebar-menu">
+        <li class="menu-item">
+            <div class="logo select-app"></div>
+            <span class="text">Select App</span>
+        </li>
+        <li class="sub-menu">
+            <ul id="ul-id-app-list">
+                <li class="menu-item">
+                    <span class="text">App 1</span>
+                </li>
+
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo dashboards"></div>
+            <span class="text">Dashboard</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Dashboard 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Dashboard 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Dashboard 3</span>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo events"></div>
+            <span class="text">Events</span>
+        </li>
+        <li class="menu-item">
+            <div class="logo sources"></div>
+            <span class="text">Sources</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Sources 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Sources 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Sources 3</span>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo management"></div>
+            <span class="text">Management</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Management 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Management 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Management 3</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+
+<div id="content">
+
+
+
+<input type="button" id="widget-1" value="Widget - 1" />
+<input type="button" id="widget-2" value="Widget - 2" />
+<input type="button" id="widget-3" value="Widget - 3" />
+<input type="button" id="widget-4" value="Widget - 4" />
+<input type="button" id="widget-5" value="Widget - 5" />
+
+
+
+<div id="content-widget" ></div>
+
+
+
+<div id="chart_div"></div>
+<div id="chart_line_area"></div>
+<div id="chart_line_area_makina"></div>
+
+
+
+</div>
+
+
+
+<div id="view-footer" >
+
+
+</div>
+
+
+
+</body>
+</html>
