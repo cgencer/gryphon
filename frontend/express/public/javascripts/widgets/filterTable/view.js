@@ -6,7 +6,51 @@ var filterTable = (function(filterTable, $, undefined){
 	var tableDef = [];
 	var tableVisibleCols = [];
 
-	prepData = function () {
+	_ts = this;
+	prepData();
+	var cuteNSexy = window.cuteNSexy || {};
+	var ajaxDictionary = {
+		'getEntries': {
+			'mandatory': [],
+			'clean': [ ],
+			'check': [ ],
+			'result': '',
+		}
+	}
+	cuteNSexy.init('http://127.0.0.1', 'api', ajaxDictionary);
+
+	$('#content').text('booting up...');
+	tables = {'root':{'name':''}};
+	tables.root.name = randomId();		
+
+	$(document).on('click', '#' + tables.root.name + ' tr', function () {
+		if ( tables.root.ref.fnIsOpen( this ) ) {
+			tables.root.ref.fnClose( this );
+		} else {
+			tables.root.ref.fnOpen( this, "Temporary row opened", "info_row" );
+			$('#' + tables.root.name + ' tr td.info_row').html('<div class="innerTables" />');
+		}
+	});
+
+//	this.loadFromJSON('dataset.json');
+	loadFromJSON('http://127.0.0.1:7001/api/getEntries');
+	
+/*
+	cuteNSexy.runChainedEvents( [ {	'cmd': 'getEntries', 
+									'payload': {},
+									'success': success,
+									'fail': fail }
+	] );
+*/
+	function success(package) {
+		build (cuteNSexy.response);
+	};
+
+	function fail(err) {
+		console.log('error received:\n'+err);
+	};
+
+	function prepData () {
 		filterTable.tableDef = [
 		    { name : 'kids', type : 'number' },
 		    { name : 'anumber', type : 'number' },
@@ -48,36 +92,19 @@ var filterTable = (function(filterTable, $, undefined){
 		];
 	};
 
-	init = function () {
+	function loadFromJSON (file) {
 		_ts = this;
-		this.prepData();
 
-
-		$('#content').text('booting up...');
-		tables = {'root':{'name':''}};
-		tables.root.name = GryphonHelpers.randomId();		
-
-		$(document).on('click', '#' + tables.root.name + ' tr', function () {
-			if ( tables.root.ref.fnIsOpen( this ) ) {
-				tables.root.ref.fnClose( this );
-			} else {
-				tables.root.ref.fnOpen( this, "Temporary row opened", "info_row" );
-				$('#' + tables.root.name + ' tr td.info_row').html('<div class="innerTables" />');
-			}
-		});
-
-//		this.loadFromJSON('dataset.json');
-		this.loadFromJSON('http://127.0.0.1:7001/api/getEntries');
-	};
-	
-	loadFromJSON = function (file) {
-		_ts = this;
 		$.ajax({
-			url : file,
-			dataType: "json",
+			url : file + '/get',
+			dataType: "jsonp",
+			contentType: 'application/json',
+			processData: true,
+			cache: false,
+			type: 'GET',
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 0) {
-					_error = 'Not connect.\n Verify Network.';
+					_error = 'Not connect. Verify Network.';
 				} else if (jqXHR.status == 404) {
 					_error = 'Requested page not found. [404]';
 				} else if (jqXHR.status == 500) {
@@ -94,12 +121,13 @@ var filterTable = (function(filterTable, $, undefined){
 				console.log(_error);
 			},
 			success : function (data) {
-				_ts.build(data);
+				console.dir(data);
+				build(data);
 			}
 		});
 	}
 
-	build = function (dp) {
+	function build (dp) {
 		_ts = this;
 		$('#content').text('loaded the file...');
 		tables.root.dataset = new Miso.Dataset( {
@@ -109,14 +137,14 @@ var filterTable = (function(filterTable, $, undefined){
 		tables.root.dataset.fetch({ 
 			success : function() {
 				console.log( this.columnNames() );
-				_ts.filterThem( this );
-				_ts.dataFiltered( this );
+				filterThem( this );
+//				dataFiltered( this );
 			}
 		});
 	};
 
-	filterThem = function (df) {
-		this.dataFiltered(
+	function filterThem (df) {
+		dataFiltered(
 			df.rows( function (row) {
 //				return row.ownsmartphone === true;
 				return (row._id > 0) === true;
@@ -124,7 +152,7 @@ var filterTable = (function(filterTable, $, undefined){
 		);
 	};
 
-	dataFiltered = function (df) {
+	function dataFiltered (df) {
 		console.log('>>> filtered result has '+df.length+' entries...');
 		$('#content').html( '<table id="' + tables.root.name + '" width="100%" />' );
 		tables.root.ref = $('#'+tables.root.name).dataTable({
@@ -149,6 +177,14 @@ var filterTable = (function(filterTable, $, undefined){
 		});
 	};
 
-	this.init();
+	function randomId (len) {
+		if(len == undefined){len = 36;}
+		var s = [];
+		var hexDigits = "0123456789abcdef";
+		for (var i = 0; i < len; i++) {
+			s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+		}
+		return(s.join(""));
+	};
 
 }(window.filterTable = window.filterTable || {}, jQuery));

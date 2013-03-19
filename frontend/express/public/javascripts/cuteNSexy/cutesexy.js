@@ -29,14 +29,6 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 */
 });
 var cuteNSexy = (function (cuteNSexy, $, undefined) {
-
-		return {						// only these methods are accessible from the outside
-			'init': init,
-			'runChainedEvents': runChainedEvents,
-										// and these variables
-			'response': buffer.rp
-		};
-
 		var _this = this;
 		var _domain = "http://mkevt.nmdapps.com";
 		var _service = "makinaweb";
@@ -50,10 +42,28 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			version: 			"0.3"
 		};
 		var buffer = {};
-		var _cfg = {};
+		var _dictionary = {};
 		function grabHandsome () {};
+		return {						// only these methods are accessible from the outside
+			'init': init,
+			'setService': setService,
+			'setDomain': setDomain,
+			'getSessionID': getSessionID,
+			'runChainedEvents': runChainedEvents,
+										// and these variables
+			'response': buffer.rp
+		};
 
-		function init () {
+		function init (dom, srv, dict) {
+			if(dom !== undefined) {
+				setDomain(dom);
+			}
+			if(srv !== undefined) {
+				setService(srv);
+			}
+			if(dict !== undefined) {
+				setDictionary(dict);
+			}
 			cleanUp();
 			createUUID();
 		};
@@ -85,24 +95,31 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		};
 		function run (cmd, payLoad, _s, _f) {
 			cleanUp();
-			_cfg = Object.create( handsomeCfg );
 			buffer.salt = $.base64.encode( createUUID() );
 
-			for(var cfk in _cfg) {
-				if(type (_cfg[cfk] ) == 'array'){
+			for(var cfk in _dictionary) {
+				if(type (_dictionary[cfk] ) == 'array'){
 					var _e = "Command does not exist in the config-file, exitting...";
 					_f(_e);
 				}
 			}
-			if(type(_e) == 'undefined') {				// checks for cfg-data exists
-				var set = _cfg[cmd];
-				for(var ck in set.clean) {
-					delete payLoad[set.clean[ck]];
+			if(_e === undefined) {				// checks for cfg-data exists
+				var set = _dictionary[cmd];
+				if(set !== undefined) {
+					if(set.clean !== undefined) {
+						for(var ck in set.clean) {
+							delete payLoad[set.clean[ck]];
+						}
+					}
 				}
 
-				for(var mk in set.mandatory) {
-					if(payLoad[set.mandatory[mk]] == undefined) {
-						var _e = "Key " + set.mandatory[mk] + " does not exist, exitting...";
+				if(set !== undefined) {
+					if(set.mandatory !== undefined) {
+						for(var mk in set.mandatory) {
+							if(payLoad[set.mandatory[mk]] == undefined) {
+								var _e = "Key " + set.mandatory[mk] + " does not exist, exitting...";
+							}
+						}
 					}
 				}
 			}
@@ -166,7 +183,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				}
 			}
 			
-			var cfgP = cuteNSexy._cfg[cmd];
+			var cfgP = cuteNSexy._dictionary[cmd];
 			for(var cfk in cfgP.check) {
 				var ea = cfgP.check[cfk];
 				var checkFlag = true;
@@ -183,26 +200,26 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 						}
 					}
 				}
-				var resString = cuteNSexy._cfg[ cmd ].result;
+				var resString = cuteNSexy._dictionary[ cmd ].result;
 				console.info("> retrieved " + cmd + " command, the result label is " + resString);
 
 				// postchecks
 /*
 				if(checkFlag == true) {
 //					console.log('checks done successfully...');
-//					console.log(cuteNSexy._cfg[ payLoad.command ].result);
-					if( cuteNSexy._cfg[ payLoad.command ].result == 'copyTheWholePackage') {
+//					console.log(cuteNSexy._dictionary[ payLoad.command ].result);
+					if( cuteNSexy._dictionary[ payLoad.command ].result == 'copyTheWholePackage') {
 
 						_s(data);
 
-					} else if(cuteNSexy.type(cuteNSexy._cfg[ payLoad.command ].result) == 'string') {
+					} else if(cuteNSexy.type(cuteNSexy._dictionary[ payLoad.command ].result) == 'string') {
 
-						_s(data[cuteNSexy._cfg[ payLoad.command ].result]);
+						_s(data[cuteNSexy._dictionary[ payLoad.command ].result]);
 
-					} else if(cuteNSexy.type(cuteNSexy._cfg[ payLoad.command ].result) == 'array') {
+					} else if(cuteNSexy.type(cuteNSexy._dictionary[ payLoad.command ].result) == 'array') {
 
 						var _t = {};
-						var res = cuteNSexy._cfg[ payLoad.command ].result;
+						var res = cuteNSexy._dictionary[ payLoad.command ].result;
 						for(var ar in res) {
 							_t[ res[ar] ] = data[ res[ar] ] ;
 							console.log('>>>>>>>>>>' + res[ar]);
@@ -238,6 +255,16 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				this._domain = newDomain;
 			}else{
 				return false;
+			}
+			return true;
+		};
+		function setDictionary (newDict) {
+			if(newDict !== undefined) {
+				this._dictionary = newDict;
+			}else{
+				if(handsomeCfg !== undefined) {
+					this._dictionary = Object.create( handsomeCfg );
+				}
 			}
 			return true;
 		};

@@ -1,4 +1,4 @@
-var GryphonAPI = (function(GryphonAPI, undefined){
+var GryphonAPI = (function(GryphonAPI, undefined) {
 	
 	var _port = 7001;
 	var _host = 'localhost';
@@ -15,11 +15,13 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 	server.use(restify.gzipResponse());
 	server.use(restify.bodyParser());
 	server.post('/api/addRow', addRow);
-	server.get('/api/getEntries', getEntries);
+	server.get('/api/getEntries/get?callback=:remainer', getEntries);
+	server.post('/api/getEntries/get?callback=:remainer', getEntries);
 	server.listen(_port, function() {
 		console.log('%s listening at %s on port %d', 'makina API', _host, _port);
-	});
-
+	} );
+//http://127.0.0.1:7001/api/getEntries/?callback=jQuery18305745645841410649_1363710295214
+//http://127.0.0.1:7001/api/getEntries/?callback=jQuery18308050109725557517_1363710144930&_=1363710145410
 	function setPort (p) {
 		_port = p;
 	}
@@ -30,11 +32,11 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 
 	function grabMetas () {
 		metalib = [];
-		db.metalib.all(function(err, docs){
-			for(var i in docs){
+		db.metalib.all(function(err, docs) {
+			for(var i in docs) {
 				metalib[i] = docs[i];
 			}
-		});
+		} );
 	};
 
 	function toRadix (N) {
@@ -50,7 +52,7 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 	};
 
 	function addRow (req, res) {
-		res.header("Access-Control-Allow-Origin", "*"); 
+		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
 		var nrow = {};
@@ -58,8 +60,9 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 		var _ts = this;
 		var newkey = '';
 
-		for(var key in row){
-			if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp'){
+		for(var key in row) {
+			if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp') {
+
 				nrow[key] = row[key];
 
 			}else{
@@ -78,9 +81,9 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 				if(oldkey == '') {
 					newkey = toRadix(metalib.length);
 					var insobj = {'meta': newkey, 'real':key};
-					db.metalib.insert(insobj, function(err, doc){
+					db.metalib.insert(insobj, function(err, doc) {
 						metalib[metalib.length] = {'meta':doc.meta, 'real':doc.real};	// add the inserted meta also onto the metalib array
-					});
+					} );
 					nrow[newkey] = row[key];
 					console.log('NEWKEY: '+newkey);
 				}else{
@@ -90,25 +93,64 @@ var GryphonAPI = (function(GryphonAPI, undefined){
 				newkey = '';
 			}
 		}
-		db.matrix.insert(nrow, {'safe': true}, function(err, doc){
+		db.matrix.insert(nrow, {'safe': true}, function(err, doc) {
 			theId = doc._id;
 			res.send(doc[0]);
-		})
+		} );
 
 	}
 
-	function getEntries (req, res) {
-		db.matrix.all(function(err, docs){
-			res.send(docs);		
-		})
+	function getEntries (req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*"); 
+		res.header("Access-Control-Allow-Headers", "X-Requested-With");
+		var nrows = [];
+
+		db.matrix.find().limit(1000).all( function(err, docs) {
+
+			for(var rowid in docs) {
+				var nrow = {};
+				var row = docs[rowid];
+				for(var key in row) {
+					if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp'  || key === '_id') {
+						nrow[key] = row[key];
+					}else{
+						oldkey = '';
+						loopSR:
+						for(var ik in metalib) {
+							if(metalib[ik].meta === key) {
+								oldkey = metalib[ik].real;
+								nrow[oldkey] = row[key];
+								break loopSR;
+							}else{
+								oldkey = '';
+							}
+						}
+					}
+				}
+				nrows.push(nrow);
+			}
+
+			var body = JSON.stringify(nrows);
+//			res.send(body);
+
+			res.writeHead(200, {
+//				'Content-Length': Buffer.byteLength(body),
+//				'Accept-Encoding': 'text/plain',
+				'Content-Type': 'application/json; charset=UTF-8'
+			});
+//			res.send(body);
+			res.write(req.query.callback + '(' + body + ');');
+			res.end();
+		} );
+		return next();
 	}
 
 	function findAll (req, res) {
 		db.collection('matrix', function(err, collection) {
 			collection.find().toArray( function(err, items) {
 				res.send(items);
-			});
-		});
+			} );
+		} );
 	};
 
-}(GryphonAPI = GryphonAPI || {}));
+}(GryphonAPI = GryphonAPI || {} ));

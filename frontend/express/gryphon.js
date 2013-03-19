@@ -2,10 +2,9 @@ var Gryphon = (function(Gryphon, undefined){
 
 	_ns = {};
 	var express = require('express');
+	var $ = require('jquery');
 	var app = express.createServer();
 	var realm = require('express-http-auth').realm('Private Area');
-	var einhorn = require('./public/javascripts/makina/makina.frontend.js');
-	_ns.app = app;
 
 	var checkUser = function(req, res, next) {
 		if (req.username == 'Foo' && req.password == 'Bar') {
@@ -27,7 +26,11 @@ var Gryphon = (function(Gryphon, undefined){
 //	app.get('/api/getAll', private, matrix.findAll);
 
 //	einhorn.saveapp(app);
-	app.get('/stern', einhorn.stern);
-	app.listen(7001);
+	app.get('/stern', getEntries);
+	app.listen(7002);
+	
+	function getEntries (req, res) {
+		res.sendfile('views/index.html');
+	};
 
 }(Gryphon = Gryphon || {}));
