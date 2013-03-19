@@ -66,7 +66,8 @@ var filterTable = (function(filterTable, $, undefined){
 			}
 		});
 
-		this.loadFromJSON('dataset.json');
+//		this.loadFromJSON('dataset.json');
+		this.loadFromJSON('http://127.0.0.1:7001/api/getEntries');
 	};
 	
 	loadFromJSON = function (file) {
@@ -109,6 +110,7 @@ var filterTable = (function(filterTable, $, undefined){
 			success : function() {
 				console.log( this.columnNames() );
 				_ts.filterThem( this );
+				_ts.dataFiltered( this );
 			}
 		});
 	};
@@ -116,7 +118,8 @@ var filterTable = (function(filterTable, $, undefined){
 	filterThem = function (df) {
 		this.dataFiltered(
 			df.rows( function (row) {
-				return row.ownsmartphone === true;
+//				return row.ownsmartphone === true;
+				return (row._id > 0) === true;
 			})
 		);
 	};
@@ -133,7 +136,7 @@ var filterTable = (function(filterTable, $, undefined){
 	        },
 //			'bProcessing': true,
 			'sPaginationType': 'full_numbers',
-			'aoColumns': filterTable.tableVisibleCols,
+//			'aoColumns': filterTable.tableVisibleCols,
 			'aoColumnDefs': { 'bSearchable': true, 'aTargets': [ '_all' ] },		// TOCHECK
 			'oColumnFilterWidgets': {												// TOCHECK
 		        'aiExclude': [ 0, 6 ],

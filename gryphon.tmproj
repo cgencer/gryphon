@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/views/index.html</string>
+	<string>frontend/express/public/javascripts/client/index.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -16,7 +16,7 @@
 			<key>filename</key>
 			<string>frontend/express/public/filterset.html</string>
 			<key>lastUsed</key>
-			<date>2013-03-14T14:46:14Z</date>
+			<date>2013-03-18T11:04:54Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -28,13 +28,19 @@
 			<key>filename</key>
 			<string>../aravan/makina/frontend/express/public/javascripts/makina/makina.filterset.js</string>
 			<key>lastUsed</key>
-			<date>2013-03-13T12:13:43Z</date>
+			<date>2013-03-18T11:03:54Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>frontend/express/public/javascripts/makina/makina.filtertable.js</string>
+			<key>lastUsed</key>
+			<date>2013-03-18T13:55:27Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>frontend/express/public/javascripts/makina/makina.tableset.js</string>
 			<key>lastUsed</key>
-			<date>2013-03-14T09:31:48Z</date>
+			<date>2013-03-18T12:51:22Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -46,19 +52,46 @@
 			<key>filename</key>
 			<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
 			<key>lastUsed</key>
-			<date>2013-03-15T14:24:22Z</date>
+			<date>2013-03-18T12:58:41Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>frontend/express/public/dataset.json</string>
 			<key>lastUsed</key>
-			<date>2013-03-11T22:55:44Z</date>
+			<date>2013-03-18T13:37:52Z</date>
 		</dict>
 		<dict>
-			<key>filename</key>
-			<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
-			<key>lastUsed</key>
-			<date>2013-03-14T09:31:41Z</date>
+			<key>children</key>
+			<array>
+				<dict>
+					<key>filename</key>
+					<string>frontend/express/public/stylesheets/k/custom-theme/jquery-ui-1.10.1.custom.css</string>
+					<key>lastUsed</key>
+					<date>2013-03-18T13:40:37Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>frontend/express/public/stylesheets/k/dashboard.css</string>
+					<key>lastUsed</key>
+					<date>2013-03-18T13:45:33Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>frontend/express/public/stylesheets/k/variables.css</string>
+					<key>lastUsed</key>
+					<date>2013-03-18T13:43:17Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
+					<key>lastUsed</key>
+					<date>2013-03-18T13:40:41Z</date>
+				</dict>
+			</array>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>styles</string>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -67,7 +100,22 @@
 					<key>filename</key>
 					<string>frontend/express/views/index.html</string>
 					<key>lastUsed</key>
-					<date>2013-03-15T14:29:10Z</date>
+					<date>2013-03-18T13:55:24Z</date>
+				</dict>
+				<dict>
+					<key>children</key>
+					<array>
+						<dict>
+							<key>filename</key>
+							<string>frontend/express/public/javascripts/client/index.js</string>
+							<key>lastUsed</key>
+							<date>2013-03-18T13:55:27Z</date>
+						</dict>
+					</array>
+					<key>expanded</key>
+					<true/>
+					<key>name</key>
+					<string>view scripts</string>
 					<key>selected</key>
 					<true/>
 				</dict>
@@ -88,13 +136,13 @@
 					<key>filename</key>
 					<string>frontend/express/public/javascripts/makina/makina.frontend.js</string>
 					<key>lastUsed</key>
-					<date>2013-03-15T14:29:10Z</date>
+					<date>2013-03-18T11:00:54Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>frontend/express/gryphon.js</string>
 					<key>lastUsed</key>
-					<date>2013-03-15T14:26:03Z</date>
+					<date>2013-03-18T12:45:25Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -112,9 +160,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>88</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>6</integer>
+				<integer>22</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -126,28 +174,58 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>6</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>45</integer>
+				<integer>47</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>5</integer>
+			<integer>7</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>46</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>47</integer>
+			</dict>
 		</dict>
-		<key>frontend/express/public/javascripts/makina/makina.frontend.js</key>
+		<key>frontend/express/public/javascripts/client/index.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>28</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>18</integer>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>frontend/express/public/javascripts/makina/makina.filtertable.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>160</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>100</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/makina/makina.matrix.js</key>
 		<dict>
@@ -156,7 +234,63 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>63</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>36</integer>
+		</dict>
+		<key>frontend/express/public/javascripts/makina/makina.tableset.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>468</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>454</integer>
+		</dict>
+		<key>frontend/express/public/stylesheets/k/dashboard.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>300</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>286</integer>
+		</dict>
+		<key>frontend/express/public/stylesheets/k/variables.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>frontend/express/public/stylesheets/ui/gryphonStyles.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -168,23 +302,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>53</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>32</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>13</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>frontend/express/public/filterset.html</string>
-		<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
+		<string>frontend/express/public/javascripts/makina/makina.tableset.js</string>
+		<string>frontend/express/public/javascripts/makina/makina.filtertable.js</string>
+		<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
 		<string>frontend/express/gryphon.js</string>
-		<string>frontend/express/public/javascripts/makina/makina.frontend.js</string>
+		<string>frontend/express/public/javascripts/makina/makina.matrix.js</string>
 		<string>frontend/express/views/index.html</string>
+		<string>frontend/express/public/javascripts/client/index.js</string>
+		<string>frontend/express/public/stylesheets/k/variables.css</string>
+		<string>frontend/express/public/stylesheets/k/dashboard.css</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
@@ -199,15 +338,30 @@
 			<key>subItems</key>
 			<dict/>
 		</dict>
-		<key>views</key>
+		<key>styles</key>
 		<dict>
 			<key>isExpanded</key>
 			<true/>
 			<key>subItems</key>
 			<dict/>
 		</dict>
+		<key>views</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict>
+				<key>view scripts</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{95, 4}, {1300, 841}}</string>
+	<string>{{43, 37}, {1300, 841}}</string>
 </dict>
 </plist>

@@ -1,8 +1,14 @@
 var mongo = require('mongodb');
+var _ = require('underscore');
+var restify = require('restify');
+var server = restify.createServer();
 
-var Server = mongo.Server,
-		Db = mongo.Db,
-	  BSON = mongo.BSONPure;
+server.post('/api/addRow', exports.addRow);
+server.get('/api/getEntries', exports.getEntries);
+
+server.listen(7001, function() {
+	console.log('%s listening at %s', 'makina API', 'localhost');
+});
 
 var db = require('mongo-lite').connect('mongodb://localhost/makina', ['metalib', 'matrix']);
 var metalib;
@@ -33,40 +39,54 @@ exports.addRow = function(req, res) {
 	var _ts = this;
 	var newkey = '';
 
+	console.dir(row);
+
 	for(var key in row){
+console.log(">: "+key);
 
 		if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp'){
-			nrow[key] = row[key];												// copy these 3 columns directly
+			nrow[key] = row[key];
 
 		}else{
-			newkey = '';
-			for(var mi in metalib) {
-				if(metalib[mi].real === key){
-					newkey = metalib[mi].meta;
-					break;
+
+			console.log('-----------------------------');
+			oldkey = '';
+			loop:
+			for(var ik in metalib) {
+				console.log(ik+'___'+metalib[ik].real +'....'+ key);
+				if(metalib[ik].real === key) {
+					console.log('CATCHED!!!');
+					oldkey = metalib[ik].meta;
+					console.dir(metalib[ik]);
+					console.log('OLDKEY: '+oldkey);
+					break loop;
+				}else{
+					oldkey = '';
 				}
 			}
-			if(newkey === ''){												// insert new key into db and fetch new metalib
+			console.log('OLDKEY: '+oldkey);
+
+			if(oldkey == '') {
 				newkey = toRadix(metalib.length);
+				console.log("###"+newkey);
 				var insobj = {'meta': newkey, 'real':key};
-				db.metalib.insert(insobj, function(err, doc){})
-				grabMetas();
-			}
-			if(newkey !== ''){
+				db.metalib.insert(insobj, function(err, doc){
+					metalib[metalib.length] = {'meta':doc.meta, 'real':doc.real};	// add the inserted meta also onto the metalib array
+				});
 				nrow[newkey] = row[key];
+				console.log('NEWKEY: '+newkey);
+			}else{
+				console.log('OLDKEY: '+oldkey);
+				nrow[oldkey] = row[key];
 			}
+			newkey = '';
 		}
 	}
+	console.dir(nrow);
 	db.matrix.insert(nrow, {'safe': true}, function(err, doc){
 		theId = doc._id;
 		res.send(doc[0]);
 	})
-
-
-
-//		row.keyTimeSlot
-		
-
 }
 
 exports.getEntries = function(req, res) {
