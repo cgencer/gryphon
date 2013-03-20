@@ -2,7 +2,8 @@
 // Please do not edit.
 goog.addDependency('../../../../Registry.js', ['makina.Registry'], ['goog.structs.Map']);
 goog.addDependency('../../../../makina/Bootstrapper.js', ['makina.Bootstrapper'], ['goog.Uri', 'goog.array', 'goog.date', 'goog.debug.ErrorHandler', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.json', 'goog.net.XhrIo', 'goog.net.cookies', 'goog.storage.mechanism.HTML5LocalStorage', 'makina.Registry', 'makina.Widget', 'makina.dashboard.Start', 'makina.dom', 'makina.util']);
-goog.addDependency('../../../../makina/dashboard/Start.js', ['makina.dashboard.Start'], ['goog.crypt.base64', 'goog.dom.query', 'goog.json']);
+goog.addDependency('../../../../makina/dashboard/Start.js', ['makina.dashboard.Start'], ['goog.crypt.base64', 'goog.dom.query', 'goog.json', 'goog.object', 'makina.Dataset']);
+goog.addDependency('../../../../makina/dataset/Dataset.js', ['makina.Dataset'], []);
 goog.addDependency('../../../../makina/dialog/Dialog.js', ['makina.dialog.Dialog'], ['goog.ui.Dialog', 'goog.ui.Popup']);
 goog.addDependency('../../../../makina/dom/dom.js', ['makina.dom'], ['goog.dom']);
 goog.addDependency('../../../../makina/template/Dashboards.js', ['makina.template.Dashboards'], []);

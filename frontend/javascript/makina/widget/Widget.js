@@ -25,6 +25,7 @@ makina.Widget = function(wType,containerDivId,options){
     var title =['Month', 'Click'];
 
     var arrNewData = [];
+    var arrDataTable = [];
 
     arrNewData.push(title);
 
@@ -33,9 +34,16 @@ makina.Widget = function(wType,containerDivId,options){
         if(dataJson[2013][i] != undefined){
             var m =[];
             var mCount =dataJson[2013][i]["c"];
-            var date =i;
+            var date = i;
             m.push(date);
             m.push(mCount);
+
+            var mT=[];
+
+            mT.push("2013."+i);
+            mT.push(mCount);
+
+            arrDataTable.push(mT);
 
             arrNewData.push(m);
 
@@ -43,7 +51,7 @@ makina.Widget = function(wType,containerDivId,options){
 
             var m =[];
             var mCount =0;
-            var date =i;
+            var date = i;
             m.push(date);
             m.push(mCount);
             arrNewData.push(m);
@@ -62,23 +70,82 @@ makina.Widget = function(wType,containerDivId,options){
     if(this.type == makina.Widget.Type.AREA){
 
         this.chart = new vsz.AreaChart(document.getElementById(this.containerId));
+        this.dataTable = vsz.arrayToDataTable(arrNewData);
 
     }else if(this.type == makina.Widget.Type.BAR){
 
         this.chart = new vsz.BarChart(document.getElementById(this.containerId));
+        this.dataTable = vsz.arrayToDataTable(arrNewData);
+
+    }else if(this.type == makina.Widget.Type.COLUMN){
+
+        this.chart = new vsz.ColumnChart(document.getElementById(this.containerId));
+        this.dataTable = vsz.arrayToDataTable(arrNewData);
 
     }else if(this.type == makina.Widget.Type.LINE){
 
         this.chart = new vsz.LineChart(document.getElementById(this.containerId));
+        this.dataTable = vsz.arrayToDataTable(arrNewData);
 
     }else if(this.type == makina.Widget.Type.PIE){
 
         this.chart = new vsz.PieChart(document.getElementById(this.containerId));
+        var data = [
+            ['Task', 'Hours per Day'],
+            ['Work',     11],
+            ['Eat',      2],
+            ['Commute',  2],
+            ['Watch TV', 2],
+            ['Sleep',    7]
+        ];
+
+        this.dataTable = vsz.arrayToDataTable(data);
+
+    }else if(this.type == makina.Widget.Type.TABLE){
+
+
+        var data = new vsz.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Click');
+       /* data.addRows([
+            ['Mike',  {v: 10000, f: '$10,000'}, true],
+            ['Jim',   {v:8000,   f: '$8,000'},  false],
+            ['Alice', {v: 12500, f: '$12,500'}, true],
+            ['Bob',   {v: 7000,  f: '$7,000'},  true]
+        ]);*/
+
+        console.log(arrDataTable);
+        data.addRows(arrDataTable);
+
+        var table = new vsz.Table(document.getElementById(this.containerId));
+        table.draw(data, {showRowNumber: false});
+
+    }else if(this.type == makina.Widget.Type.GEO){
+
+
+        this.chart = new vsz.GeoChart(document.getElementById(this.containerId));
+
+        var data =[
+            ['Country', 'Popularity'],
+            ['Adana', 2000],
+            ['Ankara', 3000],
+            ['Aydin', 40000],
+            ['Istanbul', 50000],
+            ['Izmir', 6000],
+            ['Malatya', 7000]
+        ];
+
+        this.options = {
+            region: 'TR',
+            displayMode: 'markers',
+            colorAxis: {colors: ['green', 'blue']}
+        };
+
+        this.dataTable = vsz.arrayToDataTable(data);
 
     }
 
 
-    this.dataTable = vsz.arrayToDataTable(arrNewData);
 
 
 
@@ -90,8 +157,9 @@ makina.Widget = function(wType,containerDivId,options){
 
 
 makina.Widget.prototype.Draw = function(){
-
-    this.chart.draw(this.dataTable, this.options );
+    if(this.type != makina.Widget.Type.TABLE){
+        this.chart.draw(this.dataTable, this.options );
+    }
 }
 
 
@@ -100,8 +168,11 @@ makina.Widget.Type= {
 
      AREA:'area',
      BAR:'bar',
+     COLUMN:'column',
      LINE:'line',
-     PIE:'pie'
+     PIE:'pie',
+     TABLE:'table',
+     GEO:'geo'
 
 }
 

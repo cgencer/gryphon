@@ -132,16 +132,27 @@ makina.util.jsonpRequest = function( jsonObject, fnSuccessCallBack, fnErrorCallB
    };
 */
 
-    var serviceName = jsonObject["_type"].replace("Request","");
+   // var serviceName = jsonObject["_type"].replace("Request","");
+  ///  var serviceName = jsonObject["request"]["_type"].replace("Request","");
 
   ///  var _url= 'http://mkevt.nmdapps.com/makinaweb/UserLogin/?request='+goog.json.serialize(payload);
-    var _url= 'http://mkevt.nmdapps.com/makinaweb/'+serviceName+'/?request='+goog.json.serialize(jsonObject);
+   // var _url= 'http://mkevt.nmdapps.com/makinaweb/'+serviceName+'/?request='+goog.json.serialize(jsonObject);
+
+
+   // var _url= 'http://192.168.10.17/makinaweb/'+serviceName+'/?request='+goog.json.serialize(jsonObject);
+
+    //var _url ='http://alpha.loxodonta-editor.appspot.com:80/resources/dispatcher/test/v1/ff8080813caa0458013caa0458f70000/'+serviceName+'?request='+goog.json.serialize(jsonObject);
+
+    //var _url ='http://alpha.loxodonta-editor.appspot.com:80/resources/dispatcher/test/v1/ff8080813d7cfe90013d7d150d8f0001/'+serviceName+'?request='+goog.json.serialize(jsonObject);
+
+    var _url ='http://nmdapps.com/IHaberService/ServiceDisco/';
+
+    console.log(_url);
 
 
     var jsonp = new goog.net.Jsonp(_url);
 
-
-
+    jsonp.setRequestTimeout(45*1000);//45 sn
 
 
 
@@ -150,21 +161,11 @@ makina.util.jsonpRequest = function( jsonObject, fnSuccessCallBack, fnErrorCallB
 
         function(response){
 
-            var data = {};
-            try{
-                data = response;
-            }catch (e){
-            }
-            (fnSuccessCallBack && fnSuccessCallBack(data)) || makina.util.handleRequestSuccess(data);
+            (fnSuccessCallBack && fnSuccessCallBack(response)) || makina.util.handleRequestSuccess(response);
         },
         function(response){
-            var data = {};
-            try{
-                data=response;
-            }catch (e){
-                console.log(e);
-            }
-            (fnErrorCallBack && fnErrorCallBack(data)) || makina.util.handleRequestSuccess(data);
+
+            (fnErrorCallBack && fnErrorCallBack(response)) || makina.util.handleRequestSuccess(response);
         });
 
 

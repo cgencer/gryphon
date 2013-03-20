@@ -66,33 +66,29 @@ goog.require('goog.net.jsloader');
  * @constructor
  */
 goog.net.Jsonp = function(uri, opt_callbackParamName) {
-  /**
-   * The uri_ object will be used to encode the payload that is sent to the
-   * server.
-   * @type {goog.Uri}
-   * @private
-   */
-  this.uri_ = new goog.Uri(uri);
+    /**
+     * The uri_ object will be used to encode the payload that is sent to the
+     * server.
+     * @type {goog.Uri}
+     * @private
+     */
+    this.uri_ = new goog.Uri(uri);
 
+    /**
+     * This is the callback parameter name that is added to the uri.
+     * @type {string}
+     * @private
+     */
+    this.callbackParamName_ = opt_callbackParamName ?
+        opt_callbackParamName : 'callback';
 
-    this.uri_.charset="utf-8";
-
-
-  /**
-   * This is the callback parameter name that is added to the uri.
-   * @type {string}
-   * @private
-   */
-  this.callbackParamName_ = opt_callbackParamName ?
-      opt_callbackParamName : 'callback';
-
-  /**
-   * The length of time, in milliseconds, this channel is prepared
-   * to wait for for a request to complete. The default value is 5 seconds.
-   * @type {number}
-   * @private
-   */
-  this.timeout_ = 5000;
+    /**
+     * The length of time, in milliseconds, this channel is prepared
+     * to wait for for a request to complete. The default value is 5 seconds.
+     * @type {number}
+     * @private
+     */
+    this.timeout_ = 5000;
 };
 
 
@@ -122,7 +118,7 @@ goog.net.Jsonp.scriptCounter_ = 0;
  * interrupted.
  */
 goog.net.Jsonp.prototype.setRequestTimeout = function(timeout) {
-  this.timeout_ = timeout;
+    this.timeout_ = timeout;
 };
 
 
@@ -132,7 +128,7 @@ goog.net.Jsonp.prototype.setRequestTimeout = function(timeout) {
  * @return {number} The timeout value.
  */
 goog.net.Jsonp.prototype.getRequestTimeout = function() {
-  return this.timeout_;
+    return this.timeout_;
 };
 
 
@@ -175,43 +171,36 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
                                          opt_errorCallback,
                                          opt_callbackParamValue) {
 
-  var payload = opt_payload || null;
+    var payload = opt_payload || null;
 
-  var id = opt_callbackParamValue ||
-      '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
-      goog.now().toString(36);
+    var id = opt_callbackParamValue ||
+        '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
+            goog.now().toString(36);
 
-  if (!goog.global[goog.net.Jsonp.CALLBACKS]) {
-    goog.global[goog.net.Jsonp.CALLBACKS] = {};
-  }
+    if (!goog.global[goog.net.Jsonp.CALLBACKS]) {
+        goog.global[goog.net.Jsonp.CALLBACKS] = {};
+    }
 
+    // Create a new Uri object onto which this payload will be added
+    var uri = this.uri_.clone();
+    if (payload) {
+        goog.net.Jsonp.addPayloadToUri_(payload, uri);
+    }
 
-  // Create a new Uri object onto which this payload will be added
-  var uri = this.uri_.clone();
+    if (opt_replyCallback) {
+        var reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
+        goog.global[goog.net.Jsonp.CALLBACKS][id] = reply;
 
+        uri.setParameterValues(this.callbackParamName_,
+            goog.net.Jsonp.CALLBACKS + '.' + id);
+    }
 
+    var deferred = goog.net.jsloader.load(uri.toString(),
+        {timeout: this.timeout_, cleanupWhenDone: true});
+    var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
+    deferred.addErrback(error);
 
-
-  if (payload) {
-    goog.net.Jsonp.addPayloadToUri_(payload, uri);
-  }
-
-  if (opt_replyCallback) {
-    var reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
-    goog.global[goog.net.Jsonp.CALLBACKS][id] = reply;
-
-    uri.setParameterValues(this.callbackParamName_,
-                           goog.net.Jsonp.CALLBACKS + '.' + id);
-
-
-  }
-
-  var deferred = goog.net.jsloader.load(uri.toString(),
-      {timeout: this.timeout_, cleanupWhenDone: true});
-  var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
-  deferred.addErrback(error);
-
-  return {id_: id, deferred_: deferred};
+    return {id_: id, deferred_: deferred};
 };
 
 
@@ -222,14 +211,14 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
  * @param {Object} request The request object returned by the send method.
  */
 goog.net.Jsonp.prototype.cancel = function(request) {
-  if (request) {
-    if (request.deferred_) {
-      request.deferred_.cancel();
+    if (request) {
+        if (request.deferred_) {
+            request.deferred_.cancel();
+        }
+        if (request.id_) {
+            goog.net.Jsonp.cleanup_(request.id_, false);
+        }
     }
-    if (request.id_) {
-      goog.net.Jsonp.cleanup_(request.id_, false);
-    }
-  }
 };
 
 
@@ -246,17 +235,17 @@ goog.net.Jsonp.prototype.cancel = function(request) {
 goog.net.Jsonp.newErrorHandler_ = function(id,
                                            payload,
                                            opt_errorCallback) {
-  /**
-   * When we call across domains with a request, this function is the
-   * timeout handler. Once it's done executing the user-specified
-   * error-handler, it removes the script node and original function.
-   */
-  return function() {
-    goog.net.Jsonp.cleanup_(id, false);
-    if (opt_errorCallback) {
-      opt_errorCallback(payload);
-    }
-  };
+    /**
+     * When we call across domains with a request, this function is the
+     * timeout handler. Once it's done executing the user-specified
+     * error-handler, it removes the script node and original function.
+     */
+    return function() {
+        goog.net.Jsonp.cleanup_(id, false);
+        if (opt_errorCallback) {
+            opt_errorCallback(payload);
+        }
+    };
 };
 
 
@@ -270,17 +259,17 @@ goog.net.Jsonp.newErrorHandler_ = function(id,
  * @private
  */
 goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
-  /**
-   * This function is the handler for the all-is-well response. It
-   * clears the error timeout handler, calls the user's handler, then
-   * removes the script node and itself.
-   *
-   * @param {...Object} var_args The response data sent from the server.
-   */
-  return function(var_args) {
-    goog.net.Jsonp.cleanup_(id, true);
-    replyCallback.apply(undefined, arguments);
-  };
+    /**
+     * This function is the handler for the all-is-well response. It
+     * clears the error timeout handler, calls the user's handler, then
+     * removes the script node and itself.
+     *
+     * @param {...Object} var_args The response data sent from the server.
+     */
+    return function(var_args) {
+        goog.net.Jsonp.cleanup_(id, true);
+        replyCallback.apply(undefined, arguments);
+    };
 };
 
 
@@ -294,15 +283,15 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
  * @private
  */
 goog.net.Jsonp.cleanup_ = function(id, deleteReplyHandler) {
-  if (goog.global[goog.net.Jsonp.CALLBACKS][id]) {
-    if (deleteReplyHandler) {
-      delete goog.global[goog.net.Jsonp.CALLBACKS][id];
-    } else {
-      // Removing the script tag doesn't necessarily prevent the script
-      // from firing, so we make the callback a noop.
-      goog.global[goog.net.Jsonp.CALLBACKS][id] = goog.nullFunction;
+    if (goog.global[goog.net.Jsonp.CALLBACKS][id]) {
+        if (deleteReplyHandler) {
+            delete goog.global[goog.net.Jsonp.CALLBACKS][id];
+        } else {
+            // Removing the script tag doesn't necessarily prevent the script
+            // from firing, so we make the callback a noop.
+            goog.global[goog.net.Jsonp.CALLBACKS][id] = goog.nullFunction;
+        }
     }
-  }
 };
 
 
@@ -326,14 +315,14 @@ goog.net.Jsonp.cleanup_ = function(id, deleteReplyHandler) {
  * @private
  */
 goog.net.Jsonp.addPayloadToUri_ = function(payload, uri) {
-  for (var name in payload) {
-    // NOTE(user): Safari/1.3 doesn't have hasOwnProperty(). In that
-    // case, we iterate over all properties as a very lame workaround.
-    if (!payload.hasOwnProperty || payload.hasOwnProperty(name)) {
-      uri.setParameterValues(name, payload[name]);
+    for (var name in payload) {
+        // NOTE(user): Safari/1.3 doesn't have hasOwnProperty(). In that
+        // case, we iterate over all properties as a very lame workaround.
+        if (!payload.hasOwnProperty || payload.hasOwnProperty(name)) {
+            uri.setParameterValues(name, payload[name]);
+        }
     }
-  }
-  return uri;
+    return uri;
 };
 
 
