@@ -5,6 +5,15 @@ var Gryphon = (function(Gryphon, undefined){
 	var $ = require('jquery');
 	var app = express.createServer();
 	var realm = require('express-http-auth').realm('Private Area');
+	var io = require('socket.io').listen(app);
+
+	io.sockets.on('connection', function (socket) {
+		socket.on('sendchat', function (data) {
+		});
+		socket.on('disconnect', function(){
+		});
+	});
+
 
 	var checkUser = function(req, res, next) {
 		if (req.username == 'Foo' && req.password == 'Bar') {

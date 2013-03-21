@@ -15,8 +15,8 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 	server.use(restify.gzipResponse());
 	server.use(restify.bodyParser());
 	server.post('/api/addRow', addRow);
-	server.get('/api/getEntries/get?callback=:remainer', getEntries);
-	server.post('/api/getEntries/get?callback=:remainer', getEntries);
+	server.get('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
+	server.post('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
 	server.listen(_port, function() {
 		console.log('%s listening at %s on port %d', 'makina API', _host, _port);
 	} );
@@ -51,7 +51,7 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 		return (HexN);
 	};
 
-	function addRow (req, res) {
+	function addRow (req, res, next) {
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
@@ -97,22 +97,23 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 			theId = doc._id;
 			res.send(doc[0]);
 		} );
-
+		return next();
 	}
 
 	function getEntries (req, res, next) {
 		res.header("Access-Control-Allow-Origin", "*"); 
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 		var nrows = [];
-
-		db.matrix.find().limit(1000).all( function(err, docs) {
+		db.matrix.paginate(req.params.begin, req.params.len).all( function(err, docs) {
 
 			for(var rowid in docs) {
 				var nrow = {};
 				var row = docs[rowid];
 				for(var key in row) {
-					if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp'  || key === '_id') {
+					if(key === 'keyType' || key === 'keyReport' || key === 'keyTimeSlot' || key === 'timeStamp') {
 						nrow[key] = row[key];
+					}else if(key === '_id'){
+						oldkey = '';
 					}else{
 						oldkey = '';
 						loopSR:
@@ -131,14 +132,9 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 			}
 
 			var body = JSON.stringify(nrows);
-//			res.send(body);
-
 			res.writeHead(200, {
-//				'Content-Length': Buffer.byteLength(body),
-//				'Accept-Encoding': 'text/plain',
 				'Content-Type': 'application/json; charset=UTF-8'
 			});
-//			res.send(body);
 			res.write(req.query.callback + '(' + body + ');');
 			res.end();
 		} );

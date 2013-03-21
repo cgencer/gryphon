@@ -1,10 +1,12 @@
 var filterTable = (function(filterTable, $, undefined){
 
-	var _ts = {};
+	var _ts;
 	var cfdata = {};
 	var tables = {'root':{'name':''}};
 	var tableDef = [];
 	var tableVisibleCols = [];
+
+	var halo = 'x';
 
 	_ts = this;
 	prepData();
@@ -23,6 +25,7 @@ var filterTable = (function(filterTable, $, undefined){
 	tables = {'root':{'name':''}};
 	tables.root.name = randomId();		
 
+/*
 	$(document).on('click', '#' + tables.root.name + ' tr', function () {
 		if ( tables.root.ref.fnIsOpen( this ) ) {
 			tables.root.ref.fnClose( this );
@@ -31,10 +34,91 @@ var filterTable = (function(filterTable, $, undefined){
 			$('#' + tables.root.name + ' tr td.info_row').html('<div class="innerTables" />');
 		}
 	});
-
-//	this.loadFromJSON('dataset.json');
-	loadFromJSON('http://127.0.0.1:7001/api/getEntries');
+*/
 	
+	var bigPacket = [];
+	var farkPacket = [];
+	var receivedPacket = [];
+	var page = 1;
+
+	function saveOurSouls (w, o) {
+		tables.root[w] = o;
+	}
+
+	loadFromJSON('http://127.0.0.1:7001/api/getEntries', 1, 100, function (rec) {
+
+		var t = new Miso.Dataset( {'data': rec} );
+		saveOurSouls('dSet', t);
+		t.fetch( { success: function() {
+
+			var names = this.columnNames();
+			var hs = '', ts = '';
+			for(var col in names){
+				hs += '<td>' + names[col] + '</td>';
+				ts += '<td></td>';
+			}
+			$('#content table').attr('id', tables.root.name);
+			$('#content table thead tr').html(hs);
+			$('#content table tbody tr').html(ts);
+
+			var set = this.toJSON();
+
+			saveOurSouls('dTbl', $('#'+tables.root.name).dataTable({
+				'aaData': set,
+				'bProcessing': true,
+				'bJQueryUI': true,
+				'sPaginationType': 'full_numbers',
+			    "aoColumns": filterTable.tableVisibleCols
+			}));
+			
+		}});
+	});
+
+	page++;
+	looper();
+
+	function extract (dp) {
+		receivedPacket = dp;
+		var dset = tables.root['dSet'];
+		var dtbl = tables.root['dTbl'];
+		if(dp.length > 0) {
+			for(var rp in dp) {
+				bigPacket.push( dp[rp] );
+				farkPacket.push( dp[rp] );
+			}
+
+			if(page % 10 === 0){		// render output every n calls 
+
+				for(var rp in farkPacket) {
+					dset.add( farkPacket[rp] );
+				}
+				dtbl.fnAddData( farkPacket, true );
+				farkPacket = [];
+			}
+			page++;
+			setTimeout(looper, 25);
+		}else{
+			if(farkPacket.length > 0) {
+				dtbl.fnAddData( farkPacket, true );
+				farkPacket = [];
+			}
+			build(bigPacket);
+		}
+	}
+	function looper () {
+		loadFromJSON('http://127.0.0.1:7001/api/getEntries', page, 100, function (rec) {
+			extract(rec);
+		});
+	}
+
+
+
+/*
+	var socket = io.connect('http://localhost');
+	socket.on('news', function (data) {
+		socket.emit('my other event', { my: 'data' });
+	});
+*/
 /*
 	cuteNSexy.runChainedEvents( [ {	'cmd': 'getEntries', 
 									'payload': {},
@@ -52,51 +136,40 @@ var filterTable = (function(filterTable, $, undefined){
 
 	function prepData () {
 		filterTable.tableDef = [
-		    { name : 'kids', type : 'number' },
-		    { name : 'anumber', type : 'number' },
-		    { name : 'weight', type : 'number' },
-		    { name : 'moviespermonth', type : 'number' },
-		    { name : 'wantchild', type : 'boolean' },
-		    { name : 'ownhouse', type : 'boolean' },
-		    { name : 'haspets', type : 'boolean' },
-		    { name : 'bothwork', type : 'boolean' },
-		    { name : 'yearlyholiday', type : 'boolean' },
-		    { name : 'privateschool', type : 'boolean' },
-		    { name : 'privateinsurance', type : 'boolean' },
-		    { name : 'playlottary', type : 'boolean' },
-		    { name : 'lottarybig', type : 'boolean' },
-		    { name : 'playgames', type : 'boolean' },
-		    { name : 'playgambling', type : 'boolean' },
-		    { name : 'watchporn', type : 'boolean' },
-		    { name : 'watchvideos', type : 'boolean' },
-		    { name : 'ownlaptop', type : 'boolean' },
-		    { name : 'owntablet', type : 'boolean' },
-		    { name : 'ownsmartphone', type : 'boolean' },
-		    { name : 'usesms', type : 'boolean' },
-		    { name : 'usemms', type : 'boolean' },
-		    { name : 'digitalphotos', type : 'boolean' },
-		    { name : 'sharephotos', type : 'boolean' },
-		    { name : 'usesocial', type : 'boolean' },
-		    { name : 'usetwitter', type : 'boolean' },
-		    { name : 'useecommerce', type : 'boolean' },
-		    { name : 'ownasecondhouse', type : 'boolean' },
-		    { name : 'ownstocks', type : 'boolean' },
+		    { name : 'timeStamp', 		type : 'number' },
+		    { name : 'keyType', 		type : 'string' },
+		    { name : 'keyReport', 		type : 'string' },
+		    { name : 'keyTimeSlot', 	type : 'number' },
+		    { name : 'Platform', 		type : 'string' },
+		    { name : 'City', 			type : 'string' },
+		    { name : 'Resolution', 		type : 'string' },
+		    { name : 'Manufacturer', 	type : 'string' },
+		    { name : 'CountryName', 	type : 'string' },
+		    { name : 'OsVersion', 		type : 'string' },
+		    { name : 'DeviceInfoId', 	type : 'string' },
+		    { name : 'application', 	type : 'string' },
 		];
 		filterTable.tableVisibleCols = [
-			{'mData':'city'},
-			{'mData':'country'},
-			{'mData':'zip'},
-			{'mData':'music'},
-			{'mData':'eyecolor'},
-			{'mData':'ownsmartphone'},
+			{'mData':'timeStamp'},
+			{'mData':'keyType'},
+			{'mData':'keyReport'},
+			{'mData':'keyTimeSlot'},
+			{'mData':'Platform'},
+			{'mData':'City'},
+			{'mData':'Resolution'},
+			{'mData':'Manufacturer'},
+			{'mData':'CountryName'},
+			{'mData':'OsVersion'},
+			{'mData':'DeviceInfoId'},
+			{'mData':'application'},
 		];
 	};
 
-	function loadFromJSON (file) {
+	function loadFromJSON (file, pg, len, cb) {
 		_ts = this;
 
 		$.ajax({
-			url : file + '/get',
+			url : file + '/' + pg + '/' + len + '/get',
 			dataType: "jsonp",
 			contentType: 'application/json',
 			processData: true,
@@ -121,51 +194,77 @@ var filterTable = (function(filterTable, $, undefined){
 				console.log(_error);
 			},
 			success : function (data) {
-				console.dir(data);
-				build(data);
+				cb(data);
 			}
 		});
 	}
 
 	function build (dp) {
-		_ts = this;
-		$('#content').text('loaded the file...');
+		console.log('finished loading the file...');
 		tables.root.dataset = new Miso.Dataset( {
 			'data': dp,
-			'columns': _ts.tableDefinitions
+			'columns': tableDef
 		} );
 		tables.root.dataset.fetch({ 
 			success : function() {
-				console.log( this.columnNames() );
 				filterThem( this );
-//				dataFiltered( this );
 			}
 		});
 	};
 
 	function filterThem (df) {
 		dataFiltered(
+//			df.groupBy('city', ['resolution']));
+
 			df.rows( function (row) {
-//				return row.ownsmartphone === true;
-				return (row._id > 0) === true;
+				return (row.timeStamp > 0) === true;
 			})
+
 		);
 	};
 
 	function dataFiltered (df) {
-		console.log('>>> filtered result has '+df.length+' entries...');
-		$('#content').html( '<table id="' + tables.root.name + '" width="100%" />' );
-		tables.root.ref = $('#'+tables.root.name).dataTable({
-			'aaData': df.toJSON(),
+		var _ts = this;
+		var dfj = df.toJSON();
+		console.log('>>> filtered result has '+df.length+' entries and '+df._columns.length+' columns...');
+
+		var dTbl = $('#'+tables.root.name).dataTable({
+//			'aaData': rows,
+			'bProcessing': true,
 			'bJQueryUI': true,
-			"sDom": 'T<"clear">lfrtip',
-			"oTableTools": {
-				"sSwfPath": "/swf/copy_csv_xls_pdf.swf"
-	        },
-//			'bProcessing': true,
+//		    'bDeferRender': true,
 			'sPaginationType': 'full_numbers',
-//			'aoColumns': filterTable.tableVisibleCols,
-			'aoColumnDefs': { 'bSearchable': true, 'aTargets': [ '_all' ] },		// TOCHECK
+//			'aoColumns': tableVisibleCols,
+//			'sDom': 'T<"clear">lfrtip',
+//			'oTableTools': {
+//				'sSwfPath': "/swf/copy_csv_xls_pdf.swf"
+//	        },
+		});
+		var test = df.toJSON();
+//
+		console.dir(test)
+		$('#'+tables.root.name).dataTable().fnAddData( df.toJSON() );
+		
+//		
+		
+/*
+			'aaData': df.toJSON(),
+			'bProcessing': true,
+			'bJQueryUI': true,
+		    'bDeferRender': true,
+			'sPaginationType': 'full_numbers',
+			'aoColumns': tableVisibleCols,
+			'sDom': 'T<"clear">lfrtip',
+			'oTableTools': {
+				'sSwfPath': "/swf/copy_csv_xls_pdf.swf"
+	        },
+//			'aoColumnDefs': { 'bSearchable': true, 'aTargets': [ '_all' ] },
+			'aoColumnDefs': { 'bVisible': false, 'aTargets': [0] },
+		});
+
+*/
+/*
+/*
 			'oColumnFilterWidgets': {												// TOCHECK
 		        'aiExclude': [ 0, 6 ],
 		        'sSeparator': ',  ',
@@ -174,7 +273,8 @@ var filterTable = (function(filterTable, $, undefined){
 		            { 'bSort': false, 'sSeparator': ' / ', 'aiTargets': [ 6 ] },
 				]
 			},
-		});
+
+*/
 	};
 
 	function randomId (len) {
