@@ -21,13 +21,35 @@
     <script type="text/javascript" src="frontend/javascript/deps.js" charset="utf-8"  ></script>
     <script type="text/javascript" src="frontend/javascript/makina/Bootstrapper.js" charset="utf-8"  ></script>
 
+    <script>
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8" ></script>
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', {
+            'packages':[
+                'corechart',
+                'table',
+                'geochart'
+            ]});
+
+        //  var vsz = google.visualization;
+
+        google.setOnLoadCallback(function(){
+            vsz = google.visualization;
+
+        });
+
+    </script>
+
+
+
+
+   <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8" ></script>
 
 
     <!--
       <script type="text/javascript" src="frontend/javascript/compiled/compiled.js" ></script>
      -->
+
 
 <script>
 
@@ -72,6 +94,7 @@
 
 
 
+
     <script type="text/javascript">
 
 
@@ -81,15 +104,7 @@
 
 
 
-        // Load the Visualization API and the piechart package.
-        google.load('visualization', '1.0', {'packages':['corechart']});
 
-        var visualization = {};
-
-        google.setOnLoadCallback(function(){
-            visualization = google.visualization;
-            drawChart();
-        });
 
 
 
@@ -104,8 +119,6 @@
         function drawChart() {
 
             drawMakinaLine();
-
-
 
 
         }
@@ -301,11 +314,16 @@
 
 
 
+<input type="button" id="widget-form" value="Widget - Form" />
+<input type="button" id="save-loxo" value="Save Movie Loxo" />
+
 <input type="button" id="widget-1" value="Widget - 1" />
 <input type="button" id="widget-2" value="Widget - 2" />
 <input type="button" id="widget-3" value="Widget - 3" />
 <input type="button" id="widget-4" value="Widget - 4" />
 <input type="button" id="widget-5" value="Widget - 5" />
+<input type="button" id="widget-6" value="Widget - 6" />
+<input type="button" id="widget-7" value="Widget - Geo" />
 
 
 
@@ -317,6 +335,68 @@
 <div id="chart_line_area"></div>
 <div id="chart_line_area_makina"></div>
 
+<table>
+    <tr>
+        <td valign="top" ><div id="data-grid-1"></div></td>
+        <td valign="top" > <div id="data-grid-2"></div></td>
+    </tr>
+</table>
+
+
+
+
+
+<style>
+    .user-details .button-container { overflow:auto; bottom:8px; right:16px; position:absolute; }
+    .user-details .row { overflow:auto; border-top:1px solid #EEE; padding:10px; margin:0 1px; }
+    .user-details .row:first-child { border-top:none; padding-top:15px; }
+    .user-details .row .title { float:left; }
+    .user-details .row .detail { margin-left:165px; }
+
+</style>
+ <div style="display: none;">
+
+     <div class="user-details">
+         <div class='row'>
+             <div class='title'>Application Name</div><div class='detail'><input id='application-name' class='username-text' value='' type='text'></div>
+         </div>
+         <div class='row'>
+             <div class='title'>Platfrom</div><div class='detail'>
+             <select id='application-platform'>
+                 <option value='0'>Unknown</option>
+                 <option value='1'>IOS</option>
+                 <option value='2'>Android</option>
+                 <option value='3'>Windows Phone</option>
+                 <option value='4'>Symbian</option>
+                 <option value='5'>Tizen</option>
+             </select>
+         </div>
+         </div>
+         <div class='row'>
+             <div class='title'>Market Url</div><div class='detail'><input id='application-market-url' class='email-text' value='' type='text'></div>
+         </div>
+         <div class='row'>
+             <div class='title'>Google Analytics Key</div><div class='detail'><input id='application-analytics-key' class='email-text' value='' type='text'></div>
+         </div>
+         <div class='row'>
+             <div class='title'>Description</div><div class='detail'><input id='application-description' class='email-text' value='' type='text'></div>
+         </div>
+         <div class='row'>
+             <div class='title'>Default Register Action</div>
+             <div class='detail'>
+                 <select id='application-default-register-action'>
+                     <option value="0">Install</option>
+                     <option value="1">Visit</option>
+                 </select>
+             </div>
+         </div>
+         <div>
+             <input type="button" id="create-new-app" value="CREATE" />
+
+         </div>
+     </div>
+
+ </div>
 
 
 </div>

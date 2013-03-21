@@ -12,6 +12,7 @@ goog.require('goog.object');
 goog.require('goog.dom.query') ;
 goog.require('goog.json');
 goog.require('goog.crypt.base64');
+goog.require('goog.ui.TableSorter');
 
 
 
@@ -25,35 +26,7 @@ makina.dashboard.Start = function(){
 
 
     this.BindEvents();
-
-    var   data=[
-        { campaign : 'camp1', app : 'bitaksi', click:10, install:1, platform : 'ios', city: 'ankara', timeslot: 'BASE64' },
-        { campaign : 'camp1', app : 'bitaksi', click: 2, install:2, platform : 'android', city: 'ankara', timeslot: 'BASE64' },
-        { campaign : 'camp1', app : 'bitaksi', click: 3, install:3, platform : 'ios', city: 'izmir', timeslot: 'BASE64' },
-        { campaign : 'camp2', app : 'bitaksi', click:40, install:4, platform : 'android', city: 'izmir', timeslot: 'BASE64' },
-        { campaign : 'camp2', app : 'bitaksi', click:50, install:10, platform : 'ios', city: 'istanbul', timeslot: 'BASE64' },
-        { campaign : 'camp2', app : 'bitaksi', click:60, install:20, platform : 'android', city: 'istanbul', timeslot: 'BASE64' },
-        { campaign : 'camp3', app : 'bitaksi', click:70, install:30, platform : 'ios', city: 'istanbul', timeslot: 'BASE64' },
-        { campaign : 'camp4', app : 'bitaksi', click:80, install:40, platform : 'ios', city: 'istanbul', timeslot: 'BASE64' }
-    ];
-
-
-    var ds=new makina.Dataset(data);
-
-    var minClick = ds.Min('click');
-    var maxClick = ds.Max('click');
-    var sumInstall = ds.Sum('install');
-
-    console.log("minClick ="+minClick);
-    console.log("maxClick ="+maxClick);
-    console.log("sumInstall ="+sumInstall);
-
-
-    var obj= ds.GroupBy('campaign',['click','install']);
-    console.log("--------------------------- ");
-    console.log(obj);
-
-
+/*
 
 
 
@@ -87,26 +60,76 @@ makina.dashboard.Start = function(){
 */
     var that = this;
 
-/*
+
     makina.util.ajaxRequest('http://localhost/makina/ts.json','GET',
         {},
         function(data){
-           that.SumTS(data);
+
+           that.RenderDataset(data);
 
         }
-    );*/
+    );
 
 
 }
+/**
+ *
+ * @param data
+ *
+ */
+
+makina.dashboard.Start.prototype.RenderDataset = function(data){
+
+
+    for(var i in data){
+
+        var item =data[i];
+
+        goog.object.forEach(item,function(v,k,o){
+           if(goog.string.startsWith(k,"timeslot"))
+                data[i][k]= goog.json.parse(Base64.decode(data[i][k]));
+        });
+
+    }
+
+
+    var ds=new makina.Dataset(data);
+
+    var tmpData = data;
+
+
+
+    goog.dom.getElement('data-grid-1').innerHTML = ds.GetDataTable(tmpData,"table-1");
+
+    var component = new goog.ui.TableSorter();
+    component.decorate(goog.dom.getElement('table-1'));
+    var j=0;
+    goog.object.forEach(tmpData[0],function(v,k,o){
+        component.setSortFunction(j++, goog.ui.TableSorter.alphaSort);
+    });
+
+
+
+
+
+
+    console.log("ds.GroupBys(['Application','Platform'],['click','install']");
+    var obj= ds.GroupBys(["Application","Platform"],['timeslotCLICK','timeslotINSTALL']);
+    console.log(obj);
+
+    goog.dom.getElement('data-grid-2').innerHTML = ds.GetDataTable(obj["response"],"table-2");
+
+
+
+};
+
+
 
 makina.dashboard.Start.prototype.SumTS = function(dataArrayBase64){
 
     var TS={};
 
     console.log("Date="+Date.now());
-
-
-
 
     var tsArrayData=[];
 
