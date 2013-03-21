@@ -6,6 +6,7 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 
 	var db = require('mongo-lite').connect('mongodb://' + _host + '/' + _db, ['metalib', 'matrix']);
 	var restify = require('restify');
+	var querystring = require('querystring');
 	var metalib;
 
 	grabMetas();
@@ -15,8 +16,10 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 	server.use(restify.gzipResponse());
 	server.use(restify.bodyParser());
 	server.post('/api/addRow', addRow);
-	server.get('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
-	server.post('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
+//	server.get('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
+//	server.post('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
+	server.get('/api/getEntries/selectby/:where/page/:begin/limit/:len/get?callback=:remainer', getEntries);
+	server.post('/api/getEntries/selectby/:where/page/:begin/limit/:len/get?callback=:remainer', getEntries);
 	server.listen(_port, function() {
 		console.log('%s listening at %s on port %d', 'makina API', _host, _port);
 	} );
@@ -104,7 +107,30 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 		res.header("Access-Control-Allow-Origin", "*"); 
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 		var nrows = [];
-		db.matrix.paginate(req.params.begin, req.params.len).all( function(err, docs) {
+
+//querystring.parse
+		var nw = [];
+
+		if(req.params.where !== '-'){
+			var where = querystring.parse(req.params.where);
+			if(Object.keys(where).length > 0) {
+				for(var wi in where) {
+					console.log('key: '+wi+' val:'+where[wi]);
+					loopW:
+					for(var ik in metalib) {
+						if(metalib[ik].real === wi) {
+							oldkey = metalib[ik].meta;
+							nw[oldkey] = where[wi];
+							break loopW;
+						}else{
+							oldkey = '';
+						}
+					}
+				}
+			}
+		}
+
+		db.matrix.find(nw).paginate(req.params.begin, req.params.len).all( function(err, docs) {
 
 			for(var rowid in docs) {
 				var nrow = {};

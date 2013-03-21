@@ -87,7 +87,7 @@ var filterTable = (function(filterTable, $, undefined){
 				farkPacket.push( dp[rp] );
 			}
 
-			if(page % 10 === 0){		// render output every n calls 
+			if(page % 20 === 0){		// render output every n calls 
 
 				for(var rp in farkPacket) {
 					dset.add( farkPacket[rp] );
