@@ -36,6 +36,10 @@ var Gryphon = (function(Gryphon, undefined){
 
 //	einhorn.saveapp(app);
 	app.get('/stern', getEntries);
+	app.get('/stern/', getEntries);
+	app.get('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
+	app.post('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
+
 	app.listen(7002);
 	
 	function getEntries (req, res) {

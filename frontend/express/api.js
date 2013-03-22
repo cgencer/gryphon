@@ -16,15 +16,11 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 	server.use(restify.gzipResponse());
 	server.use(restify.bodyParser());
 	server.post('/api/addRow', addRow);
-//	server.get('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
-//	server.post('/api/getEntries/:begin/:len/get?callback=:remainer', getEntries);
 	server.get('/api/getEntries/selectby/:where/page/:begin/limit/:len/get?callback=:remainer', getEntries);
 	server.post('/api/getEntries/selectby/:where/page/:begin/limit/:len/get?callback=:remainer', getEntries);
 	server.listen(_port, function() {
 		console.log('%s listening at %s on port %d', 'makina API', _host, _port);
 	} );
-//http://127.0.0.1:7001/api/getEntries/?callback=jQuery18305745645841410649_1363710295214
-//http://127.0.0.1:7001/api/getEntries/?callback=jQuery18308050109725557517_1363710144930&_=1363710145410
 	function setPort (p) {
 		_port = p;
 	}
@@ -107,8 +103,6 @@ var GryphonAPI = (function(GryphonAPI, undefined) {
 		res.header("Access-Control-Allow-Origin", "*"); 
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
 		var nrows = [];
-
-//querystring.parse
 		var nw = [];
 
 		if(req.params.where !== '-'){

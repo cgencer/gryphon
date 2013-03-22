@@ -5,6 +5,7 @@ var filterTable = (function(filterTable, $, undefined){
 	var tables = {'root':{'name':''}};
 	var tableDef = [];
 	var tableVisibleCols = [];
+	var gate = 'http://127.0.0.1:7001/api/';
 
 	var halo = 'x';
 
@@ -45,18 +46,25 @@ var filterTable = (function(filterTable, $, undefined){
 		tables.root[w] = o;
 	}
 
-	loadFromJSON('http://127.0.0.1:7001/api/getEntries', 1, 100, function (rec) {
+//http://127.0.0.1:7001/api/getEntries/selectby/CountryName%3DTurkey%26Resolution%3D800x600/page/1/limit/100/get?callback=r
+	var selectors = {};
+	loadFromJSON('getEntries', selectors, 1, 100, function (rec) {
 
 		var t = new Miso.Dataset( {'data': rec} );
 		saveOurSouls('dSet', t);
 		t.fetch( { success: function() {
 
 			var names = this.columnNames();
-			var hs = '', ts = '';
+
+			var hs = '', ts = '', sx = '<option></option>';
 			for(var col in names){
+				sx += '<option>' + names[col] + '</option>';
 				hs += '<td>' + names[col] + '</td>';
 				ts += '<td></td>';
 			}
+			$('#selector').append('<select />').children('select').append(sx);
+			$('#selector').append('<input type="text" /><input type="submit" id="newRequest" />');
+			
 			$('#content table').attr('id', tables.root.name);
 			$('#content table thead tr').html(hs);
 			$('#content table tbody tr').html(ts);
@@ -68,6 +76,10 @@ var filterTable = (function(filterTable, $, undefined){
 				'bProcessing': true,
 				'bJQueryUI': true,
 				'sPaginationType': 'full_numbers',
+				'sDom': 'T<"clear">lfrtip',
+				'oTableTools': {
+					'sSwfPath': "/swf/copy_csv_xls_pdf.swf"
+		        },
 			    "aoColumns": filterTable.tableVisibleCols
 			}));
 			
@@ -106,7 +118,7 @@ var filterTable = (function(filterTable, $, undefined){
 		}
 	}
 	function looper () {
-		loadFromJSON('http://127.0.0.1:7001/api/getEntries', page, 100, function (rec) {
+		loadFromJSON('getEntries', selectors, page, 100, function (rec) {
 			extract(rec);
 		});
 	}
@@ -165,11 +177,12 @@ var filterTable = (function(filterTable, $, undefined){
 		];
 	};
 
-	function loadFromJSON (file, pg, len, cb) {
+	function loadFromJSON (cmd, selectors, pg, len, cb) {
 		_ts = this;
 
+		params = (Object.keys(selectors).length > 0) ? jQuery.param(selectors) : '-';
 		$.ajax({
-			url : file + '/' + pg + '/' + len + '/get',
+			url : gate + cmd + '/selectby/' + params + '/page/' + pg + '/limit/' + len + '/get',
 			dataType: "jsonp",
 			contentType: 'application/json',
 			processData: true,
@@ -236,9 +249,6 @@ var filterTable = (function(filterTable, $, undefined){
 			'sPaginationType': 'full_numbers',
 //			'aoColumns': tableVisibleCols,
 //			'sDom': 'T<"clear">lfrtip',
-//			'oTableTools': {
-//				'sSwfPath': "/swf/copy_csv_xls_pdf.swf"
-//	        },
 		});
 		var test = df.toJSON();
 //
