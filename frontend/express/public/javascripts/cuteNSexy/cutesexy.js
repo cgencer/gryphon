@@ -35,6 +35,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var _cloudid = '';
 		var _appName = 'grabHandsome';
 		var _dictionary = {};
+		var _cloudids = [];
 		var _credentials = {
 			'pass': 		'demo',
 			'userName': 	'demo'
@@ -125,13 +126,14 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				}
 			}
 			if(payLoad === undefined){payLoad = {};}
+
 			if(type(_e) == 'undefined') {				// checks for key exists
 				payLoad['_type'] = cmd + 'Request';
 				if(type(_s) == 'function') {
 					fetchIt( {
 						'command': cmd, 
 						'data': $.extend( baseObj( getSessionID() ), payLoad)
-					}, _s, _f );
+					}, _s, _f, _dictionary[cmd].source );
 				}else{
 					_e = 'No Function supplied as callback!';
 					if(type(_s) == 'function') {
@@ -145,17 +147,24 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			}
 		};
 //=========================================================================================================
-		function fetchIt (payLoad, _s, _f) {
+		function fetchIt (payLoad, _s, _f, src) {
 			var _t = this;
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
 			console.dir(payLoad);
 			if(_appName === ''){_appName = 'q';}
 
-			var cid = (_cloudid !== '') ? _cloudid + '/' : '/';
+			var cid = (_cloudid !== '') ? _cloudid : '';
+/*
+	TODO if _cloudid exists in _cloudids use it
+*/
+			var cmd = payLoad.command;
+			var urlPattern = (src === 'handsome') ?
+				'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data) :
+				_domain + '/' + _service + '/' + cid + '/' + payLoad.command + '?request=' + JSON.stringify(payLoad.data);			
 
 			buffer.jqxhrs.push( $.ajax({
-				url: _domain + '/' + _service + cid + payLoad.command + '?request=' + JSON.stringify(payLoad.data),
+				url: urlPattern,
 				accepts: 'application/json',
 				dataType: 'jsonp',
 				jsonpCallback: _appName,
@@ -166,15 +175,17 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 
 			}).done( function(data, textStatus, jqXHR) {
 
-				doTheTwist(data, textStatus, jqXHR);
+				doTheTwist(data, textStatus, jqXHR, src);
 
 			}));
 		};
-		function doTheTwist (data, textStatus, jqXHR) {
+		function doTheTwist (data, textStatus, jqXHR, src) {
 			//by-pass the checks for now...
 
-			for(var i in data){
-				data = data[i];
+			if(src !== 'handsome') {
+				for(var i in data){
+					data = data[i];
+				}
 			}
 
 			var cmd = (data._type.slice(-8) == 'Response') ? data._type.replace('Response', '') : 'err';
@@ -266,6 +277,10 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			_appName = name;
 			return true;
 		};
+		function setCloudIds (arr) {
+			_cloudids = arr;
+			return true;
+		};
 		function setCloudId (id) {
 			_cloudid = id;
 			return true;
@@ -339,7 +354,9 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			'init': init,
 			'setService': setService,
 			'setDomain': setDomain,
+			'setDictionary': setDictionary,
 			'setCloudId': setCloudId,
+			'setCloudIds': setCloudIds,
 			'getSessionID': getSessionID,
 			'setAppName': setAppName,
 			'runChainedEvents': runChainedEvents,

@@ -4,21 +4,38 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 	// init with a fake object to get the dictionary
 	cuteNSexy.init({
 		domain: 'http://alpha.loxodonta-editor.appspot.com:80',
-		service: 'resources/dispatcher/test/v1/',
+		service: 'resources/dispatcher/test/v1',
 		cloudId: 'ff8080813d8c00cb013d8d1e73e00009',
 		appName: 'loxo',
-		dictionary: {	 'GetCommandPaths': {'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'pathList'},
-					'GetCommandDictionary': {'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'dictionary'}}
+		dictionary: {	 
+				 'GetCommandPaths': {'source': '', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'pathList'},
+			'GetCommandDictionary': {'source': '', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'dictionary'}
+		}
 	});
 
 	function sGetCommandPaths(package) {
 		console.dir(package);
+/*
+	TODO save the paths to the storage
+*/
 	};
 	function sGetCommandDict(package) {
 		cuteNSexy.setDictionary(package);
+
+		//only run after the new dict has been retrieved (as it has the url patterns)
+		$(document).on('click', 'button.btn', function (e) {
+			e.preventDefault();
+			cuteNSexy.runChainedEvents([ {		'cmd': 'UserLogin', 'success': sLogin, 'fail': fail,
+											'payload': {'userName': 'demo', 'pass': 'demo'} } ]);
+		});
+/*
+	TODO save the dictionary to the storage
+*/
 	};
 	function sLogin(package) {
 		// if userLogged > load dashboard
+		console.dir(package);
+		$('form').submit();
 	};
 
 	function fail(err) {
@@ -31,9 +48,6 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 										{'cmd': 'GetCommandDictionary', 'success': sGetCommandDict, 'fail': fail }
 		]);
 
-		$(document).on('click', 'button.btn', function () {
-			cuteNSexy.runChainedEvents([ {'cmd': 'UserLogin', 'success': sLogin, 'fail': fail } ]);
-		});
 		
 	});
 
