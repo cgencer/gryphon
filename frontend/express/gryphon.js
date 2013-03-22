@@ -36,7 +36,7 @@ var Gryphon = (function(Gryphon, undefined){
 
 //	einhorn.saveapp(app);
 	app.get('/stern', getEntries);
-	app.get('/stern/', getEntries);
+	app.get('/login', login);
 	app.get('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
 	app.post('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
 
@@ -44,6 +44,9 @@ var Gryphon = (function(Gryphon, undefined){
 	
 	function getEntries (req, res) {
 		res.sendfile('views/index.html');
+	};
+	function login (req, res) {
+		res.sendfile('views/login.html');
 	};
 
 }(Gryphon = Gryphon || {}));

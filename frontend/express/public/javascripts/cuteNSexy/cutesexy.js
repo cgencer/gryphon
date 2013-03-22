@@ -32,6 +32,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var _this = this;
 		var _domain = "http://mkevt.nmdapps.com";
 		var _service = "makinaweb";
+		var _cloudid = '';
 		var credentials = {
 			'pass': 		'demo',
 			'userName': 	'demo'
@@ -44,25 +45,21 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var buffer = {};
 		var _dictionary = {};
 		function grabHandsome () {};
-		return {						// only these methods are accessible from the outside
-			'init': init,
-			'setService': setService,
-			'setDomain': setDomain,
-			'getSessionID': getSessionID,
-			'runChainedEvents': runChainedEvents,
-										// and these variables
-			'response': buffer.rp
-		};
 
-		function init (dom, srv, dict) {
-			if(dom !== undefined) {
-				setDomain(dom);
-			}
-			if(srv !== undefined) {
-				setService(srv);
-			}
-			if(dict !== undefined) {
-				setDictionary(dict);
+		function init (iObj) {
+			if(iObj !== undefined) {
+				if(iObj.domain !== undefined) {				
+					setDomain(iObj.domain);
+				}
+				if(iObj.service !== undefined) {				
+					setService(iObj.service);
+				}
+				if(iObj.dictionary !== undefined) {				
+					setDictionary(iObj.dictionary);
+				}
+				if(iObj.cloudId !== undefined) {				
+					setCloudId(iObj.cloudId);
+				}
 			}
 			cleanUp();
 			createUUID();
@@ -148,9 +145,11 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
 			console.dir(payLoad);
-			buffer.jqxhrs.push( $.ajax({
 
-				url: _domain + '/' + _service + '/' + payLoad.command + '/?request=' + JSON.stringify(payLoad.data),
+			var cid = (_cloudid !== '') ? _cloudid + '/' : '/';
+
+			buffer.jqxhrs.push( $.ajax({
+				url: _domain + '/' + _service + cid + payLoad.command + '?request=' + JSON.stringify(payLoad.data),
 				accepts: 'application/json',
 				dataType: 'jsonp',
 				jsonpCallback: 'grabHandsome',
@@ -243,27 +242,31 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			}
 		};
 //=========================================================================================================
+		function setCloudId (id) {
+			_cloudid = id;
+			return true;
+		};
 		function setService (newService) {
-			this._service = newService;
+			_service = newService;
 			return true;
 		};
 		function setDomain (newDomain) {
 			if( (newDomain.substr(0,7) === 'http://') && (newDomain.length > 10) ) {
 				if(newDomain.substr(-1,1) === '/') {
-					newDomain = newDomain.substr(0,newDomain.length-1);
+					newDomain = newDomain.substr(0, newDomain.length-1);
 				}
-				this._domain = newDomain;
+				_domain = newDomain;
+				return true;
 			}else{
 				return false;
 			}
-			return true;
 		};
 		function setDictionary (newDict) {
 			if(newDict !== undefined) {
-				this._dictionary = newDict;
+				_dictionary = newDict;
 			}else{
 				if(handsomeCfg !== undefined) {
-					this._dictionary = Object.create( handsomeCfg );
+					_dictionary = Object.create( handsomeCfg );
 				}
 			}
 			return true;
@@ -308,5 +311,15 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		    return (typeof(window[v]) == "undefined")?  false: true;
 		};
 		function K () { return this; };
+		return {						// only these methods are accessible from the outside
+			'init': init,
+			'setService': setService,
+			'setDomain': setDomain,
+			'setCloudId': setCloudId,
+			'getSessionID': getSessionID,
+			'runChainedEvents': runChainedEvents,
+										// and these variables
+			'response': buffer.rp
+		};
 
 }(window.cuteNSexy = window.cuteNSexy || {}, jQuery));
