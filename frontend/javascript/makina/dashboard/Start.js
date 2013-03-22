@@ -60,7 +60,7 @@ makina.dashboard.Start = function(){
 */
     var that = this;
 
-
+/*
     makina.util.ajaxRequest('http://localhost/makina/ts.json','GET',
         {},
         function(data){
@@ -69,6 +69,7 @@ makina.dashboard.Start = function(){
 
         }
     );
+    */
 
 
 }
@@ -91,6 +92,13 @@ makina.dashboard.Start.prototype.RenderDataset = function(data){
         });
 
     }
+    var mData=[];
+
+    mData[0] =data[0];
+    mData[1] =data[1];
+
+    data = mData;
+
 
 
     var ds=new makina.Dataset(data);
@@ -114,10 +122,15 @@ makina.dashboard.Start.prototype.RenderDataset = function(data){
 
 
     console.log("ds.GroupBys(['Application','Platform'],['click','install']");
-    var obj= ds.GroupBys(["Application","Platform"],['timeslotCLICK','timeslotINSTALL']);
+    //var obj= ds.GroupBys(["Application","Platform"],['timeslotCLICK','timeslotINSTALL']);
+
+    var obj = ds.Sum('timeslotCLICK');
+
+
+
     console.log(obj);
 
-    goog.dom.getElement('data-grid-2').innerHTML = ds.GetDataTable(obj["response"],"table-2");
+   /// goog.dom.getElement('data-grid-2').innerHTML = ds.GetDataTable(obj["response"],"table-2");
 
 
 
@@ -270,10 +283,18 @@ var x = function(){
 makina.dashboard.Start.prototype.BindEvents = function(){
 
     var that = this;
+    this.widget = {};
 
-    goog.events.listen(goog.dom.getElement('create-new-app'),goog.events.EventType.CLICK,function(){
+    goog.events.listen(goog.dom.getElement('request-data-set'),goog.events.EventType.CLICK,function(){
+       that.widget =new makina.Widget();
+    });
+
+
+     goog.events.listen(goog.dom.getElement('create-new-app'),goog.events.EventType.CLICK,function(){
        that.SaveWidgetForm();
     });
+
+
     goog.events.listen(goog.dom.getElement('save-loxo'),goog.events.EventType.CLICK,function(){
        that.SaveMovie();
     });

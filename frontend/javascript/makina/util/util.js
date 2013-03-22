@@ -143,7 +143,7 @@ makina.util.jsonpRequest = function( jsonObject, fnSuccessCallBack, fnErrorCallB
 
     //var _url ='http://alpha.loxodonta-editor.appspot.com:80/resources/dispatcher/test/v1/ff8080813caa0458013caa0458f70000/'+serviceName+'?request='+goog.json.serialize(jsonObject);
 
-    //var _url ='http://alpha.loxodonta-editor.appspot.com:80/resources/dispatcher/test/v1/ff8080813d7cfe90013d7d150d8f0001/'+serviceName+'?request='+goog.json.serialize(jsonObject);
+  //  var _url ='http://alpha.loxodonta-editor.appspot.com:80/resources/dispatcher/test/v1/ff8080813d7cfe90013d7d150d8f0001/'+serviceName+'?request='+goog.json.serialize(jsonObject);
 
     var _url ='http://nmdapps.com/IHaberService/ServiceDisco/';
 

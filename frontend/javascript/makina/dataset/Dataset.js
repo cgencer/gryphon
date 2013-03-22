@@ -17,20 +17,15 @@ goog.provide('makina.Dataset');
 makina.Dataset = function(dataset){
 
     this.dataset = dataset;
-/*
-    console.log("-------------------------------");
-    console.log({"dataset":dataset});
-    console.log("-------------------------------");
 
-    goog.array.sort(dataset,function(a,b){
-        return goog.string.numerateCompare(a['city'],b['city']);
-    });
 
-    console.log({"datasetsort":dataset});
-    console.log("-------------------------------");
 
-*/
+
 }
+
+//date ddMMyyyy time HHmmss timezone +0200 fln zaten
+
+
 
 /**
  *
@@ -38,18 +33,36 @@ makina.Dataset = function(dataset){
  *
  */
 makina.Dataset.prototype.Sum = function(column){
-    var sum = 0;
+
+    var response = {
+        "sum":0,
+        "timeslot":{}
+    };
+
+    var sum =0;
+    var TS ={};
+
+    var that = this;
+
     goog.array.forEach(this.dataset,function(item){
         goog.object.forEach(item,function(v,k,o){
             if(k==column){
-            if(!isNaN(o[k])){
-                sum+=o[k];
-            }
+                if(goog.string.startsWith(k,"timeslot")){
+                    TS = that.SumTS([TS,o[k]]);
+                }else{
+                    if(!isNaN(o[k])){
+                        sum+=o[k];
+                    }
+                }
             }
         });
     });
 
-    return sum;
+    response["sum"]=sum;
+    response["timeslot"] = TS;
+
+
+    return response;
 }
 /**
  *
@@ -58,6 +71,11 @@ makina.Dataset.prototype.Sum = function(column){
  */
 makina.Dataset.prototype.Min = function(column){
     var min = null;
+
+    var response = {
+        "min": null
+    };
+
     goog.array.forEach(this.dataset,function(item){
         goog.object.forEach(item,function(v,k,o){
             if(k==column){
@@ -67,7 +85,9 @@ makina.Dataset.prototype.Min = function(column){
         });
     });
 
-    return min;
+    response["min"] = min;
+
+    return response;
 
 }
 /**
@@ -110,7 +130,7 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
            if(o==undefined){
                 goog.object.set(itm,k,items[k]);
            }else{
-               if(k=="timeslot")
+               if(goog.string.startsWith(k,"timeslot"))
                    itm[k] = that.SumTS([itm[k],items[k]]);
                else
                 itm[k]=itm[k] + items[k];
@@ -173,9 +193,14 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
  */
 makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
+
+
+
+
+
     console.log("makina.Dataset.prototype.GroupBys");
 
-    var firstRow = this.dataset[0];
+   /// var firstRow = this.dataset[0];
 
 
 
@@ -343,6 +368,66 @@ makina.Dataset.prototype.GetDataTable = function(dataset,tableId){
 }
 
 
+/**
+ *
+ * @param {Object} data
+ * @param {!Object} mDateStart
+ * @param {Object=} mDateEnd
+ *
+ */
+makina.Dataset.prototype.FilterTimeSlot = function(data, mDateStart, mDateEnd){
+
+    var sYear  = null;
+    var sMonth = null;
+    var sDay   = null;
+    var sHour  = null;
+
+    var eYear  = null;
+    var eMonth = null;
+    var eDay   = null;
+    var eHour  = null;
+
+    if(mDateEnd == undefined){
+        mDateEnd = mDateStart;
+    }
+
+
+
+        sYear  = mDateStart.getYear();
+        sMonth = mDateStart.getMonth();
+        sDay   = mDateStart.getDay();
+        sHour  = mDateStart.getHours();
+
+
+
+        eYear  = mDateEnd.getYear();
+        eMonth = mDateEnd.getMonth();
+        eDay   = mDateEnd.getDay();
+        eHour  = mDateEnd.getHours();
+
+
+    var TS = {};
+    TS["c"]=0;
+
+
+
+   for(var y=sYear; y<=eYear; y++){
+       TS[y]=data[y];
+       for(var m=sMonth; m<=eMonth; m++){
+           TS[y][m]=data[y][m];
+           for(var d=sDay; d<=eDay; d++){
+               TS[y][m][d] = data[y][m][d];
+               for(var h=sHour; h<=eHour; h++){
+                   TS[y][m][d][h] = data[y][m][d][h];
+               }
+           }
+       }
+   }
+
+
+   return TS;
+}
+
 
 /**
  *
@@ -356,13 +441,19 @@ makina.Dataset.prototype.SumTS = function(tsArrayData){
     TS["c"]=0;
 
 
+
     goog.array.forEach(tsArrayData,function(item,i){
 
+        //loop for years
         goog.object.forEach(item,function(v,yk,o){
 
+
+            console.log("start loop years "+yk );
+            console.log(item);
+
             var totalC =0;
-            if(v.c>0)
-                totalC = v.c;
+            if(v["c"]>0)
+                totalC = v["c"];
 
 
 
@@ -375,45 +466,42 @@ makina.Dataset.prototype.SumTS = function(tsArrayData){
                 goog.object.set(TS,yk, c);
                 TS["c"]+= totalC;
             }
+
+            //loop for months
             goog.object.forEach(v,function(mts,mk,mo){
                 if(mk!="c"){
                     if(goog.object.containsKey(TS[yk],mk) ){
-                        TS[yk][mk]["c"]+=mts.c;
+                        TS[yk][mk]["c"]+=mts["c"];
                     }else{
-                        var cm={c:mts.c};
+                        var cm={"c":mts["c"]};
                         goog.object.set(TS[yk], mk, cm);
                     }
                 }
-
+                //loop of days
                 goog.object.forEach(mts,function(dts,dk,dObj){
                     if(dk!="c"){
                         if(goog.object.containsKey(TS[yk][mk],dk) ){
-                            TS[yk][mk][dk]["c"]+=dts.c;
+                            TS[yk][mk][dk]["c"]+=dts["c"];
                         }else{
-                            var cm={c:dts.c};
+                            var cm={"c":dts["c"]};
                             goog.object.set(TS[yk][mk], dk, cm);
                         }
                     }
-
+                    //loop of hours
                     goog.object.forEach(dts,function(hts,hk,hObj){
                         if(hk!="c"){
                             if(goog.object.containsKey(TS[yk][mk][dk],hk) ){
-                                TS[yk][mk][dk][hk]["c"]+=dts.c;
+                                TS[yk][mk][dk][hk]["c"]+=dts["c"];
                             }else{
-                                var cm={c:dts.c};
+                                var cm={"c":dts["c"]};
                                 goog.object.set(TS[yk][mk][dk], hk, cm);
                             }
                         }
-                    });
+                    });//end of loop hours
+                });// end of loop days
+            });//end of loop months
+        });//end of loop years
 
-
-
-
-                });
-
-
-            });
-        });
     });
 
 
