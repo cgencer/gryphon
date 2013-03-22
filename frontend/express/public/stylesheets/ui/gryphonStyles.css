@@ -41,4 +41,76 @@ body.alt div.DTCR_pointer {
 
 body {
 	background-color: #e9e3d5;
+	margin:0;
 }
+.container-fluid {
+	padding-left:0;
+	padding-right:0;
+}
+.makina-logo {
+	background-color: #ffffff;
+	background-image: url("/images/k/makina-logo.png");
+	background-repeat: no-repeat;
+	background-position:center;
+	height: 50px;	
+}
+.sideBar {
+	background-color: #323232;
+	height:100%;
+}
+.accordion-group {
+	border:none;
+}
+.accordion-heading {
+	background-color: #575757;
+	color: #c5c5c5;
+	border:0;
+}
+.accordion-heading a {
+	color: #c5c5c5;
+}
+
+.sideBar .accordion-heading {
+	background-repeat:no-repeat;
+	padding-left:20px;
+	height:53px;
+	background-position:left center;
+}
+.accordion-inner {
+	padding:0;
+}
+.sideBar .accordion-heading a {
+	padding-top:14px;
+}
+.sideBar .accordion-group.selectApp .accordion-heading {
+	background-image: url("/images/k/left_menu_icons/selectapp.png");
+}
+.sideBar .accordion-group.dashboard .accordion-heading {
+	background-image: url("/images/k/left_menu_icons/dashboard.png");
+}
+.sideBar .accordion-group.events .accordion-heading {
+	background-image: url("/images/k/left_menu_icons/events.png");
+}
+.sideBar .accordion-group.sources .accordion-heading {
+	background-image: url("/images/k/left_menu_icons/sources.png");
+}
+.sideBar .accordion-group.management .accordion-heading {
+	background-image: url("/images/k/left_menu_icons/management.png");
+}
+#sideBarManagement .accordion-heading {
+	background-image:none;
+	height:32px;
+	padding-left:0;
+}
+#sideBarManagement .accordion-heading a {
+	padding-top:4px;
+}
+#sideBarManagement .accordion-heading {
+	background-color: #8e8e8e;
+	color: #ffffff;
+	border:0;
+}
+#sideBarManagement .accordion-heading a {
+	color: #ffffff;
+}
+

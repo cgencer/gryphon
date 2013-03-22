@@ -27,17 +27,19 @@
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/TableTools.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/TableTools_JUI.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/bootstrap.css">
+	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/gryphonStyles.css">
 	
 </head>
 
 <body>
 
-	<div class="container-fluid">
+	<div class="container-fluid wholePage">
 	<div class="row-fluid">
-		<div class="span2">
+		<div class="span2 sideBar">
+			<div class="makina-logo"></div>
 			<div class="accordion" id="sideBar">
 
-				<div class="accordion-group">
+				<div class="accordion-group selectApp">
 					<div class="accordion-heading">
 						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseOne">
 						Select App
@@ -50,7 +52,7 @@
 					</div>
 				</div>
 
-				<div class="accordion-group">
+				<div class="accordion-group dashboard">
 					<div class="accordion-heading">
 						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
 						Dashboard
@@ -63,41 +65,85 @@
 					</div>
 				</div>
 
-				<div class="accordion-group">
+				<div class="accordion-group events">
 					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseThree">
 						Events
 						</a>
 					</div>
-					<div id="collapseTwo" class="accordion-body collapse">
+					<div id="collapseThree" class="accordion-body collapse">
 						<div class="accordion-inner">
 							Anim pariatur cliche...
 						</div>
 					</div>
 				</div>
 
-				<div class="accordion-group">
+				<div class="accordion-group sources">
 					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
 						Sources
 						</a>
 					</div>
-					<div id="collapseTwo" class="accordion-body collapse">
+					<div id="collapseFour" class="accordion-body collapse">
 						<div class="accordion-inner">
 							Anim pariatur cliche...
 						</div>
 					</div>
 				</div>
 
-				<div class="accordion-group">
+				<div class="accordion-group management">
 					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFive">
 						Management
 						</a>
 					</div>
-					<div id="collapseTwo" class="accordion-body collapse">
+					<div id="collapseFive" class="accordion-body collapse">
 						<div class="accordion-inner">
-							Anim pariatur cliche...
+
+							<div class="accordion" id="sideBarManagement">
+
+							<div class="accordion-group sources">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+									Organization
+									</a>
+								</div>
+							</div>
+
+							<div class="accordion-group sources">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+									User
+									</a>
+								</div>
+							</div>
+
+							<div class="accordion-group sources">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+									Apps
+									</a>
+								</div>
+							</div>
+
+							<div class="accordion-group sources">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+									Makilinks
+									</a>
+								</div>
+							</div>
+
+							<div class="accordion-group sources">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+									SDK Wizard
+									</a>
+								</div>
+							</div>
+							</div>
+
+
 						</div>
 					</div>
 				</div>
