@@ -33,7 +33,9 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var _domain = "http://mkevt.nmdapps.com";
 		var _service = "makinaweb";
 		var _cloudid = '';
-		var credentials = {
+		var _appName = 'grabHandsome';
+		var _dictionary = {};
+		var _credentials = {
 			'pass': 		'demo',
 			'userName': 	'demo'
 		};
@@ -43,22 +45,24 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			version: 			"0.3"
 		};
 		var buffer = {};
-		var _dictionary = {};
 		function grabHandsome () {};
 
 		function init (iObj) {
 			if(iObj !== undefined) {
-				if(iObj.domain !== undefined) {				
+				if(iObj.domain !== undefined) {
 					setDomain(iObj.domain);
 				}
-				if(iObj.service !== undefined) {				
+				if(iObj.service !== undefined) {
 					setService(iObj.service);
 				}
-				if(iObj.dictionary !== undefined) {				
+				if(iObj.dictionary !== undefined) {
 					setDictionary(iObj.dictionary);
 				}
-				if(iObj.cloudId !== undefined) {				
+				if(iObj.cloudId !== undefined) {
 					setCloudId(iObj.cloudId);
+				}
+				if(iObj.appName !== undefined) {
+					setAppName(iObj.appName);
 				}
 			}
 			cleanUp();
@@ -120,6 +124,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					}
 				}
 			}
+			if(payLoad === undefined){payLoad = {};}
 			if(type(_e) == 'undefined') {				// checks for key exists
 				payLoad['_type'] = cmd + 'Request';
 				if(type(_s) == 'function') {
@@ -145,6 +150,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
 			console.dir(payLoad);
+			if(_appName === ''){_appName = 'q';}
 
 			var cid = (_cloudid !== '') ? _cloudid + '/' : '/';
 
@@ -152,7 +158,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				url: _domain + '/' + _service + cid + payLoad.command + '?request=' + JSON.stringify(payLoad.data),
 				accepts: 'application/json',
 				dataType: 'jsonp',
-				jsonpCallback: 'grabHandsome',
+				jsonpCallback: _appName,
 				contentType: "application/json; charset=utf-8",
 				cache: false,
 				crossDomain: true,
@@ -160,65 +166,79 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 
 			}).done( function(data, textStatus, jqXHR) {
 
-				cuteNSexy.doTheTwist(data, textStatus, jqXHR);
+				doTheTwist(data, textStatus, jqXHR);
 
 			}));
 		};
 		function doTheTwist (data, textStatus, jqXHR) {
+			//by-pass the checks for now...
+
+			for(var i in data){
+				data = data[i];
+			}
+
 			var cmd = (data._type.slice(-8) == 'Response') ? data._type.replace('Response', '') : 'err';
 
 			// prechecks
 			var found = false;
 			var realCallbackS, realCallbackF, _sssP;
 			itCameBack = data.callbackTag;
-			
-			for(var sz in cuteNSexy.buffer._sss) {
-				var pointer = cuteNSexy.buffer._sss[sz];
+
+			searchCB:
+			for(var sz in buffer._sss) {
+				var pointer = buffer._sss[sz];
 				if(itCameBack == pointer.i) {
 					found = true;
 					realCallbackS = pointer.s;
 					realCallbackF = pointer.f;
 					_sssP = sz;
+					break searchCB;
 				}
 			}
-			
-			var cfgP = cuteNSexy._dictionary[cmd];
+
+			var resString = _dictionary[ cmd ].result;
+			realCallbackS( data[resString], cmd );
+			delete buffer._sss[ _sssP ];
+			$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
+			return true;
+
+			var cfgP = _dictionary[cmd];
 			for(var cfk in cfgP.check) {
 				var ea = cfgP.check[cfk];
 				var checkFlag = true;
 				for(var k in cfgP.check[cfk]) {
 					var ref = cfgP.check[cfk][k];
-					if(cuteNSexy.type(ref) == 'string') {
+					if(type(ref) == 'string') {
 						if(data[k] != ref){
 							checkFlag = false;
 						}
-					}else if(cuteNSexy.type(ref) == 'regexp') {
+					}else if(type(ref) == 'regexp') {
 						if(ref.test(data[k]) == false){
 							checkFlag = false;
 							_e = "RegExp check of the property "+k+" in "+cmd+" failed";
 						}
 					}
 				}
-				var resString = cuteNSexy._dictionary[ cmd ].result;
+				var resString = _dictionary[ cmd ].result;
 				console.info("> retrieved " + cmd + " command, the result label is " + resString);
 
 				// postchecks
 /*
 				if(checkFlag == true) {
 //					console.log('checks done successfully...');
-//					console.log(cuteNSexy._dictionary[ payLoad.command ].result);
-					if( cuteNSexy._dictionary[ payLoad.command ].result == 'copyTheWholePackage') {
+//					console.log(_dictionary[ payLoad.command ].result);
+					if( _dictionary[ payLoad.command ].result == 'copyTheWholePackage') {
 
 						_s(data);
 
-					} else if(cuteNSexy.type(cuteNSexy._dictionary[ payLoad.command ].result) == 'string') {
+					} else if(type(_dictionary[ payLoad.command ].result) == 'string') {
 
-						_s(data[cuteNSexy._dictionary[ payLoad.command ].result]);
+						_s(data[_dictionary[ payLoad.command ].result]);
 
-					} else if(cuteNSexy.type(cuteNSexy._dictionary[ payLoad.command ].result) == 'array') {
+					} else if(type(_dictionary[ payLoad.command ].result) == 'array') {
 
 						var _t = {};
-						var res = cuteNSexy._dictionary[ payLoad.command ].result;
+						var res = _dictionary[ payLoad.command ].result;
 						for(var ar in res) {
 							_t[ res[ar] ] = data[ res[ar] ] ;
 							console.log('>>>>>>>>>>' + res[ar]);
@@ -234,7 +254,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				// use the right callback for the command!
 				if(this.type( realCallbackS ) == 'function') {
 					realCallbackS( data[resString], cmd );
-					delete cuteNSexy.buffer._sss[ _sssP ];
+					delete buffer._sss[ _sssP ];
 				}
 
 				$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
@@ -242,6 +262,10 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			}
 		};
 //=========================================================================================================
+		function setAppName (name) {
+			_appName = name;
+			return true;
+		};
 		function setCloudId (id) {
 			_cloudid = id;
 			return true;
@@ -317,6 +341,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			'setDomain': setDomain,
 			'setCloudId': setCloudId,
 			'getSessionID': getSessionID,
+			'setAppName': setAppName,
 			'runChainedEvents': runChainedEvents,
 										// and these variables
 			'response': buffer.rp

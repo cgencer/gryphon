@@ -37,6 +37,9 @@ var Gryphon = (function(Gryphon, undefined){
 //	einhorn.saveapp(app);
 	app.get('/stern', getEntries);
 	app.get('/login', login);
+	app.post('/login', login);
+	app.get('/dashboard', dashboard);
+
 	app.get('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
 	app.post('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
 
@@ -46,7 +49,12 @@ var Gryphon = (function(Gryphon, undefined){
 		res.sendfile('views/index.html');
 	};
 	function login (req, res) {
+		if(req.params.formSent === 'true'){
+		}
 		res.sendfile('views/login.html');
+	};
+	function dashboard (req, res) {
+		res.sendfile('views/dashboard.html');
 	};
 
 }(Gryphon = Gryphon || {}));
