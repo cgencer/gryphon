@@ -61,12 +61,23 @@ makina.Bootstrapper = function(){
 
     var start= new makina.dashboard.Start();
 
+    //goog.exportSymbol("makina",makina);
+    goog.exportSymbol("HandsomeWidget",makina.Widget);
+    console.log("goog.exportSymbol");
+
 
 };
 
 makina.Bootstrapper.prototype.initModules = function(){
     this.modul = "";
+
+
 };
+
+
+
+
+
 
 window.onload = makina.Bootstrapper;
 

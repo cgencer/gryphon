@@ -26,50 +26,7 @@ makina.dashboard.Start = function(){
 
 
     this.BindEvents();
-/*
 
-
-
-
-
-
-
-
-
-
-   /// this.GetServiceDisco();
-
-  ///  this.UserLogin();
-
-    var arr_json =[];
-
-/*
-    for(var i=1;i<=100;i++){
-
-
-
-      ///  var json ={"2012":{"c":1359,"3":{"c":28,"19":{"c":2,"7":{"c":2}},"22":{"c":5,"5":{"c":5}},"25":{"c":6,"3":{"c":6}},"28":{"c":7,"1":{"c":7}},"30":{"c":8,"23":{"c":8}}},"4":{"c":132,"2":{"c":9,"21":{"c":9}},"5":{"c":10,"19":{"c":10}},"8":{"c":11,"17":{"c":11}},"11":{"c":12,"15":{"c":12}},"14":{"c":13,"13":{"c":13}},"17":{"c":14,"11":{"c":14}},"20":{"c":15,"9":{"c":15}},"23":{"c":15,"7":{"c":15}},"26":{"c":16,"5":{"c":16}},"29":{"c":17,"3":{"c":17}}},"5":{"c":253,"2":{"c":18,"1":{"c":18}},"4":{"c":19,"23":{"c":19}},"7":{"c":20,"21":{"c":20}},"10":{"c":21,"19":{"c":21}},"13":{"c":22,"17":{"c":22}},"16":{"c":23,"15":{"c":23}},"19":{"c":24,"13":{"c":24}},"22":{"c":25,"11":{"c":25}},"25":{"c":26,"9":{"c":26}},"28":{"c":27,"7":{"c":27}},"31":{"c":28,"5":{"c":28}}},"6":{"c":328,"3":{"c":29,"3":{"c":29}},"6":{"c":30,"1":{"c":30}},"8":{"c":31,"23":{"c":31}},"11":{"c":31,"21":{"c":31}},"14":{"c":32,"19":{"c":32}},"17":{"c":33,"17":{"c":33}},"20":{"c":34,"15":{"c":34}},"23":{"c":35,"13":{"c":35}},"26":{"c":36,"11":{"c":36}},"29":{"c":37,"9":{"c":37}}},"7":{"c":471,"2":{"c":38,"7":{"c":38}},"5":{"c":39,"5":{"c":39}},"8":{"c":40,"3":{"c":40}},"11":{"c":41,"1":{"c":41}},"13":{"c":42,"23":{"c":42}},"16":{"c":43,"21":{"c":43}},"19":{"c":44,"19":{"c":44}},"22":{"c":45,"17":{"c":45}},"25":{"c":46,"15":{"c":46}},"28":{"c":46,"13":{"c":46}},"31":{"c":47,"11":{"c":47}}},"8":{"c":147,"3":{"c":48,"9":{"c":48}},"6":{"c":49,"7":{"c":49}},"9":{"c":50,"5":{"c":50}}}}};
-        var json ={"2013":{"c":1359,"3":{"c":28,"19":{"c":2,"7":{"c":2}},"22":{"c":5,"5":{"c":5}},"25":{"c":6,"3":{"c":6}},"28":{"c":7,"1":{"c":7}},"30":{"c":8,"23":{"c":8}}},"4":{"c":132,"2":{"c":9,"21":{"c":9}},"5":{"c":10,"19":{"c":10}},"8":{"c":11,"17":{"c":11}},"11":{"c":12,"15":{"c":12}},"14":{"c":13,"13":{"c":13}},"17":{"c":14,"11":{"c":14}},"20":{"c":15,"9":{"c":15}},"23":{"c":15,"7":{"c":15}},"26":{"c":16,"5":{"c":16}},"29":{"c":17,"3":{"c":17}}},"5":{"c":253,"2":{"c":18,"1":{"c":18}},"4":{"c":19,"23":{"c":19}},"7":{"c":20,"21":{"c":20}},"10":{"c":21,"19":{"c":21}},"13":{"c":22,"17":{"c":22}},"16":{"c":23,"15":{"c":23}},"19":{"c":24,"13":{"c":24}},"22":{"c":25,"11":{"c":25}},"25":{"c":26,"9":{"c":26}},"28":{"c":27,"7":{"c":27}},"31":{"c":28,"5":{"c":28}}},"6":{"c":328,"3":{"c":29,"3":{"c":29}},"6":{"c":30,"1":{"c":30}},"8":{"c":31,"23":{"c":31}},"11":{"c":31,"21":{"c":31}},"14":{"c":32,"19":{"c":32}},"17":{"c":33,"17":{"c":33}},"20":{"c":34,"15":{"c":34}},"23":{"c":35,"13":{"c":35}},"26":{"c":36,"11":{"c":36}},"29":{"c":37,"9":{"c":37}}},"7":{"c":471,"2":{"c":38,"7":{"c":38}},"5":{"c":39,"5":{"c":39}},"8":{"c":40,"3":{"c":40}},"11":{"c":41,"1":{"c":41}},"13":{"c":42,"23":{"c":42}},"16":{"c":43,"21":{"c":43}},"19":{"c":44,"19":{"c":44}},"22":{"c":45,"17":{"c":45}},"25":{"c":46,"15":{"c":46}},"28":{"c":46,"13":{"c":46}},"31":{"c":47,"11":{"c":47}}},"8":{"c":147,"3":{"c":48,"9":{"c":48}},"6":{"c":49,"7":{"c":49}},"9":{"c":50,"5":{"c":50}}}}};
-
-        arr_json.push(json);
-    }
-
-   // console.log(arr_json);
-
-    var totalJson = this.SumTS(arr_json);
-*/
-    var that = this;
-
-/*
-    makina.util.ajaxRequest('http://localhost/makina/ts.json','GET',
-        {},
-        function(data){
-
-           that.RenderDataset(data);
-
-        }
-    );
-    */
 
 
 }
@@ -80,7 +37,7 @@ makina.dashboard.Start = function(){
  */
 
 makina.dashboard.Start.prototype.RenderDataset = function(data){
-
+/*
 
     for(var i in data){
 
@@ -116,10 +73,10 @@ makina.dashboard.Start.prototype.RenderDataset = function(data){
         component.setSortFunction(j++, goog.ui.TableSorter.alphaSort);
     });
 
+*/
 
 
-
-
+/*
 
     console.log("ds.GroupBys(['Application','Platform'],['click','install']");
     //var obj= ds.GroupBys(["Application","Platform"],['timeslotCLICK','timeslotINSTALL']);
@@ -128,7 +85,7 @@ makina.dashboard.Start.prototype.RenderDataset = function(data){
 
 
 
-    console.log(obj);
+    console.log(obj);*/
 
    /// goog.dom.getElement('data-grid-2').innerHTML = ds.GetDataTable(obj["response"],"table-2");
 
@@ -140,6 +97,7 @@ makina.dashboard.Start.prototype.RenderDataset = function(data){
 
 makina.dashboard.Start.prototype.SumTS = function(dataArrayBase64){
 
+/*
     var TS={};
 
     console.log("Date="+Date.now());
@@ -220,6 +178,7 @@ makina.dashboard.Start.prototype.SumTS = function(dataArrayBase64){
     console.log("end of loop");
 
     console.log(TS);
+*/
 
 /*
         goog.array.forEach(tsArrayData,function(itemTS){
@@ -274,10 +233,6 @@ makina.dashboard.Start.prototype.GenerateModelClass = function(item){
 
 }
 
-var x = function(){
-
-}
-
 
 
 makina.dashboard.Start.prototype.BindEvents = function(){
@@ -285,9 +240,7 @@ makina.dashboard.Start.prototype.BindEvents = function(){
     var that = this;
     this.widget = {};
 
-    goog.events.listen(goog.dom.getElement('request-data-set'),goog.events.EventType.CLICK,function(){
-       that.widget =new makina.Widget();
-    });
+/*
 
 
      goog.events.listen(goog.dom.getElement('create-new-app'),goog.events.EventType.CLICK,function(){
@@ -295,9 +248,7 @@ makina.dashboard.Start.prototype.BindEvents = function(){
     });
 
 
-    goog.events.listen(goog.dom.getElement('save-loxo'),goog.events.EventType.CLICK,function(){
-       that.SaveMovie();
-    });
+
 
     goog.events.listen(goog.dom.getElement('widget-1'),goog.events.EventType.CLICK,function(){
         that.DrawWidget(1);
@@ -324,64 +275,13 @@ makina.dashboard.Start.prototype.BindEvents = function(){
     goog.events.listen(goog.dom.getElement('widget-7'),goog.events.EventType.CLICK,function(){
         that.DrawWidget(7);
     });
+*/
 
 
 
 }
 
 
-makina.dashboard.Start.prototype.SaveMovie = function(){
-/*
-    var json={
-            "_type":"SaveRequest",
-            "session":"e6f6eeea-d56e-44a3-8ed0-10fbfb8bb683",
-            "verb":"Save",
-            "applicationToken":"ff8080813caa0458013caa0458f70000",
-            "serializedObject":{
-                "_type":"Movie",
-                "movieName":"The Matrix Reloaded",
-                "year":2003,
-                "directors":["Andy Wachowski","Lana Wachowski"],
-                "poster":""
-            } ,
-            "deviceId" : "0FE07CEE-00F8-4C37-8472-A77322BEF972"
-    }
-*/
-    /*{
-        "request" : {
-            "verb" : "GetCategories",
-                "_type" : "GetCategoriesRequest",
-                "session" : "61382769-EA3B-40ED-8EFB-5DA5E81BAE33",
-                "blogName" : "Erdem",
-                "deviceId" : "eff4411f44f9749e7fb6f5ac1ffb50cd"
-        }
-    }*/
-
-    var json ={
-        "request":{
-        "_type":"GetCategoriesRequest",
-        "session":"e6f6eeea-d56e-44a3-8ed0-10fbfb8bb683",
-        "verb":"GetCategories",
-        "blogName" : "Erdem",
-        "deviceId" : "0FE07CEE-00F8-4C37-8472-A77322BEF972"
-        }
-    }
-
-    var that = this;
-
-
-    makina.util.jsonpRequest(json,
-        function(data){
-
-            console.log(data);
-        },
-        function(data){
-            console.log(data);
-        }
-    );
-
-
-    }
 
 
 makina.dashboard.Start.prototype.SaveWidgetForm = function(){
@@ -478,6 +378,7 @@ makina.dashboard.Start.prototype.DrawWidget = function(type){
 
     this.widgetContainer = "content-widget";
 
+/*
 
     var options = {
         width: 600,
@@ -506,6 +407,7 @@ makina.dashboard.Start.prototype.DrawWidget = function(type){
     }else if(type == 7){
         this.cart = new makina.Widget(makina.Widget.Type.GEO  , this.widgetContainer, options);
     }
+*/
 
 
 

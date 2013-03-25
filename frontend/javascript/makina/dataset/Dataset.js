@@ -11,7 +11,7 @@ goog.provide('makina.Dataset');
 
 
 /**
- * @param {Array<Object>} dataset
+ * @param {!Array.<Object>} dataset
  * @constructor
  */
 makina.Dataset = function(dataset){
@@ -19,9 +19,16 @@ makina.Dataset = function(dataset){
     this.dataset = dataset;
 
 
-
-
 }
+/**
+ *
+ * @param {!Array.<Object>} dataset
+ *
+ */
+makina.Dataset.prototype.SetDataset = function(dataset){
+    this.dataset = dataset;
+}
+
 
 //date ddMMyyyy time HHmmss timezone +0200 fln zaten
 
@@ -29,40 +36,61 @@ makina.Dataset = function(dataset){
 
 /**
  *
- * @param {String} column
+ * @param {Array.<String>} columns
  *
  */
-makina.Dataset.prototype.Sum = function(column){
+makina.Dataset.prototype.Sum = function(columns){
 
     var response = {
         "sum":0,
         "timeslot":{}
     };
 
+    var s = goog.now();
+
+    console.log("makina.Dataset.prototype.Sum");
+
     var sum =0;
-    var TS ={};
+    var TS ={"c":0};
 
     var that = this;
 
     goog.array.forEach(this.dataset,function(item){
         goog.object.forEach(item,function(v,k,o){
-            if(k==column){
-                if(goog.string.startsWith(k,"timeslot")){
-                    TS = that.SumTS([TS,o[k]]);
+
+            goog.array.forEach(columns,function(col){
+
+                if(goog.string.startsWith(col,"timeslot")){
+
+                    TS[col] = that.SumTS([TS[col],o[col]]);
+
+
                 }else{
-                    if(!isNaN(o[k])){
-                        sum+=o[k];
+                    if(!isNaN(o[col])){
+                        sum+=o[col];
                     }
                 }
-            }
+            });
+
         });
     });
+
+    goog.array.forEach(columns,function(col){
+        TS["c"] += TS[col]["c"];
+    })
+
 
     response["sum"]=sum;
     response["timeslot"] = TS;
 
+    var t=goog.now() - s;
 
-    return response;
+    var o={
+        "response":response,
+        "ms":t
+    };
+
+    return o;
 }
 /**
  *
@@ -110,15 +138,16 @@ makina.Dataset.prototype.Max = function(column){
 }
 
 /**
- * @param {String} byColumn
- * @param {Array<String>}columns
+ * @param {!String} byColumn
+ * @param {Array.<String>}columns
  *
  */
 makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 
     var tmp_arr=[];
 
-    var s=new Date().getTime();
+
+    var s= goog.now();
 
     var that = this;
 
@@ -146,7 +175,8 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 
         for(var i in tmp_arr){
             var item = tmp_arr[i];
-            var vl=goog.object.get(item,byColumn);
+            var getItemByColumn = byColumn.toString();
+            var vl=goog.object.get(item,getItemByColumn);
             if(obj[byColumn]==vl){
                 tmp_arr[i]=sumGroupByItem(item,items);
                 isAdded = true;
@@ -165,13 +195,14 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 
     goog.array.forEach(this.dataset,function(item){
        var o={};
-        goog.object.set(o,byColumn,item[byColumn]);
+        var getItemByColumn = byColumn.toString();
+        goog.object.set(o,getItemByColumn,item[byColumn]);
 
         addObject(o,item);
-        ///console.log("o="+JSON.stringify(o)+" -- "+JSON.stringify(item));
 
     });
-    var t=new Date().getTime() - s;
+
+    var t=goog.now() - s;
 
     var o={
         "response":tmp_arr,
@@ -187,8 +218,8 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 
 
 /**
- * @param {Array<String>} byColumns
- * @param {Array<String>} columns
+ * @param {Array.<String>} byColumns
+ * @param {Array.<String>} columns
  *
  */
 makina.Dataset.prototype.GroupBys = function(byColumns, columns){
@@ -197,8 +228,6 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
 
 
-
-    console.log("makina.Dataset.prototype.GroupBys");
 
    /// var firstRow = this.dataset[0];
 
@@ -314,7 +343,7 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
 
 /**
- * @param {Array<Object>} dataset
+ * @param {Array.<Object>} dataset
  * @param {String} tableId
  *
  */
@@ -431,7 +460,7 @@ makina.Dataset.prototype.FilterTimeSlot = function(data, mDateStart, mDateEnd){
 
 /**
  *
- * @param {Array<Object>}tsArrayData
+ * @param {Array.<Object>}tsArrayData
  *
  */
 makina.Dataset.prototype.SumTS = function(tsArrayData){
@@ -447,9 +476,6 @@ makina.Dataset.prototype.SumTS = function(tsArrayData){
         //loop for years
         goog.object.forEach(item,function(v,yk,o){
 
-
-            console.log("start loop years "+yk );
-            console.log(item);
 
             var totalC =0;
             if(v["c"]>0)
