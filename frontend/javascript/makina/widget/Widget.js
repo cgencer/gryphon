@@ -228,6 +228,7 @@ makina.Widget.prototype._RequestDataBeforeSend = function(){
 
 }
 
+
 makina.Widget.prototype.RequestData = function(){
 
     var that = this;
@@ -237,14 +238,20 @@ makina.Widget.prototype.RequestData = function(){
     var jsonp = new goog.net.Jsonp(url);
     jsonp.setRequestTimeout(45*1000);//45 sn
 
+    this.elConsole.innerHTML ="";
+
     this.Console("Request Data With JSONP","blue");
 
     this._RequestDataBeforeSend();
 
+    var t1 = goog.now();
+
     jsonp.send({},
         function(response){
 
-            that.Console("Response JSONP Request");
+            var t2=goog.now() - t1;
+
+            that.Console("Response JSONP Request ms="+t2);
 
             that._ResponseDataSuccessCallBack(response);
 

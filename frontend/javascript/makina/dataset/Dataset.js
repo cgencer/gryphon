@@ -226,13 +226,6 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
 
 
-
-
-
-   /// var firstRow = this.dataset[0];
-
-
-
     var responseColumns = byColumns;
     responseColumns=responseColumns.concat(columns);
 
