@@ -58,6 +58,58 @@ body {
 	background-color: #323232;
 	height:100%;
 }
+/*
+ * Namespace JQuiery UI patches
+ */
+#ui-datepicker-div { display:none }
+.ui-datepicker-group .ui-widget-header {
+	background:none;
+	border:0;
+	font-weight:normal;
+}
+.ui-datepicker .ui-datepicker-header {
+	padding:0;
+	color:#F4F1E9;
+}
+.ui-datepicker-multi-2 .ui-datepicker-group {
+	width:40%;
+}
+.popover-content .ui-widget.ui-datepicker {
+	font-size:1em;
+}
+.ui-datepicker-group {
+	background-color:#3c3c3c;
+}
+.ui-datepicker-calendar {
+	background-color:#ffffff;	
+}
+.ui-datepicker-calendar th {
+	font-weight:normal;
+	font-size:10px;
+}
+/*
+ * Namespace Twitter Bootstrap patches
+ */
+.btn, .modal-warning  {
+	border-radius:0;
+	box-shadow:none;
+	font-size:12px;
+}
+.popover {
+	background-color:#3C3C3C;	
+}
+.popover.bottom .arrow:after {
+	border-bottom-color:#3c3c3c;
+}
+.btn-primary {
+	background-color: #575757;
+}
+.btn-primary:hover {
+	background-color: #119692;
+}
+.withSpacer .btn {
+	margin-left:5px;
+}
 .accordion-group {
 	border:none;
 }
@@ -103,7 +155,7 @@ body {
 	padding-left:0;
 }
 #sideBarManagement .accordion-heading a {
-	padding-top:4px;
+	padding-top:10px;
 }
 #sideBarManagement .accordion-heading {
 	background-color: #8e8e8e;
@@ -112,5 +164,147 @@ body {
 }
 #sideBarManagement .accordion-heading a {
 	color: #ffffff;
+	text-indent:2px;
+}
+thead {
+	background-color: #b3b3b3;
+	color:#ffffff;
+	text-weight:normal;
+}
+.modal-body {
+	padding:0;
+}
+.bigs, .pulldowns, .breadcrumbs {
+	padding-left:10px;
+}
+.bigs {
+	padding-top:10px;
+}
+.bigTitle {
+	background-color: #ededed;
+	height:56px;
+	text-align:center;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size:14px;
+	line-height:48px;
+	text-indent:18px;
+	color:#464646;
+}
+.bigData {
+	background-color: #ffffff;
+	height:70px;
+	text-align:center;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size:40px;
+	line-height:50px;
+	color:#464646;
+}
+.breadcrumbs {
+	padding:10px;
+}
+.tooltip-inner {
+	display:inline;
+	width:250px;
+}
+.calendars {
+	font-size:12px;
+}
+.popover-content {
+	padding:0;
+}
+.popover {
+	max-width:560px;
+	left:560px;
+}
+.ui-datepicker th {
+	padding:0;
+}
+.ui-widget-header {
+	font-weight:none;
+}
+.makina-select-box {
+	padding-left:10px;
+}
+.makina-select-box ul {
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+	.makina-select-box ul:first-child > li {
+		border: 1px solid #000000;
+	}
+	.makina-select-box .makina-select-box-options {
+		z-index: 10;
+	}
+	.makina-select-box ul li {
+		display: block;
+		position: relative;
+		float: left;
+		font-family: Geneva, Arial, Helvetica, sans-serif;
+		color:#575757;
+	}
+	.makina-select-box li ul {
+		display: none;
+	}
+	.makina-select-box .makina-selected {
+		background-image: url("/images/k/select-box-icon-right.png");
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	.makina-select-box ul li a {
+		display: block;
+		text-decoration: none;
+		color:#575757;
+		padding: 5px 40px 5px 25px;
+		background: #B3B3B3;
+		white-space: nowrap;
+	}
+	.makina-select-box ul ul li {
+		padding: 0px;
+	}
+	.makina-select-box ul ul li a {
+		border-top: 1px solid #000000;
+	}
+	.makina-select-box li:hover ul {
+		display: block;
+		position: absolute;
+	}
+	.makina-select-box li:hover li {
+		float: none;
+		font-size: 12px;
+		font-family: Geneva, Arial, Helvetica, sans-serif;
+		color:#575757;
+	}
+	.makina-select-box li:hover li a:hover {
+		background: #EF9539;
+	}
+
+.row-fluid [class*="span"] {
+	margin-left:0;
+}
+.bigs .bigTitle {
+	background-repeat:no-repeat;
+	background-position:0.6em 0.4em;
+	text-indent:1.5em;
+}
+.bigs.clicks .bigTitle {
+	background-image: url("/images/k/header_icons/totalclicks.png");
+}
+.bigs.installs .bigTitle {
+	background-image: url("/images/k/header_icons/totalclicks.png");
+}
+.bigs.avgcr .bigTitle {
+	background-image: url("/images/k/header_icons/avgconvrate.png");
+}
+.bigs.paidvsorg .bigTitle {
+	background-image: url("/images/k/header_icons/totalclicks.png");
+}
+.bigs.toprank .bigTitle {
+	background-image: url("/images/k/header_icons/highest.png");
+}
+.bigs.avgrank .bigTitle {
+	background-image: url("/images/k/header_icons/avgrank.png");
 }
 

@@ -15,12 +15,13 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 
 	function sGetCommandPaths(package) {
 		console.dir(package);
-/*
-	TODO save the paths to the storage
-*/
+		$.localStorage( 'paths', package );
+//		amplify.store('paths', package);
 	};
 	function sGetCommandDict(package) {
 		cuteNSexy.setDictionary(package);
+		amplify.store( 'dictionary', package );
+//		amplify.store('dictionary', package);
 
 		//only run after the new dict has been retrieved (as it has the url patterns)
 		$(document).on('click', 'button.btn', function (e) {
@@ -28,9 +29,6 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 			cuteNSexy.runChainedEvents([ {		'cmd': 'UserLogin', 'success': sLogin, 'fail': fail,
 											'payload': {'userName': 'demo', 'pass': 'demo'} } ]);
 		});
-/*
-	TODO save the dictionary to the storage
-*/
 	};
 	function sLogin(package) {
 		// if userLogged > load dashboard

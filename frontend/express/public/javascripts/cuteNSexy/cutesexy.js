@@ -34,6 +34,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var _service = "makinaweb";
 		var _cloudid = '';
 		var _appName = 'grabHandsome';
+		var _paths = [];
 		var _dictionary = {};
 		var _cloudids = [];
 		var _credentials = {
@@ -105,27 +106,27 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					_f(_e);
 				}
 			}
-			if(_e === undefined) {				// checks for cfg-data exists
+			if(typeof(_e) == 'undefined') {				// checks for cfg-data exists
 				var set = _dictionary[cmd];
-				if(set !== undefined) {
-					if(set.clean !== undefined) {
+				if(typeof(set) !== 'undefined') {
+					if(typeof(set.clean) !== 'undefined') {
 						for(var ck in set.clean) {
 							delete payLoad[set.clean[ck]];
 						}
 					}
 				}
 
-				if(set !== undefined) {
-					if(set.mandatory !== undefined) {
+				if(type(set) !== 'undefined') {
+					if(type(set.mandatory) !== 'undefined') {
 						for(var mk in set.mandatory) {
-							if(payLoad[set.mandatory[mk]] == undefined) {
+							if(type(payLoad[set.mandatory[mk]]) == 'undefined') {
 								var _e = "Key " + set.mandatory[mk] + " does not exist, exitting...";
 							}
 						}
 					}
 				}
 			}
-			if(payLoad === undefined){payLoad = {};}
+			if(type(payLoad) === 'undefined'){payLoad = {};}
 
 			if(type(_e) == 'undefined') {				// checks for key exists
 				payLoad['_type'] = cmd + 'Request';
@@ -300,13 +301,15 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				return false;
 			}
 		};
+		function setPaths (pack) {
+			_paths = pack;
+			return true;
+		};
 		function setDictionary (newDict) {
-			if(newDict !== undefined) {
-				_dictionary = newDict;
+			if(typeof(handsomeCfg) != 'undefined' && handsomeCfg != null) {
+				_dictionary = Object.create( handsomeCfg );
 			}else{
-				if(handsomeCfg !== undefined) {
-					_dictionary = Object.create( handsomeCfg );
-				}
+				_dictionary = newDict;
 			}
 			return true;
 		};
@@ -354,6 +357,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			'init': init,
 			'setService': setService,
 			'setDomain': setDomain,
+			'setPaths': setPaths,
 			'setDictionary': setDictionary,
 			'setCloudId': setCloudId,
 			'setCloudIds': setCloudIds,

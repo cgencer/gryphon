@@ -1,6 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -9,7 +7,10 @@
 
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jquery/jquery-1.8.3.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jqueryui/jquery-ui.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/dom/jqueryui/i18n/jquery.ui.datepicker-tr.js"></script>
+	<script language="javascript" type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/bootstrap/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/less-1.3.3.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/underscore-min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/underscore.math.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/underscore.deferred.js"></script>
@@ -17,9 +18,12 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.base64.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.csv-0.71.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/moment/moment.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/utils/amplify.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/cuteNSexy/cutesexy.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/client/dashboard.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/widget.js"></script>
 
+	<link rel="stylesheet/less" type="text/css" href="styles.less" />
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/demo_page.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/demo_table_jui.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/smoothness/jquery-ui-1.8.4.custom.css">
@@ -34,131 +38,295 @@
 <body>
 
 	<div class="container-fluid wholePage">
-	<div class="row-fluid">
-		<div class="span2 sideBar">
-			<div class="makina-logo"></div>
-			<div class="accordion" id="sideBar">
 
-				<div class="accordion-group selectApp">
-					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseOne">
-						Select App
-						</a>
+		<div class="row-fluid">
+			<div class="span2 sideBar">
+
+				<div class="makina-logo"></div>
+				<div class="accordion" id="sideBar">
+					<div class="accordion-group selectApp">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseOne">
+							Select App
+							</a>
+						</div>
+						<div id="collapseOne" class="accordion-body collapse in">
+							<div class="accordion-inner">
+								Anim pariatur cliche...
+							</div>
+						</div>
 					</div>
-					<div id="collapseOne" class="accordion-body collapse in">
-						<div class="accordion-inner">
-							Anim pariatur cliche...
+					<div class="accordion-group dashboard">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
+							Dashboard
+							</a>
+						</div>
+						<div id="collapseTwo" class="accordion-body collapse">
+							<div class="accordion-inner">
+								Anim pariatur cliche...
+							</div>
+						</div>
+					</div>
+					<div class="accordion-group events">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseThree">
+							Events
+							</a>
+						</div>
+						<div id="collapseThree" class="accordion-body collapse">
+							<div class="accordion-inner">
+								Anim pariatur cliche...
+							</div>
+						</div>
+					</div>
+					<div class="accordion-group sources">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
+							Sources
+							</a>
+						</div>
+						<div id="collapseFour" class="accordion-body collapse">
+							<div class="accordion-inner">
+								Anim pariatur cliche...
+							</div>
+						</div>
+					</div>
+					<div class="accordion-group management">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFive">
+							Management
+							</a>
+						</div>
+						<div id="collapseFive" class="accordion-body collapse">
+							<div class="accordion-inner">
+								<div class="accordion" id="sideBarManagement">
+									<div class="accordion-group sources">
+										<div class="accordion-heading" data-target="#managementOrganization" data-toggle="modal">
+											<a href="#managementOrganization">
+												Organization
+											</a>
+										</div>
+									</div>
+									<div class="accordion-group sources">
+										<div class="accordion-heading" data-target="#managementUser" data-toggle="modal">
+											<a href="#managementUser">
+											User
+											</a>
+										</div>
+									</div>
+									<div class="accordion-group sources">
+										<div class="accordion-heading" data-target="#managementApps" data-toggle="modal">
+											<a href="#managementApps">
+											Apps
+											</a>
+										</div>
+									</div>
+									<div class="accordion-group sources">
+										<div class="accordion-heading" data-target="#managementMakilinks" data-toggle="modal">
+											<a href="#managementMakilinks">
+											Makilinks
+											</a>
+										</div>
+									</div>
+									<div class="accordion-group sources">
+										<div class="accordion-heading" data-target="#managementSDKWizard" data-toggle="modal">
+											<a href="#managementSDKWizard">
+											SDK Wizard
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<div class="accordion-group dashboard">
-					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseTwo">
-						Dashboard
-						</a>
+			<div class="span10 rightSide">
+
+				<div class="row-fluid">
+
+					<div class="span2 bigs clicks">
+						<div class="bigTitle">Total Clicks</div>
+						<div class="bigData">7K</div>
 					</div>
-					<div id="collapseTwo" class="accordion-body collapse">
-						<div class="accordion-inner">
-							Anim pariatur cliche...
-						</div>
+					<div class="span2 bigs installs">
+						<div class="bigTitle">Total Installs</div>
+						<div class="bigData">785</div>
 					</div>
+					<div class="span2 bigs avgcr">
+						<div class="bigTitle">Average CR</div>
+						<div class="bigData">%7</div>
+					</div>
+					<div class="span2 bigs paidvsorg">
+						<div class="bigTitle">Paid / Organic</div>
+						<div class="bigData">0.7</div>
+					</div>
+					<div class="span2 bigs toprank">
+						<div class="bigTitle">Highest Rank</div>
+						<div class="bigData">4</div>
+					</div>
+					<div class="span2 bigs avgrank">
+						<div class="bigTitle">Average Rank</div>
+						<div class="bigData">13</div>
+					</div>
+
+					<div class="span12 breadcrumbs">
+						Dashboard (All Types) > OS Paid
+					</div>
+
+					<div class="span3 makina-select-box">
+						<ul class="makina-menu" id="select-a" >
+					<input type="hidden" name="" class="makina-menu-hidden" />
+					<li><a href="#" class="makina-selected">Selected</a>
+						<ul class="makina-select-box-options">
+							<li><a href="#" rel="1">Option 1</a></li>
+							<li><a href="#" rel="2">Option 2</a></li>
+							<li><a href="#" rel="3">Option 3</a></li>
+							<li><a href="#" rel="4">Option 4</a></li>
+							<li><a href="#" rel="5">Selected</a></li>
+						</ul>
+					</li>
+				</ul>
+						<ul class="makina-menu " id="select-a" >
+					<input type="hidden" name="" class="makina-menu-hidden" />
+					<li><a href="#" class="makina-selected">Selected</a>
+						<ul class="makina-select-box-options">
+							<li><a href="#" rel="1">Option 1</a></li>
+							<li><a href="#" rel="2">Option 2</a></li>
+							<li><a href="#" rel="3">Option 3</a></li>
+							<li><a href="#" rel="4">Option 4</a></li>
+							<li><a href="#" rel="5">Selected</a></li>
+						</ul>
+					</li>
+				</ul>
+					</div>
+
+					<div class="span9 withSpacer">
+						<a class="btn btn-primary pull-right" rel="tooltip" data-toggle="tooltip">30 Days<span class="caret"></span></a>
+						<a class="btn btn-primary dropdown-toggle pull-right">Last Week</a>
+						<a class="btn btn-primary dropdown-toggle pull-right">Today</a>
+						<a class="btn btn-primary dropdown-toggle pull-right" id="create-widget">Widget</a>
+					</div>
+
+					<div id="contentMap" class="span10">
+						<table style="height: 500px;">
+							<tr>
+								<td valign="top"><div id="content-widget" style="width: 400px;height: 200px;" ></div></td>
+								<td valign="top"><div id="widget-console"></div></td>
+							</tr>
+						</table>
+						<div id="chart_div"></div>
+					</div>
+
+
 				</div>
 
-				<div class="accordion-group events">
-					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseThree">
-						Events
-						</a>
-					</div>
-					<div id="collapseThree" class="accordion-body collapse">
-						<div class="accordion-inner">
-							Anim pariatur cliche...
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-group sources">
-					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-						Sources
-						</a>
-					</div>
-					<div id="collapseFour" class="accordion-body collapse">
-						<div class="accordion-inner">
-							Anim pariatur cliche...
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-group management">
-					<div class="accordion-heading">
-						<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFive">
-						Management
-						</a>
-					</div>
-					<div id="collapseFive" class="accordion-body collapse">
-						<div class="accordion-inner">
-
-							<div class="accordion" id="sideBarManagement">
-
-							<div class="accordion-group sources">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-									Organization
-									</a>
-								</div>
-							</div>
-
-							<div class="accordion-group sources">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-									User
-									</a>
-								</div>
-							</div>
-
-							<div class="accordion-group sources">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-									Apps
-									</a>
-								</div>
-							</div>
-
-							<div class="accordion-group sources">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-									Makilinks
-									</a>
-								</div>
-							</div>
-
-							<div class="accordion-group sources">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#sideBar" href="#collapseFour">
-									SDK Wizard
-									</a>
-								</div>
-							</div>
-							</div>
-
-
-						</div>
-					</div>
-				</div>
-
+			</div>
 		</div>
-	  </div>
-	  <div class="span10">
-page content	  	
-	  </div>
+</div>
+	<div id="managementOrganization" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Organization Management</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<table class="table table-striped table-condensed">
+					<thead>
+						<tr>
+							<th>Organization Name</th><th>Description</th><th>Level</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>...</td>
+							<td>...</td>
+							<td><button class="btn btn-primary btn-warning" type="button">Edit</button></td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td>...</td>
+							<td>...</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td>...</td>
+							<td>...</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td>...</td>
+							<td>...</td>
+						</tr>
+					</tbody>
+				</table>
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
 	</div>
+
+	<div id="managementUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Manage Users</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
 	</div>
 
+	<div id="managementApps" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Manage Applications</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
 
+	<div id="managementMakilinks" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Makilinks</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
 
-<div id="content"></div>
+	<div id="managementSDKWizard" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">SDK Wizard</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
+
+	<div id="containerForCalendar" class="hide" style="display:none;"></div>
 
 </body>
 </html>
