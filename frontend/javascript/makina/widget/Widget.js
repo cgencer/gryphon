@@ -25,6 +25,8 @@ makina.Widget = function(options,consoleWidget){
 
     this.options = options;
 
+    this.fetchEvents = options["fetchOptions"];
+
     this.elConsole;
 
     if(consoleWidget!=undefined){
@@ -44,6 +46,8 @@ makina.Widget = function(options,consoleWidget){
 
     this._responseSuccessCallBack = this.options["responseSuccessCallBack"];
     this._responseErrorCallBack = this.options["responseErrorCallBack"];
+    this._responseColumnsCallBack = this.options["responseColumnsCallBack"];
+
 
 
     /**
@@ -51,13 +55,15 @@ makina.Widget = function(options,consoleWidget){
      * @type {Array.<Object>}
      */
     this.responseData = [];
-    this.data =[];
+    this.dataRows =[];
+    this.dataColumns = [];
+
     this._timer;
 
     this._utcTime =Math.round( new goog.date.DateTime(1999,1,1,10,10,10).getTime() /1000.0 );
 
 
-    this.ds = new makina.Dataset(this.data);
+    this.ds = new makina.Dataset(this.dataRows);
 
     this.Console("Start Widget","blue");
 
@@ -65,6 +71,62 @@ makina.Widget = function(options,consoleWidget){
 
 
 }
+/**
+ *
+ * @param eventItem
+ *
+ */
+makina.Widget.prototype.AddEvent = function(eventItem){
+
+    var isAdded = false;
+
+    goog.array.forEach(this.fetchEvents,function(item){
+        if(item["id"]==eventItem["id"])
+            isAdded = true;
+    });
+
+    if(!isAdded){
+        this.fetchEvents.push(eventItem);
+    }
+
+    return !isAdded;
+
+}
+/**
+ *
+ * @param eventId
+ *
+ */
+makina.Widget.prototype.RemoveEvent = function(eventId){
+
+    var isAdded = false;
+    var tmp =[];
+
+    goog.array.forEach(this.fetchEvents,function(item){
+        if(item["id"]==eventId)
+            isAdded = true;
+        else tmp.push(item);
+    });
+
+    if(isAdded){
+        this.fetchEvents =tmp;
+    }
+
+    return isAdded;
+}
+
+/**
+ *
+ * @return {Array}
+ *
+ */
+makina.Widget.prototype.GetRowColumns = function(){
+
+    return this.dataColumns;
+}
+
+
+
 /**
  *
  * @param {!string} messages
@@ -91,8 +153,6 @@ makina.Widget.prototype.Console = function(messages,color){
 
 }
 
-
-
 makina.Widget.prototype._StartTimer = function(){
 
 
@@ -114,9 +174,6 @@ makina.Widget.prototype._StartTimer = function(){
     }
 }
 
-
-
-
 /**
  *
  * @param {Object!}item
@@ -128,6 +185,8 @@ makina.Widget.prototype._ProcessFetchItems =  function(item){
 
     var that =  this;
 
+    var s=goog.now();
+    that.Console("Start "+item["name"]+" ProcessFetchItems","green");
 
 
     if(item["type"]== "sum"){
@@ -139,17 +198,30 @@ makina.Widget.prototype._ProcessFetchItems =  function(item){
 
     }else if(item["type"]=="groupby"){
 
-        console.log(" call group bysss ");
-        var obj= this.ds.GroupBys(item["byColumns"]  , item["columns"]);
+
+        var obj= this.ds.GroupBys(item["byColumns"]  , item["columns"], item["byValues"]);
 
 
         if(item["fetchCallBack"]!= null){
            item["fetchCallBack"](obj);
         }
 
-    }else {
+    }else if(item["type"] == "keyvalues"){
+
+        console.log("Call get key Values Array");
+        var obj = this.ds.GetColumnValues(item['byColumns']);
+
+        if(item["fetchCallBack"]!= null){
+            item["fetchCallBack"](obj);
+        }
+
+    }else{
 
     }
+
+
+    var ms = goog.now() - s;
+    that.Console("End "+item["name"]+" ProcessFetchItems ms="+ms,"green");
 
 
 
@@ -167,13 +239,30 @@ makina.Widget.prototype._ResponseDataSuccessCallBack = function(response){
 
     var that = this;
 
-    if(this._responseSuccessCallBack != null)
-        (this._responseSuccessCallBack && this._responseSuccessCallBack(response));
+
+
 
     this.responseData = response;
-    this.DecodeData();
 
-    this.ds.SetDataset(this.data);
+    this.dataColumns = response["columns"];
+
+    this.DecodeData(response["rows"]);
+
+
+    var rsData={};
+    rsData["columns"]= this.dataColumns;
+    rsData["rows"]= this.dataRows;
+
+    if(this._responseSuccessCallBack != null)
+        (this._responseSuccessCallBack && this._responseSuccessCallBack(rsData));
+
+    if(this._responseColumnsCallBack != null)
+        (this._responseColumnsCallBack && this._responseColumnsCallBack(rsData));
+
+
+
+
+    this.ds.SetDataset(this.dataRows);
 
 
     //process request options filters...
@@ -182,9 +271,29 @@ makina.Widget.prototype._ResponseDataSuccessCallBack = function(response){
 
     this.Console("Fetch Event Options Started","red");
 
-    var retchOptions = this.options["fetchOptions"];
+    var i = 0, limit = this.fetchEvents.length, busy = false;
 
-    goog.array.forEach(retchOptions,function(item){
+    var processor = setInterval(function()
+    {
+        if(!busy){
+
+            busy = true;
+            var item = that.fetchEvents[i];
+            that._ProcessFetchItems(item);
+            if(++i == limit)
+            {
+                clearInterval(processor);
+            }
+            busy = false;
+        }
+
+    }, 200);
+
+/*
+
+    /// var retchOptions = this.options["fetchOptions"];
+
+    goog.array.forEach(this.fetchEvents, function(item){
 
         var s=goog.now();
         that.Console("Start "+item["name"]+" ProcessFetchItems","green");
@@ -195,10 +304,8 @@ makina.Widget.prototype._ResponseDataSuccessCallBack = function(response){
 
     });
 
-    var t2= goog.now() - t1;
-
-    this.Console("End Of Event Options total ms="+t2,"red");
-
+*/
+    this.Console("Fetch Event Options Endddddddddd","red");
 
     if(goog.isNumber(this._refreshTime)){
         this._StartTimer();
@@ -262,8 +369,6 @@ makina.Widget.prototype.RequestData = function(){
 }
 
 
-
-
 makina.Widget.prototype.EndOfProcess = function(){
 
     this._timer.start();
@@ -271,12 +376,13 @@ makina.Widget.prototype.EndOfProcess = function(){
 }
 
 
-makina.Widget.prototype.DecodeData = function(){
+makina.Widget.prototype.DecodeData = function(responseDataRows){
 
     var that = this;
 
 
-    if(that.responseData.length == 0){
+
+    if(responseDataRows.length == 0){
 
     }else{
 
@@ -286,23 +392,33 @@ makina.Widget.prototype.DecodeData = function(){
 
     }
 
+   this.Console("Start decode code ","yellow");
+    var t1 = goog.now();
 
+   goog.array.forEach(responseDataRows,function(rowItem,i){
 
-   goog.array.forEach(that.responseData,function(rowItem,i){
-       goog.object.forEach(rowItem,function(v,k,o){
-           if(goog.string.startsWith(k,"timeslot"))
-               that.responseData[i][k]= goog.json.parse(Base64.decode(that.responseData[i][k]));
-       });
+     ///  if(i<=100){
+           goog.object.forEach(rowItem,function(v,k,o){
+               if(goog.string.startsWith(k,"timeslot"))
+                   responseDataRows[i][k]= goog.json.parse(Base64.decode(responseDataRows[i][k]));
+           });
 
-       that.UpdateDataRow(rowItem);
+           that.UpdateDataRow(rowItem);
+    ///   }
+
 
    });
 
+    var t2 = goog.now() - t1;
+
+    this.Console("End of decode code ms="+t2,"yellow");
 
 
 
-    console.log(" that.responseData = "+ that.responseData.length);
-    console.log(" that.data = "+ that.data.length);
+
+
+    console.log(" that.responseData = "+ responseDataRows.length);
+    console.log(" that.dataRows = "+ that.dataRows.length);
 
 
 }
@@ -319,9 +435,9 @@ makina.Widget.prototype.UpdateDataRow = function(newRowItem){
     var BreakException= {};
 
     try{
-        goog.array.forEach(that.data,function(item,i){
+        goog.array.forEach(that.dataRows,function(item,i){
            if(item["_rowKey"] == newRowItem["_rowKey"]){
-              that.data[i] = newRowItem;
+              that.dataRows[i] = newRowItem;
                isUpdated = true;
                throw BreakException;
            }
@@ -334,8 +450,9 @@ makina.Widget.prototype.UpdateDataRow = function(newRowItem){
        /// console.log("Update Row = "+newRowItem["_rowKey"]);
     }else{
        /// console.log("Add Row = "+newRowItem["_rowKey"]);
-        that.data.push(newRowItem);
+        that.dataRows.push(newRowItem);
     }
+
 
 
 }
@@ -368,7 +485,7 @@ makina.Widget.prototype.Draw = function(){
     }else if(this.type == makina.Widget.Type.PIE){
 
 
-        var data = [
+        var dataRows = [
             ['Task', 'Hours per Day'],
             ['Work',     11],
             ['Eat',      2],
@@ -402,20 +519,20 @@ makina.Widget.prototype.Draw = function(){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
 
-makina.Widget.prototype.DrawChartArea = function(containerId, data, options){
+makina.Widget.prototype.DrawChartArea = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 
     this.chart = new google.visualization.AreaChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 }
 
@@ -423,19 +540,19 @@ makina.Widget.prototype.DrawChartArea = function(containerId, data, options){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
-makina.Widget.prototype.DrawChartBar = function(containerId, data, options){
+makina.Widget.prototype.DrawChartBar = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 
     this.chart = new google.visualization.BarChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 }
 
@@ -443,19 +560,19 @@ makina.Widget.prototype.DrawChartBar = function(containerId, data, options){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
-makina.Widget.prototype.DrawChartColumn = function(containerId, data, options){
+makina.Widget.prototype.DrawChartColumn = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 
     this.chart = new google.visualization.ColumnChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 }
 
@@ -463,19 +580,19 @@ makina.Widget.prototype.DrawChartColumn = function(containerId, data, options){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
-makina.Widget.prototype.DrawChartLine = function(containerId, data, options){
+makina.Widget.prototype.DrawChartLine = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 
     this.chart = new google.visualization.LineChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 
 }
@@ -484,19 +601,19 @@ makina.Widget.prototype.DrawChartLine = function(containerId, data, options){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
-makina.Widget.prototype.DrawChartPie = function(containerId, data, options){
+makina.Widget.prototype.DrawChartPie = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 
     this.chart = new google.visualization.PieChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 
 }
@@ -505,20 +622,20 @@ makina.Widget.prototype.DrawChartPie = function(containerId, data, options){
 /**
  *
  * @param containerId
- * @param data
+ * @param dataRows
  * @param options
  *
  *//*
 
-makina.Widget.prototype.DrawChartTable = function(containerId, data, options){
+makina.Widget.prototype.DrawChartTable = function(containerId, dataRows, options){
 
     this.containerId = containerId;
     this.options = options;
-    this.data = data;
+    this.dataRows = dataRows;
 */
 /*
     this.chart = new google.visualization.PieChart(document.getElementById(this.containerId));
-    this.dataTable = google.visualization.arrayToDataTable(this.data);
+    this.dataTable = google.visualization.arrayToDataTable(this.dataRows);
     this.chart.draw(this.dataTable, this.options);
 
     var data = new google.visualization.DataTable();

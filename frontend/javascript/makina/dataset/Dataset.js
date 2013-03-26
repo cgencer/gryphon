@@ -220,20 +220,24 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 /**
  * @param {Array.<String>} byColumns
  * @param {Array.<String>} columns
+ * @param {Array.<String>=} byValues
  *
  */
-makina.Dataset.prototype.GroupBys = function(byColumns, columns){
+makina.Dataset.prototype.GroupBys = function(byColumns, columns, byValues){
 
 
 
     var responseColumns = byColumns;
     responseColumns=responseColumns.concat(columns);
 
+    if(!goog.isDef(byValues))
+        byValues = null;
+
 
 
     var tmp_arr=[];
 
-    var s=new Date().getTime();
+    var s=goog.now();
 
     var that = this;
 
@@ -277,6 +281,21 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
 
 
+    var isEquals = function(item){
+
+        var bool = true;
+
+        goog.array.forEach(byColumns,function(columnKey,i){
+
+            if( byValues[i]!=null && item[columnKey] != byValues[i])
+                bool = false;
+        });
+
+        return bool;
+    }
+
+
+
 
     goog.array.forEach(this.dataset,function(item){
 
@@ -297,7 +316,18 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
         o["item"]=newItem;
 
-        addObject(o);
+       //// console.log(newItem);
+
+        if(byValues!=null){
+
+            if(isEquals(newItem)){
+                addObject(o);
+            }
+
+        }else{
+            addObject(o);
+        }
+
 
     });
 
@@ -307,19 +337,12 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
     }
 
 
-/*
-        goog.array.sort(tmp,function(a,b){
-            return goog.string.caseInsensitiveCompare(a[byColumns[0]], b[byColumns[0]]);
-        });
-    */
+
        goog.array.stableSort(tmp,function(a,b){
             return goog.string.caseInsensitiveCompare(a[byColumns[0]], b[byColumns[0]]);
         });
 
-
-
-
-    var t=new Date().getTime() - s;
+    var t=goog.now() - s;
 
 
 
@@ -333,6 +356,76 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns){
 
 }
 
+
+/**
+ *
+ * @param {Array.<String>} columns
+ *
+ */
+makina.Dataset.prototype.GetColumnValues = function(columns){
+
+
+
+    columns = columns.sort();
+
+    var colKeys ={};
+
+    var t1 = goog.now();
+
+    var addValuesToArray = function(column, val){
+
+        var isAdded = false;
+
+        goog.array.forEach(colKeys[column],function(itm){
+            if(itm == val)
+                isAdded = true;
+        });
+
+        if(!isAdded)
+            colKeys[column].push(val);
+
+    }
+
+
+
+
+    goog.array.forEach(columns,function(itm){
+        goog.object.set(colKeys,itm,[]);
+    });
+
+    console.log("makina.Dataset.prototype.GetColumnValues");
+
+    console.log(colKeys);
+
+    goog.array.forEach(this.dataset,function(item){
+
+        goog.array.forEach(columns,function(col){
+            addValuesToArray(col,item[col]);
+        });
+    });
+
+
+
+    goog.array.forEach(columns,function(col){
+        goog.array.stableSort(colKeys[col],function(a,b){
+            return goog.string.caseInsensitiveCompare(a, b);
+        });
+    });
+
+
+
+
+    var t = goog.now() - t1;
+
+
+    var o={
+        "response":colKeys,
+        "ms":t
+    };
+
+
+    return o;
+}
 
 
 /**

@@ -63,7 +63,10 @@ makina.Bootstrapper = function(){
 
     //goog.exportSymbol("makina",makina);
     goog.exportSymbol("HandsomeWidget",makina.Widget);
-    console.log("goog.exportSymbol");
+    goog.exportSymbol('HandsomeWidget.prototype.AddEvent',makina.Widget.prototype.AddEvent);
+    goog.exportSymbol('HandsomeWidget.prototype.RemoveEvent',makina.Widget.prototype.RemoveEvent);
+    goog.exportSymbol('HandsomeWidget.prototype.GetRowColumns',makina.Widget.prototype.GetRowColumns);
+
 
 
 };
