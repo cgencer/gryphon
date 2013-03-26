@@ -17,6 +17,14 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.json-2.4.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.base64.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.csv-0.71.min.js"></script>
+
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/jquery.dataTables.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/ColReorder.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/KeyTable.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/TableTools.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/ColumnFilterWidgets.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/jquery.dataTables.columnFilter.js"></script>
+
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/moment/moment.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/amplify.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/cuteNSexy/cutesexy.js"></script>
@@ -176,7 +184,7 @@
 						Dashboard (All Types) > OS Paid
 					</div>
 
-					<div class="span3 makina-select-box">
+					<div class="span4 makina-select-box"><nobr>
 						<ul class="makina-menu" id="select-a" >
 					<input type="hidden" name="" class="makina-menu-hidden" />
 					<li><a href="#" class="makina-selected">Selected</a>
@@ -189,7 +197,7 @@
 						</ul>
 					</li>
 				</ul>
-						<ul class="makina-menu " id="select-a" >
+						<ul class="makina-menu " id="select-b" >
 					<input type="hidden" name="" class="makina-menu-hidden" />
 					<li><a href="#" class="makina-selected">Selected</a>
 						<ul class="makina-select-box-options">
@@ -201,16 +209,16 @@
 						</ul>
 					</li>
 				</ul>
-					</div>
+					</nobr></div>
 
-					<div class="span9 withSpacer">
+					<div class="span8 withSpacer">
 						<a class="btn btn-primary pull-right" rel="tooltip" data-toggle="tooltip">30 Days<span class="caret"></span></a>
 						<a class="btn btn-primary dropdown-toggle pull-right">Last Week</a>
 						<a class="btn btn-primary dropdown-toggle pull-right">Today</a>
 						<a class="btn btn-primary dropdown-toggle pull-right" id="create-widget">Widget</a>
 					</div>
 
-					<div id="contentMap" class="span10">
+					<div id="contentMap" class="span10" style="display:none;">
 						<table style="height: 500px;">
 							<tr>
 								<td valign="top"><div id="content-widget" style="width: 400px;height: 200px;" ></div></td>
@@ -220,6 +228,20 @@
 						<div id="chart_div"></div>
 					</div>
 
+					<div id="contentDataset" class="span12">
+						<table width="100%" class="makina-form-table">
+							<thead>
+								<tr>
+									<td></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 
 				</div>
 
@@ -328,5 +350,19 @@
 
 	<div id="containerForCalendar" class="hide" style="display:none;"></div>
 
+	<div id="filterBySecondaryDimension" class="hide" style="display:none;">
+		<ul class="makina-menu " id="select-c" >
+			<input type="hidden" name="" class="makina-menu-hidden" />
+			<li><a href="#" class="makina-selected">Selected</a>
+				<ul class="makina-select-box-options">
+					<li><a href="#" rel="1">Option 1</a></li>
+					<li><a href="#" rel="2">Option 2</a></li>
+					<li><a href="#" rel="3">Option 3</a></li>
+					<li><a href="#" rel="4">Option 4</a></li>
+					<li><a href="#" rel="5">Selected</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

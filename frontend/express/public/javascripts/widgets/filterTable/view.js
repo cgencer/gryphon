@@ -24,7 +24,7 @@ var filterTable = (function(filterTable, $, undefined){
 
 	$('#content').text('booting up...');
 	tables = {'root':{'name':''}};
-	tables.root.name = randomId();		
+	tables.root.name = randomId();
 
 /*
 	$(document).on('click', '#' + tables.root.name + ' tr', function () {
@@ -46,7 +46,6 @@ var filterTable = (function(filterTable, $, undefined){
 		tables.root[w] = o;
 	}
 
-//http://127.0.0.1:7001/api/getEntries/selectby/CountryName%3DTurkey%26Resolution%3D800x600/page/1/limit/100/get?callback=r
 	var selectors = {};
 	loadFromJSON('getEntries', selectors, 1, 100, function (rec) {
 

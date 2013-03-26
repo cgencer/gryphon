@@ -67,6 +67,22 @@ body {
 	border:0;
 	font-weight:normal;
 }
+.dataTables_wrapper .ui-widget-header {
+	background:none;
+	background-color: #464646;
+	color:#ffffff;
+	border:0;
+	font-weight:normal;	
+}
+.ui-corner-tr, .ui-corner-tr {
+	border-top-left-radius:0;
+	border-top-right-radius:0;
+}
+.dataTables_wrapper select, textarea, input[type="text"] {
+	padding:0;
+	margin:0;
+	color:#575757;
+}
 .ui-datepicker .ui-datepicker-header {
 	padding:0;
 	color:#F4F1E9;
@@ -86,6 +102,33 @@ body {
 .ui-datepicker-calendar th {
 	font-weight:normal;
 	font-size:10px;
+}
+.dataTables_wrapper .ui-toolbar {
+	padding:0;
+}
+.dataTables_wrapper table thead tr {
+	background-color:#B3B3B3;
+	color:#dadada;	
+	padding-top: 3px;
+}
+.dataTables_wrapper table {
+}
+.dataTables_wrapper label {
+	margin:0;
+	font-weight:normal;
+	font-size:12px;
+}
+..dataTables_wrapper .dataTables_info {
+	font-weight:normal;
+	font-size:12px;
+}
+.dataTables_wrapper table thead tr .ui-state-default,
+.dataTables_wrapper table thead tr .ui-widget-content .ui-state-default, 
+.dataTables_wrapper table thead tr .ui-widget-header .ui-state-default {
+	background:none;
+	background-color:#B3B3B3;
+	color:#ffffff;
+	border:none;
 }
 /*
  * Namespace Twitter Bootstrap patches
@@ -307,4 +350,19 @@ thead {
 .bigs.avgrank .bigTitle {
 	background-image: url("/images/k/header_icons/avgrank.png");
 }
-
+#contentDataset {
+	padding-left:10px;
+}
+#contentDataset table tr.odd {
+	background-color:#F4F1EA;
+}
+.dataTables_info {
+	padding-left:5px;
+	color:#B3B3B3;
+}
+.paging_full_numbers .ui-button {
+	color:#B3B3B3 !important;	
+}
+.dataTables_paginate .btn-primary {
+	color:#B3B3B3;
+}
