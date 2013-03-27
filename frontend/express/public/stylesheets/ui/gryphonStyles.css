@@ -366,3 +366,6 @@ thead {
 .dataTables_paginate .btn-primary {
 	color:#B3B3B3;
 }
+.info_row {
+	padding:5px;
+}

@@ -58,54 +58,36 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			console.log(widget1);
 		});
 
-		tables = {'root':{'name':''}};
-		tables.root.name = randomId();
+		$('.fg-toolbar.ui-widget-header').prepend( $('#filterBySecondaryDimension').html() );
 
-		var names = ['test', 'column', 'other'];
-		var hs = '', ts = '';
-		for(var col in names){
-			hs += '<td>' + names[col] + '</td>';
-			ts += '<td></td>';
-		}
-		$('#contentDataset table').attr('id', tables.root.name);
-		$('#contentDataset table thead tr').html(hs);
-		$('#contentDataset table tbody tr').html(ts);
+		var rowsEx = {
+			'columns': [
+				{'visible': true, order:2, 'cvname':'test'},
+				{'visible': true, order:0, 'cvname':'column'},
+				{'visible': true, order:1, 'cvname':'other'}
+			],
+			'rows': [
+				{
+					'test': 0,
+					'column': 'sdfs',
+					'other': 'xxx'
+				}, {
+					'test': 5,
+					'other': 'xxx',
+					'column': 'sdfs'
+				}, {
+					'test': 5,
+					'column': 'sdfs',
+					'other': 'xxx'
+				}, {
+					'test': 5,
+					'column': 'sdfs',
+					'other': 'xxx'
+				}
+			]
+		};
 
-		var rows = [
-			{
-				'test': 0,
-				'column': 'sdfs',
-				'other': 'xxx'
-			}, {
-				'test': 5,
-				'column': 'sdfs',
-				'other': 'xxx'
-			}, {
-				'test': 5,
-				'column': 'sdfs',
-				'other': 'xxx'
-			}, {
-				'test': 5,
-				'column': 'sdfs',
-				'other': 'xxx'
-		}];
-
-
-		var dTbl = $('#'+tables.root.name).dataTable({
-			'aaData': rows,
-			'bProcessing': true,
-			'bJQueryUI': true,
-//		    'bDeferRender': true,
-			'sPaginationType': 'full_numbers',
-			'aoColumns': tableVisibleCols,
-//			'sDom': 'T<"clear">lfrtip',
-		});
-
-		$('a.fg-button')	.removeClass('fg-button')			.removeClass('ui-corner-tl')
-							.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
-							.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
-							.removeClass('ui-state-disabled')
-							.addClass('btn')					.addClass('btn-primary');
+		drawTable (rowsEx);
 
 		cuteNSexy.setPaths(amplify.store( 'paths'));
 		cuteNSexy.setDictionary(amplify.store( 'dictionary'));
@@ -116,6 +98,76 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 	});
 
+	function drawTable (pack) {
+
+		var newcols = [];
+		for(var ci=0; ci < Object.keys(pack.columns).length; ci++) {
+			for(var col in pack.columns) {
+				if(pack.columns[col].order === ci) {
+					newcols.push({'cvname':pack.columns[col].cvname});
+				}
+			}
+		}
+		pack.columns = newcols;
+
+		var dTbl = prepTableView( randomId(), pack, 'root', '#contentDataset', 'child' );
+
+		$('a.fg-button')	.removeClass('fg-button')			.removeClass('ui-corner-tl')
+							.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
+							.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
+							.removeClass('ui-state-disabled')
+							.addClass('btn')					.addClass('btn-primary');
+
+	};
+
+	function prepTableView (name, pack, relation, into, children) {
+		var hs = '', ts = '';
+		tables[relation] = {};
+		tableVisibleCols[relation] = [];
+		tables[relation].name = name;
+		$(into).html( $('#datasetTableTemplate').html() );
+		console.log($(into).html());
+
+		for(var col in pack.columns) {
+			hs += '<td>' + pack.columns[col].cvname + '</td>';
+			ts += '<td></td>';
+			tableVisibleCols[relation].push( {'mData': pack.columns[col].cvname} );
+		}
+		$(into + ' table').attr('id', tables[relation].name);
+		console.log(tables[relation].name);
+		$('#' + tables[relation].name + ' thead tr').html(hs);
+		$('#' + tables[relation].name + ' tbody tr').html(ts);
+
+		if( $.fn.DataTable.fnIsDataTable( document.getElementById(tables[relation].name) ) ) {
+			$('#'+tables[relation].name).dataTable().fnDestroy(true);
+		}
+
+		var dTbl = $('#'+tables[relation].name).dataTable({
+			'aaData': pack.rows,
+			'bProcessing': true,
+			'bJQueryUI': true,
+			'sPaginationType': 'full_numbers',
+			'aoColumns': tableVisibleCols[relation],
+		});
+		tables[relation].rel = dTbl;
+
+		if(children !== false) {
+			$(document).on('click', '#' + tables[relation].name + ' tr', function () {
+				if ( dTbl.fnIsOpen( this ) ) {
+					dTbl.fnClose( this );
+				} else {
+					dTbl.fnOpen( this, "", "info_row" );
+
+					tables[children] = {};
+					tables[children].name = randomId();
+					var dTblChild = prepTableView( randomId(), pack, children, '#'+tables[relation].name+' .info_row', 'grandchildren' );
+					tables[children].rel = dTblChild;
+				}
+			});
+		}
+
+		return dTbl;
+	}
 	function randomId (len) {
 		if(len == undefined){len = 36;}
 		var s = [];
@@ -135,7 +187,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
         console.log(response);
     }
     function responseSuccessCallBack (response){
-        console.log(" JSONP responseSuccessCallBack");
+console.log('-------------------------');
+	console.dir(response);
+		drawTable(response);
     }
     function responseErrorCallBack (response){
         console.log(" JSONP responseErrorCallBack")
