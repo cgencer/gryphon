@@ -350,6 +350,12 @@ thead {
 .bigs.avgrank .bigTitle {
 	background-image: url("/images/k/header_icons/avgrank.png");
 }
+.drillDown {
+	background-repeat:no-repeat;
+	background-image:url('/images/dashboard/drilldown.png');
+	width:32px;
+	height:32px;
+}
 #contentDataset {
 	padding-left:10px;
 }
@@ -368,4 +374,5 @@ thead {
 }
 .info_row {
 	padding:5px;
+	padding-left:15px;
 }
