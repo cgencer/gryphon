@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+
+<title>MAKINA</title>
+
+<!-- loxodonta -->
+
+
+
+
+
+<link rel="stylesheet" href="frontend/stylesheets/css/dashboard.css"  />
+
+<script type="text/javascript" src="https://www.google.com/jsapi" charset="utf-8" ></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8" ></script>
+
+
+
+
+
+<script type="text/javascript" src="widget.js" charset="utf-8" ></script>
+
+
+
+<script>
+
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1.0', {
+        'packages':[
+            'corechart',
+            'table',
+            'geochart'
+        ]});
+
+    //  var vsz = google.visualization;
+
+
+
+</script>
+
+
+
+<script>
+
+    $(document).ready(function(){
+
+        $(".menu-item").click(function(){
+
+
+            if($(this).next(".sub-menu").hasClass('sub-menu')){
+
+                $(".sub-menu").hide();
+                $(".menu-item").removeClass("active");
+
+
+                if($(this).next(".sub-menu").is(':visible')){
+                    $(this).removeClass("active");
+                    $(this).next(".sub-menu").hide();
+                }else {
+                    $(this).next(".sub-menu").show();
+                    $(this).addClass("active");
+                }
+            }
+
+        });
+
+
+        $(".makina-menu").each(function(){
+            var idd = this.id;
+            $("#"+idd+" .makina-select-box-options> li a").click(function(){
+                var val=$(this).attr("rel");
+                var txt=$(this).text();
+                $("#"+idd).find('.makina-selected').text(txt);
+                $("#"+idd).find('.makina-menu-hidden').text(val);
+            });
+        });
+
+
+    });
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+
+    var widget;
+
+
+    var fetchCallBackGroupBy1 = function(response){
+
+        console.log("fetchCallBackGroupBy-------------------------------------");
+        console.log(response);
+        drawGeoMap(response.response.rows);
+
+
+    }
+
+    var fetchCallBackSum = function(response){
+
+        console.log("fetchCallBackSum++++++++++++++");
+        console.log(response);
+
+    }
+
+    var responseSuccessCallBack = function(response){
+        console.log(" JSONP responseSuccessCallBack");
+        console.log(response);
+
+    }
+
+
+    var responseErrorCallBack = function(response){
+        console.log(" JSONP responseErrorCallBack")
+    }
+
+    var fetchCallBackGroupBy2 = function(response){
+        console.log("fetchCallBackGroupBy2");
+        console.log(response);
+    }
+    var fetchCallBackGroupBy3 = function(response){
+        console.log("fetchCallBackGroupBy3");
+        console.log(response);
+    }
+
+    var fetchCallBackGroupBy4 = function(response){
+        console.log("fetchCallBackGroupBy4");
+        console.log(response);
+    }
+
+
+    var fetchCallBackKeysValues = function(response){
+
+        console.log(response);
+
+    }
+
+    var responseColumnsCallBack = function(response){
+        console.log(response);
+    }
+
+
+
+    function drawGeoMap(arr){
+
+
+        var chart = new google.visualization.GeoChart(document.getElementById("content-widget"));
+
+        var data =[ ['Country', 'Click'] ];
+
+
+        for(var i in arr){
+
+            var item = arr[i];
+            if(item["CountryCode"]=="TR"){
+
+                var city = item["City"];
+                var click = 0;
+                if(item["timeslotCLICK"]!= undefined)
+                    click =item["timeslotCLICK"]["c"];
+                if(isNaN(click))
+                    click =0;
+
+                var dataItem =[city,click]
+                data.push(dataItem);
+            }
+
+        }
+
+
+
+        var options = {
+            region: 'TR',
+            displayMode: 'markers',
+            colorAxis: {colors: ['green', 'blue']}
+        };
+
+        var dataTable = google.visualization.arrayToDataTable(data);
+        chart.draw(dataTable, options);
+
+    }
+
+
+
+
+
+
+
+
+    $(document).ready(function(){
+
+
+        $("#create-widget").click(function(){
+
+
+
+
+            var options={
+                "url":"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
+                "refreshTime":15,
+                "fetchOptions":[
+                    {
+                        "id":"1",
+                        "type":"sum", // sum, group by
+                        "name":"fetch 1",
+                        "byColumns":[], // group bys
+                        "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
+                        "fetchCallBack": fetchCallBackSum
+                    },
+                    {
+                        "id":"2",
+                        "type":"groupby", // sum, group by
+                        "name":"fetch 2",
+                        "byColumns":['CountryCode','City'], // group bys
+                        "byValues" :['TR',null],
+                        "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
+                        "fetchCallBack": fetchCallBackGroupBy1
+                    },
+                    {
+                        "id":"3",
+                        "type":"groupby", // sum, group by
+                        "name":"fetch 2",
+                        "byColumns":['Platform'], // group bys
+                        "byValues" :['Android'],
+                        "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
+                        "fetchCallBack": fetchCallBackGroupBy2
+                    },
+                    {
+                        "id":"4",
+                        "type":"keyvalues", // sum, group by
+                        "name":"fetch 3",
+                        "byColumns":['CountryCode','CountryName'], // group bys
+                        "byValues":null,
+                        "columns":null,// city,app,company
+                        "fetchCallBack": fetchCallBackGroupBy3
+                    }
+
+                ],
+                "responseSuccessCallBack" : responseSuccessCallBack,
+                "responseErrorCallBack": responseErrorCallBack,
+                "responseColumnsCallBack":responseColumnsCallBack
+            };
+
+
+
+            widget =  new HandsomeWidget(options);
+            //HandsomeWidget
+            //HandsomeWidget.prototype.AddEvent
+            //HandsomeWidget.prototype.RemoveEvent(id) --- RemoveEvent(1);
+            //HandsomeWidget.prototype.GetRowColumns ---  return columns
+
+            var newEvent = {
+                "id":"5",
+                "type":"keyvalues", // sum, group by
+                "name":"fetch 3",
+                "byColumns":['CountryCode','CountryName'], // group bys
+                "byValues":['TR','Ankara'],
+                "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
+                "fetchCallBack": fetchCallBackGroupBy4
+            };
+
+
+            // widget.AddEvent(newEvent);
+
+
+
+        });
+
+
+
+
+    });
+
+
+
+
+</script>
+
+
+
+</head>
+<body>
+
+
+<div id="sidebar">
+
+    <div class="sidebar-top">
+
+        <div class="makina-logo"></div>
+
+    </div>
+    <ul class="sidebar-menu">
+        <li class="menu-item">
+            <div class="logo select-app"></div>
+            <span class="text">Select App</span>
+        </li>
+        <li class="sub-menu">
+            <ul id="ul-id-app-list">
+                <li class="menu-item">
+                    <span class="text">App 1</span>
+                </li>
+
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo dashboards"></div>
+            <span class="text">Dashboard</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Dashboard 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Dashboard 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Dashboard 3</span>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo events"></div>
+            <span class="text">Events</span>
+        </li>
+        <li class="menu-item">
+            <div class="logo sources"></div>
+            <span class="text">Sources</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Sources 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Sources 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Sources 3</span>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <div class="logo management"></div>
+            <span class="text">Management</span>
+        </li>
+        <li class="sub-menu">
+            <ul>
+                <li class="menu-item">
+                    <span class="text">Management 1</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Management 2</span>
+                </li>
+                <li class="menu-item">
+                    <span class="text">Management 3</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+
+<div id="content">
+
+
+    <input type="button" id="create-widget" value="Create Widget" />
+
+
+
+
+    <div id="content-widget" ></div>
+
+
+
+    <div id="chart_div"></div>
+    <div id="chart_line_area"></div>
+    <div id="chart_line_area_makina"></div>
+
+    <div id="widget-console"></div>
+
+
+
+    <table>
+        <tr>
+            <td valign="top" ><div id="data-grid-1"></div></td>
+            <td valign="top" > <div id="data-grid-2"></div></td>
+        </tr>
+    </table>
+
+
+
+
+
+    <style>
+        .user-details .button-container { overflow:auto; bottom:8px; right:16px; position:absolute; }
+        .user-details .row { overflow:auto; border-top:1px solid #EEE; padding:10px; margin:0 1px; }
+        .user-details .row:first-child { border-top:none; padding-top:15px; }
+        .user-details .row .title { float:left; }
+        .user-details .row .detail { margin-left:165px; }
+
+    </style>
+    <div style="display: none;">
+
+        <div class="user-details">
+            <div class='row'>
+                <div class='title'>Application Name</div><div class='detail'><input id='application-name' class='username-text' value='' type='text'></div>
+            </div>
+            <div class='row'>
+                <div class='title'>Platfrom</div><div class='detail'>
+                <select id='application-platform'>
+                    <option value='0'>Unknown</option>
+                    <option value='1'>IOS</option>
+                    <option value='2'>Android</option>
+                    <option value='3'>Windows Phone</option>
+                    <option value='4'>Symbian</option>
+                    <option value='5'>Tizen</option>
+                </select>
+            </div>
+            </div>
+            <div class='row'>
+                <div class='title'>Market Url</div><div class='detail'><input id='application-market-url' class='email-text' value='' type='text'></div>
+            </div>
+            <div class='row'>
+                <div class='title'>Google Analytics Key</div><div class='detail'><input id='application-analytics-key' class='email-text' value='' type='text'></div>
+            </div>
+            <div class='row'>
+                <div class='title'>Description</div><div class='detail'><input id='application-description' class='email-text' value='' type='text'></div>
+            </div>
+            <div class='row'>
+                <div class='title'>Default Register Action</div>
+                <div class='detail'>
+                    <select id='application-default-register-action'>
+                        <option value="0">Install</option>
+                        <option value="1">Visit</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <input type="button" id="create-new-app" value="CREATE" />
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<div id="view-footer" >
+
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+
+$white:#FFFFFF;
+$black:#282828;
+
+$color_1_1:#17D0E2;
+$color_1_2:#261D6E;
+
+$color_2_1:#119692;
+$color_2_2:#74E1C3;
+
+$color_3_1:#C1407A;
+$color_3_2:#6F2660;
+
+$color_4_1:#F5C643;
+$color_4_2:#FF5F00;
+
+$color_5_1:#6B47C7;
+$color_5_2:#1EAB95;
+
+$color_6_1:#3A6A5D;
+$color_6_2:#C7C7C7;
+
+$color_7_1:#655968;
+$color_7_2:#EF9539;
+
+$color_8_1:#31083B;
+$color_8_2:#76A20C;
+
+$color_9_1:#C393CF;
+$color_9_2:#8932DA;
+
+$color_10_1:#988558;
+$color_10_2:#A14127;
+
+$color_menu_passive:#575757;
+$color_content_bg:#E9E3D5;
+
+$color_sub_menu_bg:#8E8E8E;
+
+
+$table_header_color:#B3B3B3;
+$table_row_even_color:#FFFFFF;
+$table_row_odd_color:#F4F1EA;
+$table_row_text_color:#464646;
+
+$button_color_dark:#575757;
+$button_color_orange:#EF9539;
+$button_color_green:#119692;
+
+
+
+$fontFamilyLeftMenu: 13px Ubuntu,Helvetica,sans-serif;
+$fontColorLeftMenu:#ACACAC;
+
+
+$makinaFormContentColor:#F4F1EA;
+
+
+
+
+
+
+
+
+
+
+
+
+$font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+$font-size-header:14px;
+$bodyColor:#393939;
+$projectBgColor:#272B2E;
+
+$dialogTitleBgColor:#414141;
+
+
+
+
+
+
+$linkColor: #404041;
+$yellow: #ffce00;
+$lightYellow: #ffdb00;
+$black: #414042;
+$green: #aab300;
+$gray: #f0efed;
+$red: #dc291e;
+$brown: #633b1b;
+$white: #FFF;
+$border: 1px solid lighten($black, 50);
+
+
+@mixin borderTopLeftRadius {
+  border-radius: 6px 0 0 0;
+  -moz-border-radius: 6px 0 0 0;
+  -webkit-border-radius: 6px 0 0 0;
+}
+@mixin borderBottomLeftRadius {
+  border-radius: 0 0 0 6px;
+  -moz-border-radius: 0 0 0 6px;
+  -webkit-border-radius: 0 0 0 6px;
+}
+@mixin borderBottomLeftRightRadius {
+  border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  -webkit-border-radius: 0 0 6px 6px;
+}
+@mixin radius {
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+@mixin gradient($startColor, $endColor) {
+  background: $endColor; /* Old browsers */
+  background: -moz-linear-gradient(top, $startColor 0%, $endColor 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $startColor), color-stop(100%, $endColor)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, $startColor 0%, $endColor 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, $startColor 0%, $endColor 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, $startColor 0%, $endColor 100%); /* IE10+ */
+  background: linear-gradient(top, $startColor 0%, $endColor 100%); /* W3C */
+}
+@mixin rounded($tl, $tr, $br, $bl) {
+  border-radius: $tl $tr $br $bl;
+  -moz-border-radius: $tl $tr $br $bl;
+  -webkit-border-radius: $tl $tr $br $bl;
+}
+@mixin borderTopRightRadius {
+  border-radius: 0 6px 0 0;
+  -moz-border-radius: 0 6px 0 0;
+  -webkit-border-radius: 0 6px 0 0;
+}
+@mixin borderTopRadius {
+  border-radius: 6px 6px 0 0;
+  -moz-border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+}
+@mixin borderRadius {
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+@mixin shadow($a1, $a2, $a3) {
+  -moz-box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5);
+  box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5);
+}
+@mixin shadowInset($a1, $a2, $a3) {
+  -moz-box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5) inset;
+  -webkit-box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5) inset;
+  box-shadow: $a1 $a2 $a3 rgba(0, 0, 0, 0.5) inset;
+}
+@mixin breakWord {
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
+}
+@mixin field {
+  color: $black;
+  @include borderRadius;
+  padding: 7px 11px;
+  border: none;
+  border: $border;
+}
+@mixin whiteTextShadow {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+@mixin blackTextShadow {
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+@mixin LoginField {
+  height: 35px;
+  line-height: 35px;
+  color: #a3a3a3;
+  font-size: 26px;
+  @include radius;
+  margin-bottom: 25px;
+  width: 369px;
+  padding: 2px 11px;
+  border: none;
+  -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+  -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+}
