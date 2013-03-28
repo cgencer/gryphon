@@ -159,9 +159,13 @@ makina.Widget.prototype.Console = function(messages,color){
 
 
     console.log(msg);
-    if(this.consoleWidget != undefined)
-    if(this.elConsole != undefined){
-        this.elConsole.appendChild(makina.dom.createElement("<div style='color:"+clr+" ' >"+msg+"</div>"));
+    try{
+        if(this.consoleWidget !="" )
+        if(this.elConsole != undefined){
+            this.elConsole.appendChild(makina.dom.createElement("<div style='color:"+clr+" ' >"+msg+"</div>"));
+        }
+    }catch(e){
+
     }
 
 }
@@ -351,8 +355,13 @@ makina.Widget.prototype.RequestData = function(){
     var jsonp = new goog.net.Jsonp(url);
     jsonp.setRequestTimeout(45*1000);//45 sn
 
-    if(this.consoleWidget != undefined)
-        this.elConsole.innerHTML ="";
+   try{
+       if(this.consoleWidget != "")
+           this.elConsole.innerHTML ="";
+   }catch (e){
+
+   }
+
 
     this.Console("Request Data With JSONP","blue");
 

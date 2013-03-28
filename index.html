@@ -20,16 +20,16 @@
 
 
 
-
 <!--
+
 
     <script type="text/javascript" src="frontend/javascript/third_party/goog/closure/goog/base.js" charset="utf-8" ></script>
     <script type="text/javascript" src="frontend/javascript/deps.js" charset="utf-8"  ></script>
     <script type="text/javascript" src="frontend/javascript/makina/Bootstrapper.js" charset="utf-8"  ></script>
 
 
--->
 
+-->
 
 
 
@@ -217,7 +217,7 @@
                 var options={
                     "url":"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
                     "refreshTime":15,
-                    "fetchOptions":null/*[
+                    "fetchOptions":[
                        {
                             "id":"1",
                             "type":"sum", // sum, group by
@@ -254,7 +254,7 @@
                             "fetchCallBack": fetchCallBackGroupBy3
                         }
 
-                    ]*/,
+                    ],
                     "responseSuccessCallBack" : responseSuccessCallBack,
                     "responseErrorCallBack": responseErrorCallBack,
                     "responseColumnsCallBack":responseColumnsCallBack

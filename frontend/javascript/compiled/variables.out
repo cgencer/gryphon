@@ -60,7 +60,7 @@ L 54:ee
 goog$string$quotRe_:Aa
 L 53:ie
 goog$debug$Logger$Level$INFO:rc
-L 52:u
+L 52:t
 L 51:he
 goog$events$BrowserFeature$HAS_W3C_EVENT_SUPPORT:Tc
 JSCompiler_StaticMethods_setScheme:yb
@@ -97,7 +97,7 @@ JSCompiler_StaticMethods_invalidateCache_:Nb
 goog$Uri$QueryData:Fb
 goog$Uri$reDisallowedInSchemeOrUserInfo_:Hb
 goog$isNumber:ea
-JSCompiler_prototypeAlias:t
+JSCompiler_prototypeAlias:u
 goog$debug$Logger:W
 makina$dom$createElement:Wb
 goog$debug$Trace_$Stat_:Ic

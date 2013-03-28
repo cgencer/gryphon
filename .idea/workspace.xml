@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2f54df1a-4542-4570-8afd-c591db5d07d2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/widget.html" />
+    <list default="true" id="2f54df1a-4542-4570-8afd-c591db5d07d2" name="Default" comment="added new functions  stop, add">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/compiled/compiled.js" afterPath="$PROJECT_DIR$/frontend/javascript/compiled/compiled.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/compiled/properties.out" afterPath="$PROJECT_DIR$/frontend/javascript/compiled/properties.out" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/compiled/source_map.js" afterPath="$PROJECT_DIR$/frontend/javascript/compiled/source_map.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/compiled/variables.out" afterPath="$PROJECT_DIR$/frontend/javascript/compiled/variables.out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/makina/dataset/Dataset.js" afterPath="$PROJECT_DIR$/frontend/javascript/makina/dataset/Dataset.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/javascript/makina/widget/Widget.js" afterPath="$PROJECT_DIR$/frontend/javascript/makina/widget/Widget.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widget.html" afterPath="$PROJECT_DIR$/widget.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widget.js" afterPath="$PROJECT_DIR$/widget.js" />
     </list>
     <ignored path="makina.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,7 +41,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/frontend/javascript/externs/makina.externs.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/makina/template/Dashboards.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/makina/dialog/Dialog.js" />
         <option value="$PROJECT_DIR$/frontend/login.html" />
@@ -53,11 +51,12 @@
         <option value="$PROJECT_DIR$/frontend/javascript/makina/util/util.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/externs/google.visualization.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/makina/dashboard/Start.js" />
+        <option value="$PROJECT_DIR$/widget-process.html" />
+        <option value="$PROJECT_DIR$/frontend/javascript/makina/dataset/Dataset.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/makina/Bootstrapper.js" />
         <option value="$PROJECT_DIR$/frontend/javascript/makina/widget/Widget.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/widget.html" />
-        <option value="$PROJECT_DIR$/frontend/javascript/makina/dataset/Dataset.js" />
       </list>
     </option>
   </component>
@@ -93,6 +92,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -111,33 +111,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="makina" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="makina" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="frontend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.General" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../gryphon" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/development" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PublishConfig">
     <servers>
@@ -216,7 +201,19 @@
       <created>1364226404303</created>
       <updated>1364226404303</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="compiled widget &#10;">
+      <created>1364234547445</created>
+      <updated>1364234547445</updated>
+    </task>
+    <task id="LOCAL-00007" summary="compiled widget &#10;">
+      <created>1364312467719</created>
+      <updated>1364312467719</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added new functions  stop, add">
+      <created>1364464609595</created>
+      <updated>1364464609595</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -228,7 +225,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18996799" sideWeight="0.6707589" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19637139" sideWeight="0.6707589" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -278,7 +275,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="compiled widget &#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="added new functions  stop, add" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -296,6 +293,7 @@
     <MESSAGE value="dataset groupbys,&#10;sum time slot data" />
     <MESSAGE value="added request data from server,&#10;" />
     <MESSAGE value="compiled widget &#10;" />
+    <MESSAGE value="added new functions  stop, add" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -303,11 +301,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/frontend/javascript/third_party/goog/closure/goog/net/jsloader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="183" column="16" selection-start="6468" selection-end="6468" vertical-scroll-proportion="-1.1699196" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/third_party/goog/closure/goog/uri/uri.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="198" column="65" selection-start="5513" selection-end="5513" vertical-scroll-proportion="0.31343284" />
@@ -331,18 +324,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/externs/google.visualization.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="929" selection-end="949" vertical-scroll-proportion="0.58553386">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
+        <state line="30" column="0" selection-start="929" selection-end="949" vertical-scroll-proportion="0.58553386" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/Registry.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="1" selection-start="331" selection-end="331" vertical-scroll-proportion="0.35132033">
-          <folding />
-        </state>
+        <state line="18" column="1" selection-start="331" selection-end="331" vertical-scroll-proportion="0.35132033" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/externs/makina.externs.js">
@@ -354,9 +341,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/validation/Validate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="23" selection-start="2027" selection-end="2032" vertical-scroll-proportion="0.7072331">
-          <folding />
-        </state>
+        <state line="77" column="23" selection-start="2027" selection-end="2032" vertical-scroll-proportion="0.7072331" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/dashboard/Start.js">
@@ -375,24 +360,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/Bootstrapper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="0" selection-start="1506" selection-end="1506" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="330" column="0" selection-start="8242" selection-end="8308" vertical-scroll-proportion="-17.0">
-          <folding>
-            <element signature="tag#script#4;tag#head#0;tag#html#0" expanded="false" />
-            <element signature="tag#div#0;tag#body#0;tag#html#0" expanded="false" />
-            <element signature="n#style#0;n#div#5;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/webide.jar!/resources/html5-schema/tables.rnc">
       <provider selected="true" editor-type-id="text-editor">
         <state line="203" column="29" selection-start="3927" selection-end="3927" vertical-scroll-proportion="0.4730195">
@@ -400,51 +367,132 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/widget.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="20" selection-start="606" selection-end="606" vertical-scroll-proportion="0.26153848">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/widget.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.5559441">
           <folding>
-            <marker date="1364227312888" expanded="false" signature="14828:14834" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/widget/Widget.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="220" column="0" selection-start="4128" selection-end="4128" vertical-scroll-proportion="-1.0344431">
-          <folding>
-            <marker date="1364227275535" expanded="true" signature="1658:1672" placeholder="..." />
-            <marker date="1364227275535" expanded="false" signature="1658:1664" placeholder="..." />
-            <marker date="1364227275535" expanded="false" signature="1658:1664" placeholder="..." />
-            <element signature="e#2323#2798#0" expanded="false" />
+            <marker date="1364465393388" expanded="false" signature="14828:14834" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/dataset/Dataset.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="217" column="0" selection-start="3953" selection-end="3953" vertical-scroll-proportion="0.29621124">
+        <state line="224" column="2" selection-start="4097" selection-end="4097" vertical-scroll-proportion="0.45235363">
           <folding>
-            <element signature="e#870#1275#0" expanded="false" />
-            <element signature="e#1617#1993#0" expanded="false" />
-            <element signature="e#2080#2372#0" expanded="false" />
-            <element signature="e#2510#3950#0" expanded="false" />
-            <element signature="e#2623#3040#0" expanded="false" />
-            <element signature="e#3079#3624#0" expanded="false" />
-            <element signature="e#3677#3840#0" expanded="false" />
-            <element signature="e#5732#5777#0" expanded="false" />
-            <element signature="e#6344#7435#0" expanded="false" />
-            <element signature="e#8254#8583#0" expanded="false" />
+            <element signature="e#897#1302#0" expanded="false" />
+            <element signature="e#1644#2020#0" expanded="false" />
+            <element signature="e#2107#2399#0" expanded="false" />
+            <element signature="e#2537#3977#0" expanded="false" />
+            <element signature="e#4176#6657#0" expanded="false" />
+            <element signature="e#4438#4890#0" expanded="false" />
+            <element signature="e#4923#5265#0" expanded="false" />
+            <element signature="e#5302#5530#0" expanded="false" />
+            <element signature="e#5585#6246#0" expanded="false" />
+            <element signature="e#6769#7850#0" expanded="false" />
+            <element signature="e#7991#9082#0" expanded="false" />
+            <element signature="e#9261#10248#0" expanded="false" />
+            <element signature="e#9901#10230#0" expanded="false" />
+            <element signature="e#10357#12411#0" expanded="false" />
+            <element signature="e#10445#12387#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/Bootstrapper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="0" selection-start="1088" selection-end="1088" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/javascript/makina/widget/Widget.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="342" column="16" selection-start="6674" selection-end="6674" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#156#0" expanded="false" />
+            <element signature="e#227#318#0" expanded="false" />
+            <element signature="e#1060#1108#0" expanded="false" />
+            <element signature="e#1422#1455#0" expanded="false" />
+            <element signature="e#1510#1762#0" expanded="false" />
+            <element signature="e#1593#1668#0" expanded="false" />
+            <element signature="e#1688#1737#0" expanded="false" />
+            <element signature="e#1763#1794#0" expanded="false" />
+            <element signature="e#1850#2126#0" expanded="false" />
+            <element signature="e#1950#2046#0" expanded="false" />
+            <element signature="e#2065#2103#0" expanded="false" />
+            <element signature="e#2128#2160#0" expanded="false" />
+            <element signature="e#2211#2244#0" expanded="false" />
+            <element signature="e#2447#2515#0" expanded="false" />
+            <marker date="1364465146920" expanded="false" signature="2973:2987" placeholder="..." />
+            <marker date="1364465146920" expanded="false" signature="2973:2979" placeholder="..." />
+            <element signature="e#3749#3795#0" expanded="false" />
+            <element signature="e#3856#4754#0" expanded="false" />
+            <element signature="e#4006#4154#0" expanded="false" />
+            <element signature="e#4096#4147#0" expanded="false" />
+            <element signature="e#4186#4380#0" expanded="false" />
+            <element signature="e#4323#4373#0" expanded="false" />
+            <element signature="e#4416#4630#0" expanded="false" />
+            <element signature="e#4572#4623#0" expanded="false" />
+            <element signature="e#4634#4642#0" expanded="false" />
+            <element signature="e#4757#4816#0" expanded="false" />
+            <element signature="e#4890#6229#0" expanded="false" />
+            <element signature="e#6230#6280#0" expanded="false" />
+            <element signature="e#6352#6506#0" expanded="false" />
+            <element signature="e#7176#7343#0" expanded="false" />
+            <element signature="e#7371#7436#0" expanded="false" />
+            <element signature="e#7492#7522#0" expanded="false" />
+            <element signature="e#7588#8286#0" expanded="false" />
+            <element signature="e#7651#7659#0" expanded="false" />
+            <element signature="e#7663#7785#0" expanded="false" />
+            <element signature="e#7919#8191#0" expanded="false" />
+            <element signature="e#7975#8144#0" expanded="false" />
+            <element signature="e#8287#8331#0" expanded="false" />
+            <element signature="e#8392#8965#0" expanded="false" />
+            <element signature="e#8481#8744#0" expanded="false" />
+            <element signature="e#8540#8736#0" expanded="false" />
+            <element signature="e#8597#8726#0" expanded="false" />
+            <element signature="e#8752#8760#0" expanded="false" />
+            <element signature="e#8779#8849#0" expanded="false" />
+            <element signature="e#8853#8960#0" expanded="false" />
+            <element signature="e#9016#9632#0" expanded="false" />
+            <element signature="e#9638#9644#0" expanded="false" />
+            <element signature="e#9645#9717#0" expanded="false" />
+            <element signature="e#9717#10127#0" expanded="false" />
+            <element signature="e#10128#10200#0" expanded="false" />
+            <element signature="e#10200#10607#0" expanded="false" />
+            <element signature="e#10608#10680#0" expanded="false" />
+            <element signature="e#10680#11093#0" expanded="false" />
+            <element signature="e#11094#11166#0" expanded="false" />
+            <element signature="e#11166#11576#0" expanded="false" />
+            <element signature="e#11577#11649#0" expanded="false" />
+            <element signature="e#11649#12057#0" expanded="false" />
+            <element signature="e#12058#12130#0" expanded="false" />
+            <element signature="e#12130#12314#0" expanded="false" />
+            <element signature="e#12315#13097#0" expanded="false" />
+            <element signature="e#13097#13106#0" expanded="false" />
+            <element signature="e#13107#13188#0" expanded="false" />
+            <element signature="e#13188#13360#0" expanded="false" />
+            <element signature="e#13361#13935#0" expanded="false" />
+            <element signature="e#13935#13944#0" expanded="false" />
+            <element signature="e#13948#14104#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="14" selection-start="0" selection-end="13706" vertical-scroll-proportion="-4.576923">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/widget.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="379" column="0" selection-start="9473" selection-end="9473" vertical-scroll-proportion="0.23195267">
+          <folding>
+            <element signature="n#style#0;n#div#5;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="tag#div#5;tag#div#1;tag#body#0;tag#html#0" expanded="false" />
           </folding>
         </state>
       </provider>
