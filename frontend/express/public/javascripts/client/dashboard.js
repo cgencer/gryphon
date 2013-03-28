@@ -31,6 +31,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		                   /// "url":"http://192.168.10.13/Events/Report/MAKINA/CIRawReport",
 		                    "refreshTime":1000,
 		                    "fetchOptions":[
+/*
 		                       {
 		                            "id": "1",
 		                            "type": "sum", // sum, group by
@@ -39,7 +40,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		                            "columns": ['timeslotCLICK','timeslotINSTALL'],// city,app,company
 		                            "fetchCallBack": fetchCallBackSum
 		                        },
-/*		                        {
+*/
+		                        {
 		                            "id":"2",
 		                            "type":"groupby", // sum, group by
 		                            "name":"fetch 2",
@@ -48,7 +50,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		                            "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
 		                            "fetchCallBack": fetchCallBackGroupBy1
 		                        },
-		                        {
+/*		                        {
 		                            "id":"3",
 		                            "type":"groupby", // sum, group by
 		                            "name":"fetch 2",
@@ -129,6 +131,23 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 	});
 
+	function prepData (pack) {
+		tables['root'].untouched = pack;
+		max = Object.keys(pack.columns).length;
+		for(var row in pack.rows) {
+			if(!isset(pack.rows[row].cpc)) { $.extend(pack.rows[row], {'cpc':0}); }
+			if(!isset(pack.rows[row].cpd)) { $.extend(pack.rows[row], {'cpd':0}); }
+			if(!isset(pack.rows[row].cost)) { $.extend(pack.rows[row], {'cost':0}); }
+			if(!isset(pack.rows[row].cr)) { $.extend(pack.rows[row], {'cr':0}); }
+		}
+		pack.columns.push({'cvname':'cpc', 	'cname':'cpc', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
+		pack.columns.push({'cvname':'cpd', 	'cname':'cpd', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
+		pack.columns.push({'cvname':'cr', 	'cname':'cr', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
+		pack.columns.push({'cvname':'cost', 'cname':'cost', 'editable':true, 'process':'', 'visible':true, 'order':max++});
+		tables['root'].dataSet = pack;
+		return pack;
+	};
+
 	function drawTable (pack) {
 
 		var newcols = [];
@@ -143,7 +162,54 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		var dTbl = prepTableView( randomId(), pack, 'root', '#contentDataset', 'child' );
 
-		
+		// creates the var_ classes for each rows cells
+		var ar = ['cost', 'cpc', 'cpd', 'cr', 'cost'];
+		for(var i in ar) {
+			$('.dataTables_scrollHead table thead td').each( function (i, v) {
+				if( $(this).children('div').text() === ar[i]) {
+					$('.dataTables_scrollBody table tbody tr').each( function (ii, vv) {
+						$(this).children('td').eq(i).addClass('var_'+ar[i]);
+						$(this).children('td').eq(i).addClass('editMe');
+					});
+				}
+			});
+		}
+
+		$(document).on('keypress', '.realLiveWire', function (event) {
+			if(_ts.editing) {
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+				if(event.keyCode == 13) {
+					_ts.calcCells( $(this) );
+					_ts.editing = false;
+				}
+				$('#' + __ts.tableRealName + 'innerTableBody tr td').each( function (i, o) {
+					$(o).width( $(parentRow).children('td').eq(i).width() );
+				});
+			}
+		});
+
+		// had to iterate each cell to bind event, whereafter removal of the event can be made on each cell
+		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
+			if(!_ts.editing) {
+				if 	( (Number($(this).siblings('.var_clicks').text()) > 0 && $(this).hasClass('var_cpc') ) || 
+					(Number($(this).siblings('.var_installs').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
+
+					var cx = $(this).attr('class').split(' ');
+					for(var i in cx) {
+						if(cx[i].substr(0,5) === "cell_") {
+							cellRealValue = Number($('#'+_ts.tableShadowName+'Body #'+cx[i]).text());
+						}
+					}
+
+					cellWidth = $(this).children('div').width() + 30;
+					$(this).parent('tr').blur();
+					$(this).html('<input type="text" class="realLiveWire" style="width:'+cellWidth+'px;" value="'+cellRealValue+'" />');
+					$(this).children('input').focus();
+					_ts.editing = true;					
+				}
+			}
+		});
+
 		$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
 									.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
 									.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
@@ -214,7 +280,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			'aoColumns': tableVisibleCols[relation],
 			'sScrollX': $('.span12').width(),//'100%',
 			'bScrollCollapse': true,
-			'sScrollXInner': '200%',
 			'sDefaultContent': '',
 			'iCookieDuration': 60*60*24*365, // 1 year
 			'sCookiePrefix': 'gryphonTable_',
@@ -246,6 +311,26 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			"sDom": (relation === 'root') ? '<"H"TClfRr>t<"F"ip>' : 't'
 		});
 		$('#'+tables[relation].name).dataTable().columnFilter();
+
+		$('td', oTable.fnGetNodes()).hover( function() {
+			var iCol = $('td').index(this) % 5;
+			var nTrs = oTable.fnGetNodes();
+			$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+		}, function() {
+			$('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+		} );
+
+
+		var indexes = [];
+		for(var i in tableVisibleCols[relation]) {
+			indexes[ tableVisibleCols[relation] ] = i;
+		}
+		for(var k in indexes) {
+//			dTbl.fnGetTds( $('#' + tables[relation].name + ' tbody tr:eq(' + indexes[k] + ')')[k] );
+			
+			
+			
+		}
 
 		tables[relation].rel = dTbl;
 
@@ -293,10 +378,18 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 		return(s.join(""));
 	};
-    function fetchCallBackGroupBy (response){
+	function isset(varname){
+		return(typeof(window[varname]) != 'undefined');
+	}
+    function fetchCallBackGroupBy1 (response){
         console.log("fetchCallBackGroupBy++++++++++++++");
-        console.log(response);
-        drawGeoMap(response.response);
+//        console.log(response);
+
+var t = prepData(response);
+//console.log(t);
+		drawTable(t);
+		widget1.StopListener();
+//        drawGeoMap(response.response);
     }
     function fetchCallBackSum (response){
         console.log("fetchCallBackSum++++++++++++++");
@@ -304,8 +397,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
     }
     function responseSuccessCallBack (response){
         console.log(response);
-		drawTable(response);
-		widget1.RemoveEvent(1);
+//		drawTable(response);
     }
     function responseColumnsCallBack (response){
     }
@@ -397,7 +489,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	};
 
 	return {
-		'fetchCallBackGroupBy': 	fetchCallBackGroupBy,
+		'fetchCallBackGroupBy1': 	fetchCallBackGroupBy1,
 		'fetchCallBackSum': 		fetchCallBackSum,
 		'responseSuccessCallBack': 	responseSuccessCallBack,
 		'responseErrorCallBack': 	responseErrorCallBack,
