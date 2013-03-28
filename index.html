@@ -18,8 +18,10 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8" ></script>
 
 
-<!--
 
+
+
+<!--
 
     <script type="text/javascript" src="frontend/javascript/third_party/goog/closure/goog/base.js" charset="utf-8" ></script>
     <script type="text/javascript" src="frontend/javascript/deps.js" charset="utf-8"  ></script>
@@ -27,6 +29,8 @@
 
 
 -->
+
+
 
 
 
@@ -99,13 +103,14 @@
 
     <script type="text/javascript">
 
+        var widget;
 
 
-        var fetchCallBackGroupBy = function(response){
+        var fetchCallBackGroupBy1 = function(response){
 
-            console.log("fetchCallBackGroupBy++++++++++++++");
+            console.log("fetchCallBackGroupBy-------------------------------------");
             console.log(response);
-            drawGeoMap(response.response);
+            drawGeoMap(response.response.rows);
 
 
         }
@@ -119,6 +124,8 @@
 
         var responseSuccessCallBack = function(response){
             console.log(" JSONP responseSuccessCallBack");
+            console.log(response);
+
         }
 
 
@@ -127,7 +134,28 @@
         }
 
         var fetchCallBackGroupBy2 = function(response){
+            console.log("fetchCallBackGroupBy2");
+            console.log(response);
+        }
+        var fetchCallBackGroupBy3 = function(response){
+            console.log("fetchCallBackGroupBy3");
+            console.log(response);
+        }
 
+       var fetchCallBackGroupBy4 = function(response){
+            console.log("fetchCallBackGroupBy4");
+            console.log(response);
+        }
+
+
+        var fetchCallBackKeysValues = function(response){
+
+            console.log(response);
+
+        }
+
+        var responseColumnsCallBack = function(response){
+            console.log(response);
         }
 
 
@@ -188,9 +216,10 @@
 
                 var options={
                     "url":"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
-                    "refreshTime":20,
-                    "fetchOptions":[
-                        {
+                    "refreshTime":15,
+                    "fetchOptions":null/*[
+                       {
+                            "id":"1",
                             "type":"sum", // sum, group by
                             "name":"fetch 1",
                             "byColumns":[], // group bys
@@ -198,31 +227,61 @@
                             "fetchCallBack": fetchCallBackSum
                         },
                         {
+                            "id":"2",
                             "type":"groupby", // sum, group by
                             "name":"fetch 2",
                             "byColumns":['CountryCode','City'], // group bys
+                            "byValues" :['TR',null],
                             "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
-                            "fetchCallBack": fetchCallBackGroupBy
+                            "fetchCallBack": fetchCallBackGroupBy1
                         },
                         {
+                            "id":"3",
                             "type":"groupby", // sum, group by
-                            "name":"fetch 3",
-                            "byColumns":['CountryCode'], // group bys
+                            "name":"fetch 2",
+                            "byColumns":['Platform'], // group bys
+                            "byValues" :['Android'],
                             "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
                             "fetchCallBack": fetchCallBackGroupBy2
+                        },
+                        {
+                            "id":"4",
+                            "type":"keyvalues", // sum, group by
+                            "name":"fetch 3",
+                            "byColumns":['CountryCode','CountryName'], // group bys
+                            "byValues":null,
+                            "columns":null,// city,app,company
+                            "fetchCallBack": fetchCallBackGroupBy3
                         }
 
-                    ],
+                    ]*/,
                     "responseSuccessCallBack" : responseSuccessCallBack,
-                    "responseErrorCallBack": responseErrorCallBack
+                    "responseErrorCallBack": responseErrorCallBack,
+                    "responseColumnsCallBack":responseColumnsCallBack
                 };
 
 
 
-                var widget1 =  new HandsomeWidget(options,"widget-console");
+                widget =  new HandsomeWidget(options);
+                //HandsomeWidget
+                //HandsomeWidget.prototype.AddEvent
+                //HandsomeWidget.prototype.RemoveEvent(id) --- RemoveEvent(1);
+                //HandsomeWidget.prototype.GetRowColumns ---  return columns
 
-                console.log("widget1");
-                console.log(widget1);
+                var newEvent = {
+                    "id":"5",
+                    "type":"keyvalues", // sum, group by
+                    "name":"fetch 3",
+                    "byColumns":['CountryCode','CountryName'], // group bys
+                    "byValues":['TR','Ankara'],
+                    "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
+                    "fetchCallBack": fetchCallBackGroupBy4
+                };
+
+
+               // widget.AddEvent(newEvent);
+
+
 
             });
 
@@ -230,10 +289,6 @@
 
 
         });
-
-
-
-
 
 
 
@@ -355,6 +410,11 @@
 <div id="chart_line_area_makina"></div>
 
 <div id="widget-console"></div>
+
+    <iframe height="100" width="400" id="widget-frame" src="widget-process.html" >
+
+    </iframe>
+
 
 <table>
     <tr>

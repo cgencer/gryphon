@@ -43,7 +43,8 @@ makina.Dataset.prototype.Sum = function(columns){
 
     var response = {
         "sum":0,
-        "timeslot":{}
+        "timeslot":{},
+        "columns":columns
     };
 
     var s = goog.now();
@@ -344,10 +345,10 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns, byValues){
 
     var t=goog.now() - s;
 
-
+    var response ={"columns":responseColumns,"rows":tmp};
 
     var o={
-        "response":tmp,
+        "response":response,
         "ms":t
     };
 
@@ -395,7 +396,6 @@ makina.Dataset.prototype.GetColumnValues = function(columns){
 
     console.log("makina.Dataset.prototype.GetColumnValues");
 
-    console.log(colKeys);
 
     goog.array.forEach(this.dataset,function(item){
 
@@ -416,10 +416,14 @@ makina.Dataset.prototype.GetColumnValues = function(columns){
 
 
     var t = goog.now() - t1;
+    var response={};
+
+    response["columns"]=columns;
+    response["rows"]=colKeys;
 
 
     var o={
-        "response":colKeys,
+        "response":response,
         "ms":t
     };
 

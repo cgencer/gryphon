@@ -66,6 +66,17 @@ makina.Bootstrapper = function(){
     goog.exportSymbol('HandsomeWidget.prototype.AddEvent',makina.Widget.prototype.AddEvent);
     goog.exportSymbol('HandsomeWidget.prototype.RemoveEvent',makina.Widget.prototype.RemoveEvent);
     goog.exportSymbol('HandsomeWidget.prototype.GetRowColumns',makina.Widget.prototype.GetRowColumns);
+    goog.exportSymbol('HandsomeWidget.prototype.StopListener',makina.Widget.prototype.StopListener);
+    goog.exportSymbol('HandsomeWidget.prototype.StartListener',makina.Widget.prototype.StartListener);
+
+    console.info("HandsomeWidget 1.1.0");
+    console.info('HandsomeWidget.prototype.AddEvent');
+    console.info('HandsomeWidget.prototype.RemoveEvent');
+    console.info('HandsomeWidget.prototype.GetRowColumns');
+    console.info('HandsomeWidget.prototype.StopListener');
+    console.info('HandsomeWidget.prototype.StartListener');
+
+
 
 
 

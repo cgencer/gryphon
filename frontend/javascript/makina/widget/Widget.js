@@ -20,22 +20,23 @@ goog.require('makina.Dataset');
  * @param {string|null} consoleWidget
  * @constructor
  */
-makina.Widget = function(options,consoleWidget){
+makina.Widget = function(options,consoleWidgetName){
 
 
     this.options = options;
+
+    this.isRunning = true;
 
     this.fetchEvents = options["fetchOptions"];
 
     this.elConsole;
 
-    if(consoleWidget!=undefined){
-        /**
-         *
-         * @type {string}
-         */
-        var el =consoleWidget;
-        this.elConsole = goog.dom.getElement(el);
+    this.consoleWidget = "";
+    if(consoleWidgetName != undefined)
+        this.consoleWidget = consoleWidgetName;
+
+    if(this.consoleWidget != ""){
+        this.elConsole = goog.dom.getElement(this.consoleWidget);
     }
 
 
@@ -126,6 +127,17 @@ makina.Widget.prototype.GetRowColumns = function(){
 }
 
 
+makina.Widget.prototype.StopListener = function(){
+    this.isRunning = false;
+    return true;
+}
+
+makina.Widget.prototype.StartListener = function(){
+    this.isRunning = true;
+    return true;
+}
+
+
 
 /**
  *
@@ -147,6 +159,7 @@ makina.Widget.prototype.Console = function(messages,color){
 
 
     console.log(msg);
+    if(this.consoleWidget != undefined)
     if(this.elConsole != undefined){
         this.elConsole.appendChild(makina.dom.createElement("<div style='color:"+clr+" ' >"+msg+"</div>"));
     }
@@ -155,22 +168,27 @@ makina.Widget.prototype.Console = function(messages,color){
 
 makina.Widget.prototype._StartTimer = function(){
 
-
-
     var that = this;
 
-    if(this._timer == null || this._timer == undefined){
+    if(!goog.isNumber(this._refreshTime)){
+        this._refreshTime = 0;
+    }
 
-        that.Console("Create Timer and Start Timer "+(that._refreshTime/1000) +" ms");
+    if(this._refreshTime>0){
+        if(this._timer == null || this._timer == undefined){
 
-        that._timer = new goog.Timer(that._refreshTime);
-        that._timer.start();
-        goog.events.listen(that._timer, goog.Timer.TICK, function(){
-           that.RequestData();
-        });
-    }else{
-        that.Console("Start Timer...");
-        this._timer.start();
+            that.Console("Create Timer and Start Timer "+(that._refreshTime/1000) +" ms");
+
+            that._timer = new goog.Timer(that._refreshTime);
+            that._timer.start();
+            goog.events.listen(that._timer, goog.Timer.TICK, function(){
+               if(that.isRunning)
+                    that.RequestData();
+            });
+        }else{
+            that.Console("Start Timer...");
+            this._timer.start();
+        }
     }
 }
 
@@ -239,15 +257,11 @@ makina.Widget.prototype._ResponseDataSuccessCallBack = function(response){
 
     var that = this;
 
-
-
-
     this.responseData = response;
 
     this.dataColumns = response["columns"];
 
     this.DecodeData(response["rows"]);
-
 
     var rsData={};
     rsData["columns"]= this.dataColumns;
@@ -260,56 +274,48 @@ makina.Widget.prototype._ResponseDataSuccessCallBack = function(response){
         (this._responseColumnsCallBack && this._responseColumnsCallBack(rsData));
 
 
-
-
     this.ds.SetDataset(this.dataRows);
 
-
-    //process request options filters...
 
     var t1 =goog.now();
 
     this.Console("Fetch Event Options Started","red");
 
-    var i = 0, limit = this.fetchEvents.length, busy = false;
+    var i = 0, limit = 0, busy = false;
 
-    var processor = setInterval(function()
-    {
-        if(!busy){
+    if(this.fetchEvents != null)
+      limit = this.fetchEvents.length;
+    if(!goog.isNumber(limit))
+        limit =0;
 
-            busy = true;
-            var item = that.fetchEvents[i];
-            that._ProcessFetchItems(item);
-            if(++i == limit)
-            {
-                clearInterval(processor);
+    if(limit>0){
+
+        var processor = setInterval(function()
+        {
+            if(!busy){
+
+                busy = true;
+                var item = that.fetchEvents[i];
+                that._ProcessFetchItems(item);
+                if(++i == limit)
+                {
+
+                    that._StartTimer();
+
+                    clearInterval(processor);
+                }
+                busy = false;
             }
-            busy = false;
-        }
 
-    }, 200);
+        }, 200);
 
-/*
-
-    /// var retchOptions = this.options["fetchOptions"];
-
-    goog.array.forEach(this.fetchEvents, function(item){
-
-        var s=goog.now();
-        that.Console("Start "+item["name"]+" ProcessFetchItems","green");
-
-        that._ProcessFetchItems(item);
-        var ms = goog.now() - s;
-        that.Console("End "+item["name"]+" ProcessFetchItems ms="+ms,"green");
-
-    });
-
-*/
-    this.Console("Fetch Event Options Endddddddddd","red");
-
-    if(goog.isNumber(this._refreshTime)){
+    }else{
         this._StartTimer();
     }
+
+
+    this.Console("Fetch Event Options Endddddddddd","red");
+
 
 
 }
@@ -345,7 +351,8 @@ makina.Widget.prototype.RequestData = function(){
     var jsonp = new goog.net.Jsonp(url);
     jsonp.setRequestTimeout(45*1000);//45 sn
 
-    this.elConsole.innerHTML ="";
+    if(this.consoleWidget != undefined)
+        this.elConsole.innerHTML ="";
 
     this.Console("Request Data With JSONP","blue");
 
@@ -387,38 +394,24 @@ makina.Widget.prototype.DecodeData = function(responseDataRows){
     }else{
 
         var dateTime = new goog.date.DateTime();
-
         this._utcTime =Math.round( dateTime.getTime() /1000.0 );
-
     }
 
    this.Console("Start decode code ","yellow");
     var t1 = goog.now();
 
    goog.array.forEach(responseDataRows,function(rowItem,i){
-
-     ///  if(i<=100){
            goog.object.forEach(rowItem,function(v,k,o){
                if(goog.string.startsWith(k,"timeslot"))
                    responseDataRows[i][k]= goog.json.parse(Base64.decode(responseDataRows[i][k]));
            });
-
            that.UpdateDataRow(rowItem);
-    ///   }
-
-
    });
 
     var t2 = goog.now() - t1;
 
     this.Console("End of decode code ms="+t2,"yellow");
 
-
-
-
-
-    console.log(" that.responseData = "+ responseDataRows.length);
-    console.log(" that.dataRows = "+ that.dataRows.length);
 
 
 }
