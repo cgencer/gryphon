@@ -75,6 +75,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		                    "responseColumnsCallBack":responseColumnsCallBack
 		                };
 			widget1 =  new HandsomeWidget(options, 'widget-console');
+			console.dir(widget1.GetRowColumns());
             //HandsomeWidget
             //HandsomeWidget.prototype.AddEvent(event)
             //HandsomeWidget.prototype.RemoveEvent(id) --- RemoveEvent(1);
@@ -92,23 +93,10 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				{'visible': true, order:1, 'cvname':'other'}
 			],
 			'rows': [
-				{
-					'test': 0,
-					'column': 'sdfs',
-					'other': 'xxx'
-				}, {
-					'test': 5,
-					'other': 'xxx',
-					'column': 'sdfs'
-				}, {
-					'test': 5,
-					'column': 'sdfs',
-					'other': 'xxx'
-				}, {
-					'test': 5,
-					'column': 'sdfs',
-					'other': 'xxx'
-				}
+				{'test': 0,'column': 'sdfs','other': 'xxx'},
+				{'test': 5,'other': 'xxx','column': 'sdfs'},
+				{'test': 5,'column': 'sdfs','other': 'xxx'},
+				{'test': 5,'column': 'sdfs','other': 'xxx'}
 			]
 		};
 
@@ -120,6 +108,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 										.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
 										.removeClass('ui-state-disabled')
 										.addClass('btn')					.addClass('btn-primary');
+			prepTableForCalc();
 		});
 
 		cuteNSexy.setPaths(amplify.store( 'paths'));
@@ -145,7 +134,63 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		pack.columns.push({'cvname':'cr', 	'cname':'cr', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
 		pack.columns.push({'cvname':'cost', 'cname':'cost', 'editable':true, 'process':'', 'visible':true, 'order':max++});
 		tables['root'].dataSet = pack;
-		return pack;
+
+		var no = {'columns': pack.columns, 'rows': []};
+		for(var row in pack.rows) {
+			var pr = pack.rows[row];
+			var o = {};
+			for(var col in pr) {
+				switch (col) {
+					case 'timeslotCLICK':
+						if(Object.keys(pr[col]).length > 0) {
+							if(typeof pr[col].c == 'undefined'){
+								o['CLICK'] = 0;
+							}else{
+								o['CLICK'] = Number(pr[col].c);								
+							}
+						}else{
+							o['CLICK'] = 0;
+						}
+						break;
+					case 'timeslotINSTALL':
+						if(Object.keys(pr[col]).length > 0) {
+							if(typeof pr[col].c == 'undefined'){
+								o['INSTALL'] = 0;
+							}else{
+								o['INSTALL'] = Number(pr[col].c);								
+							}
+						}else{
+							o['INSTALL'] = 0;
+						}
+						break;
+					default:
+						o[col] = pr[col];
+						break;
+				}
+			}
+			no['rows'].push(o);
+		}
+console.log('................................');
+		console.dir(no);
+		return no;
+	};
+
+	function prepTableForCalc () {
+		// creates the var_ classes for each rows cells
+		var ar = ['cost', 'cpc', 'cpd', 'cr', 'cost', 'click', 'install'];
+		for(var i in ar) {
+			$('.dataTables_scrollHead table thead td').each( function (r, v) {
+				if( $(v).text().toLowerCase() === ar[i]) {
+					$('.dataTables_scrollBody table tbody tr').each( function (c, vv) {
+						var pt = $(vv).children('td').eq(r);
+						$(pt).addClass('var_'+ar[i]);
+						if(ar[i] !== 'click' && ar[i] !== 'install') {
+							$(pt).addClass('editMe');
+						}
+					});
+				}
+			});
+		}
 	};
 
 	function drawTable (pack) {
@@ -162,18 +207,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		var dTbl = prepTableView( randomId(), pack, 'root', '#contentDataset', 'child' );
 
-		// creates the var_ classes for each rows cells
-		var ar = ['cost', 'cpc', 'cpd', 'cr', 'cost'];
-		for(var i in ar) {
-			$('.dataTables_scrollHead table thead td').each( function (i, v) {
-				if( $(this).children('div').text() === ar[i]) {
-					$('.dataTables_scrollBody table tbody tr').each( function (ii, vv) {
-						$(this).children('td').eq(i).addClass('var_'+ar[i]);
-						$(this).children('td').eq(i).addClass('editMe');
-					});
-				}
-			});
-		}
+		prepTableForCalc ();
 
 		$(document).on('keypress', '.realLiveWire', function (event) {
 			if(_ts.editing) {
@@ -191,8 +225,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		// had to iterate each cell to bind event, whereafter removal of the event can be made on each cell
 		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
 			if(!_ts.editing) {
-				if 	( (Number($(this).siblings('.var_clicks').text()) > 0 && $(this).hasClass('var_cpc') ) || 
-					(Number($(this).siblings('.var_installs').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
+				if 	( (Number($(this).siblings('.var_click').text()) > 0 && $(this).hasClass('var_cpc') ) || 
+					(Number($(this).siblings('.var_install').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
 
 					var cx = $(this).attr('class').split(' ');
 					for(var i in cx) {
@@ -284,6 +318,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			'iCookieDuration': 60*60*24*365, // 1 year
 			'sCookiePrefix': 'gryphonTable_',
 			'aoColumnDefs': [
+				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
+				{ "sTitle": "Installs", "aTargets": [ 'INSTALL' ] },
 
 				{'bVisible': true,	'aTargets': ['CLICK', 'INSTALL', 'DeviceInfoId', 'City', 'CountryName', 
 												'Platform', 'Resolution', 'mksubpublisher', 'mkbannertype'] },
@@ -312,15 +348,15 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		});
 		$('#'+tables[relation].name).dataTable().columnFilter();
 
-		$('td', oTable.fnGetNodes()).hover( function() {
-			var iCol = $('td').index(this) % 5;
-			var nTrs = oTable.fnGetNodes();
-			$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
-		}, function() {
-			$('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
-		} );
-
-
+		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
+			var clicked = $(this);
+			var ci = $(this).parent('tr').children('td').index( $(this) );
+			$('.dataTables_scrollBody td').each( function (i, v) {
+				$(v).addClass('darkenedColumns');
+				$(clicked).removeClass('darkenedColumns');
+			});
+		});
+	
 		var indexes = [];
 		for(var i in tableVisibleCols[relation]) {
 			indexes[ tableVisibleCols[relation] ] = i;
@@ -341,6 +377,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			$(this).attr('alt', i);
 		});
 
+/*		CLICKROW
+		
 		if(children !== false) {
 			$(document).on('click', '#'+tables[relation].name+' tbody tr td.driller', function (event) {
 
@@ -366,6 +404,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		});
 		$('<td style="width:32px;"></td>').insertBefore( $('#'+tables[relation].name+' thead tr td:first-child') );
 		$('<td style="width:32px;"></td>').insertBefore( $('.dataTables_scrollHead thead tr td:first-child') );
+*/
 
 		return dTbl;
 	}
@@ -381,13 +420,30 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	function isset(varname){
 		return(typeof(window[varname]) != 'undefined');
 	}
+	function formatNumber ( num, fixed ) { 
+		if(fixed === undefined){fixed = 2;}
+		var decimalPart;
+		var array = Math.floor(num).toString().split('');
+		var index = -3; 
+		while ( array.length + index > 0 ) { 
+			array.splice( index, 0, '.' );              
+			index -= 4;
+		}
+
+		if(fixed > 0){
+			decimalPart = num.toFixed(fixed).split(".")[1];
+			if(decimalPart !== "00"){
+				return array.join('') + "," + decimalPart;
+			}else{
+				return array.join('')
+			}
+		}
+		return array.join(''); 
+	};
     function fetchCallBackGroupBy1 (response){
         console.log("fetchCallBackGroupBy++++++++++++++");
-//        console.log(response);
-
-var t = prepData(response);
-//console.log(t);
-		drawTable(t);
+console.dir(response);
+		drawTable( prepData(response) );
 		widget1.StopListener();
 //        drawGeoMap(response.response);
     }
@@ -436,13 +492,79 @@ var t = prepData(response);
         chart.draw(dataTable, options);
     }
 
+	function calcARow (theRow, newCost) {	// newcost null yerine deger verilirse onu kullan; cost'u editlenen alana gore hesapla 
+		var cost = 0;
+		cost = (newCost !== null) ? newCost : this.initialCost;
+		cost = Math.round(cost * 100) / 100;
+
+		var thereIsAZero = false;
+		clicks = Number( $(theRow).children('.var_click').text() );
+		installs = Number( $(theRow).children('.var_install').text() );
+
+		destCPD = $(theRow).children('.var_cpd');
+		destCPC = $(theRow).children('.var_cpc');
+		destCR = $(theRow).children('.var_cr');
+		destCOST = $(theRow).children('.var_cost');
+		shdwCPD = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cpd');
+		shdwCPC = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cpc');
+		shdwCR = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cr');
+		shdwCOST = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cost');
+
+		if(clicks === 0 || installs === 0 || clicks === NaN || installs === NaN) {
+			thereIsAZero = true;
+		}
+
+		$(destCOST).html( '<div class="cellContent"><nobr>' + 
+							$(destCOST).attr('title') + ' ' + formatNumber(cost) + ' ' + $(destCOST).attr('alt') +
+							'</nobr></div>');
+		shdwCOST.text(cost);
+		$(shdwCOST).attr('class', $(shdwCOST).attr('class') + ' noEmpty');
+
+		if(!thereIsAZero) {
+			c = Math.round((clicks / installs) * 100) / 100;
+			$(destCR).html( '<div class="cellContent"><nobr>' + 
+							$(destCR).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCR).attr('alt') +
+							'</nobr></div>');
+			$(shdwCR).text(c);
+			$(shdwCR).attr('class', $(shdwCR).attr('class') + ' noEmpty');
+		}else{
+			$(destCR).html( '<small>[ n/a ]</small>' );
+			$(shdwCR).text('');
+		}
+
+		if(clicks > 0 || !thereIsAZero) {
+			newcpc = cost / clicks;
+			c = Math.round(newcpc * 100) / 100;
+			$(destCPC).html( '<div class="cellContent"><nobr>' + 
+							$(destCPC).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCPC).attr('alt') +
+							'</nobr></div>');
+			$(shdwCPC).text(c);
+			$(shdwCPC).attr('class', $(shdwCPC).attr('class') + ' noEmpty');
+		}else{
+			$(destCPC).html( '<small>[ n/a ]</small>' );
+			$(shdwCPC).text('');
+		}
+		if(installs > 0 || !thereIsAZero) {
+			newcpd = cost / installs;
+			c = Math.round(newcpd * 100) / 100;
+			$(destCPD).html( '<div class="cellContent"><nobr>' + 
+							$(destCPD).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCPD).attr('alt') +
+							'</nobr></div>');
+			$(shdwCPD).text(c);
+			$(shdwCPD).attr('class', $(shdwCPD).attr('class') + ' noEmpty');
+		}else{
+			$(destCPD).html( '<small>[ n/a ]</small>' );
+			$(shdwCPD).text('');
+		}
+	};
+
 	function calcCells (input) {
 		var _ts = this;
 		thereIsAZero = false;
 		theCell = $(input).parent('td');
 		theRow = $(input).parent('tr');
-		clicks = Number( $(theRow).children('.var_clicks').text() );
-		installs = Number( $(theRow).children('.var_installs').text() );
+		clicks = Number( $(theRow).children('.var_click').text() );
+		installs = Number( $(theRow).children('.var_install').text() );
 		if(clicks === 0 || installs === 0 || clicks === NaN || installs === NaN) {
 			thereIsAZero = true;
 		}
@@ -452,37 +574,38 @@ var t = prepData(response);
 		if(!thereIsAZero) {
 			if( $(theCell).hasClass('var_cpc') ) {					// we're editing the CPC
 
-				this.calcARow( $(theRow), (clicks * edited ) );
+				calcARow( $(theRow), (clicks * edited ) );
 
 			} else if( $(theCell).hasClass('var_cpd') ) {			// we're editing the CPD
 
-				this.calcARow( $(theRow), (installs * edited ) );
+				calcARow( $(theRow), (installs * edited ) );
 
 			} else if( $(theCell).hasClass('var_cost') ) {
 
-				this.calcARow( $(theRow), edited );
+				calcARow( $(theRow), edited );
 
 			}
 		}
 	};
+	
 	function calculateSumsOfRows () {
 		if(this.showFooter === true) {
 
 			var colCalc = {
-				'sums': ['var_clicks', 'var_installs', 'var_cost'],
-				'avgs': ['var_cpc', 'var_cpd', 'var_conversionrate']
+				'sums': ['var_click', 'var_install', 'var_cost'],
+				'avgs': ['var_cpc', 'var_cpd', 'var_cr']
 			};
 
 			for(var idx in colCalc.sums) {
 				var pre = $('#sum_' + colCalc.sums[idx]).attr('title');
 				var suf = $('#sum_' + colCalc.sums[idx]).attr('alt');
-				var s = this.formatNumber($("#"+this.tableShadowName+" td."+colCalc.sums[idx]).sum());
+				var s = formatNumber($("#"+this.tableShadowName+" td."+colCalc.sums[idx]).sum());
 				$("#"+this.tableRealName+' #sum_' + colCalc.sums[idx]).html( '<div class="cellContent"><nobr>' + pre + s + suf + '</nobr></div>' );
 			}
 			for(var idx in colCalc.avgs) {
 				var pre = $('#sum_' + colCalc.avgs[idx]).attr('title');
 				var suf = $('#sum_' + colCalc.avgs[idx]).attr('alt');
-				var a = this.formatNumber($("#"+this.tableShadowName+" td."+colCalc.avgs[idx]+'.noEmpty').avg());
+				var a = formatNumber($("#"+this.tableShadowName+" td."+colCalc.avgs[idx]+'.noEmpty').avg());
 				$("#"+this.tableRealName+' #sum_' + colCalc.avgs[idx]).html( '<div class="cellContent"><nobr>' + pre + a + suf + '</nobr></div>' );
 			}
 		}
