@@ -1,6 +1,11 @@
 var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 	var tables = {'root':{'name':''}};
+	var initialCost = 10000;
+	var editingFlag = false;
+	var _ts = this;
+	var clickTotal = 0;
+	var installTotal = 0;
 	var widget1;
 	tableVisibleCols = [
 		{'mData':'test'},
@@ -27,28 +32,31 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$("#create-widget").click( function(){
 		 var options={
-		                    "url":"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
+		                    'url':"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
 		                   /// "url":"http://192.168.10.13/Events/Report/MAKINA/CIRawReport",
-		                    "refreshTime":1000,
-		                    "fetchOptions":[
+		                    'refreshTime': 1000,
+		                    'fetchOptions': [
 /*
 		                       {
-		                            "id": "1",
-		                            "type": "sum", // sum, group by
-		                            "name": "fetch 1",
-		                            "byColumns": null, // group bys
-		                            "columns": ['timeslotCLICK','timeslotINSTALL'],// city,app,company
-		                            "fetchCallBack": fetchCallBackSum
-		                        },
+		                            'id': '1', 'type': 'sum', 'name': 'fetch 1', 'byColumns': null,
+									'columns': ['timeslotCLICK'], 'fetchCallBack': function (result) {
+										$('#bigNumbersTotalClick').text( size_format(result.timeslot.c) );
+									}
+		                        }, {
+		                            'id': '2', 'type': 'sum', 'name': 'fetch 1', 'byColumns': null,
+		                            'columns': ['timeslotCLICK'], 'fetchCallBack': function (result) {
+										$('#bigNumbersTotalInstall').text( size_format(result.timeslot.c) );
+									}
+								}
 */
 		                        {
-		                            "id":"2",
-		                            "type":"groupby", // sum, group by
-		                            "name":"fetch 2",
-		                            "byColumns":['CountryCode','City'], // group bys
-		                            "byValues" :null,
-		                            "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
-		                            "fetchCallBack": fetchCallBackGroupBy1
+		                            'id':"3",
+		                            'type':"groupby", // sum, group by
+		                            'name':"fetch 2",
+		                            'byColumns':['CountryCode','City'], // group bys
+		                            'byValues': null,
+		                            'columns':['timeslotCLICK','timeslotINSTALL'],// city,app,company
+		                            'fetchCallBack': fetchCallBackGroupBy1
 		                        },
 /*		                        {
 		                            "id":"3",
@@ -120,7 +128,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 	});
 
+
 	function prepData (pack) {
+		var cT = 0, cI = 0;
 		tables['root'].untouched = pack;
 		max = Object.keys(pack.columns).length;
 		for(var row in pack.rows) {
@@ -146,7 +156,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 							if(typeof pr[col].c == 'undefined'){
 								o['CLICK'] = 0;
 							}else{
-								o['CLICK'] = Number(pr[col].c);								
+								o['CLICK'] = Number(pr[col].c);
+								cT += Number(pr[col].c);
 							}
 						}else{
 							o['CLICK'] = 0;
@@ -157,7 +168,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 							if(typeof pr[col].c == 'undefined'){
 								o['INSTALL'] = 0;
 							}else{
-								o['INSTALL'] = Number(pr[col].c);								
+								o['INSTALL'] = Number(pr[col].c);
+								cI += Number(pr[col].c);
 							}
 						}else{
 							o['INSTALL'] = 0;
@@ -170,8 +182,10 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 			no['rows'].push(o);
 		}
-console.log('................................');
-		console.dir(no);
+		$('#bigNumbersTotalClick').text( size_format(cT) );
+		$('#bigNumbersTotalInstall').text( size_format(cI) );
+		$('#bigNumbersAverageCR').text( '%'+formatNumber(cT/cI,2) );
+		
 		return no;
 	};
 
@@ -210,36 +224,38 @@ console.log('................................');
 		prepTableForCalc ();
 
 		$(document).on('keypress', '.realLiveWire', function (event) {
-			if(_ts.editing) {
+			if(_ts.editingFlag) {
 				var keycode = (event.keyCode ? event.keyCode : event.which);
 				if(event.keyCode == 13) {
-					_ts.calcCells( $(this) );
-					_ts.editing = false;
+					$('td.darkenedColumns').each( function (i,v) {
+						$(v).removeClass('darkenedColumns');
+					})
+
+	//				calcCells( $(this) );
+					_ts.editingFlag = false;
 				}
+/*
 				$('#' + __ts.tableRealName + 'innerTableBody tr td').each( function (i, o) {
 					$(o).width( $(parentRow).children('td').eq(i).width() );
 				});
+*/
+
 			}
 		});
 
 		// had to iterate each cell to bind event, whereafter removal of the event can be made on each cell
-		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
-			if(!_ts.editing) {
+		$(document).on('click', 'td.editMe', function () {
+			if(!_ts.editingFlag) {
 				if 	( (Number($(this).siblings('.var_click').text()) > 0 && $(this).hasClass('var_cpc') ) || 
 					(Number($(this).siblings('.var_install').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
 
-					var cx = $(this).attr('class').split(' ');
-					for(var i in cx) {
-						if(cx[i].substr(0,5) === "cell_") {
-							cellRealValue = Number($('#'+_ts.tableShadowName+'Body #'+cx[i]).text());
-						}
-					}
+					cellRealValue = $(this).attr('alt');
 
 					cellWidth = $(this).children('div').width() + 30;
 					$(this).parent('tr').blur();
 					$(this).html('<input type="text" class="realLiveWire" style="width:'+cellWidth+'px;" value="'+cellRealValue+'" />');
 					$(this).children('input').focus();
-					_ts.editing = true;					
+					_ts.editingFlag = true;					
 				}
 			}
 		});
@@ -318,6 +334,7 @@ console.log('................................');
 			'iCookieDuration': 60*60*24*365, // 1 year
 			'sCookiePrefix': 'gryphonTable_',
 			'aoColumnDefs': [
+				{ "asSorting": [ "desc" ], "aTargets": [ 0, 1 ] },
 				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
 				{ "sTitle": "Installs", "aTargets": [ 'INSTALL' ] },
 
@@ -344,7 +361,14 @@ console.log('................................');
 			// sDOM parameters:
 			// C: Column visibility		l: Paging size		R: Column order+resize	f: filtering		r: processing
 			// T: TableTools			i: footer info		p: paging buttons 		S: Y-scrolling		W: Column filters
-			"sDom": (relation === 'root') ? '<"H"TClfRr>t<"F"ip>' : 't'
+			"sDom": (relation === 'root') ? '<"H"TClfRr>t<"F"ip>' : 't',
+			'fnDrawCallback': function( oSettings ) {
+				$('tr').each( function (i, v) {
+					prepTableForCalc();
+					calcARow($(v), null);
+					saveCellValues();
+				});
+			}
 		});
 		$('#'+tables[relation].name).dataTable().columnFilter();
 
@@ -441,15 +465,14 @@ console.log('................................');
 		return array.join(''); 
 	};
     function fetchCallBackGroupBy1 (response){
-        console.log("fetchCallBackGroupBy++++++++++++++");
-console.dir(response);
 		drawTable( prepData(response) );
 		widget1.StopListener();
 //        drawGeoMap(response.response);
     }
     function fetchCallBackSum (response){
         console.log("fetchCallBackSum++++++++++++++");
-        console.log(response);
+        console.dir(response);
+
     }
     function responseSuccessCallBack (response){
         console.log(response);
@@ -492,9 +515,14 @@ console.dir(response);
         chart.draw(dataTable, options);
     }
 
+	function saveCellValues () {
+		$('td.editMe').each( function(i, v) {
+			$(v).attr('alt', $(v).text().replace('.', '').replace(',', '.') );
+		});
+	}
 	function calcARow (theRow, newCost) {	// newcost null yerine deger verilirse onu kullan; cost'u editlenen alana gore hesapla 
 		var cost = 0;
-		cost = (newCost !== null) ? newCost : this.initialCost;
+		cost = (newCost != null) ? newCost : initialCost;
 		cost = Math.round(cost * 100) / 100;
 
 		var thereIsAZero = false;
@@ -505,56 +533,33 @@ console.dir(response);
 		destCPC = $(theRow).children('.var_cpc');
 		destCR = $(theRow).children('.var_cr');
 		destCOST = $(theRow).children('.var_cost');
-		shdwCPD = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cpd');
-		shdwCPC = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cpc');
-		shdwCR = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cr');
-		shdwCOST = $("#"+this.tableShadowName+' tr#'+$(theRow).attr('alt')).children('.var_cost');
 
 		if(clicks === 0 || installs === 0 || clicks === NaN || installs === NaN) {
 			thereIsAZero = true;
 		}
 
-		$(destCOST).html( '<div class="cellContent"><nobr>' + 
-							$(destCOST).attr('title') + ' ' + formatNumber(cost) + ' ' + $(destCOST).attr('alt') +
-							'</nobr></div>');
-		shdwCOST.text(cost);
-		$(shdwCOST).attr('class', $(shdwCOST).attr('class') + ' noEmpty');
+		$(destCOST).html( '<div class="cellContent"><nobr>' + formatNumber(cost) + '</nobr></div>');
 
 		if(!thereIsAZero) {
 			c = Math.round((clicks / installs) * 100) / 100;
-			$(destCR).html( '<div class="cellContent"><nobr>' + 
-							$(destCR).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCR).attr('alt') +
-							'</nobr></div>');
-			$(shdwCR).text(c);
-			$(shdwCR).attr('class', $(shdwCR).attr('class') + ' noEmpty');
+			$(destCR).html( '<div class="cellContent"><nobr>' + formatNumber(c) + '</nobr></div>');
 		}else{
 			$(destCR).html( '<small>[ n/a ]</small>' );
-			$(shdwCR).text('');
 		}
 
 		if(clicks > 0 || !thereIsAZero) {
 			newcpc = cost / clicks;
 			c = Math.round(newcpc * 100) / 100;
-			$(destCPC).html( '<div class="cellContent"><nobr>' + 
-							$(destCPC).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCPC).attr('alt') +
-							'</nobr></div>');
-			$(shdwCPC).text(c);
-			$(shdwCPC).attr('class', $(shdwCPC).attr('class') + ' noEmpty');
+			$(destCPC).html( '<div class="cellContent"><nobr>' + formatNumber(c) + '</nobr></div>');
 		}else{
 			$(destCPC).html( '<small>[ n/a ]</small>' );
-			$(shdwCPC).text('');
 		}
 		if(installs > 0 || !thereIsAZero) {
 			newcpd = cost / installs;
 			c = Math.round(newcpd * 100) / 100;
-			$(destCPD).html( '<div class="cellContent"><nobr>' + 
-							$(destCPD).attr('title') + ' ' + formatNumber(c) + ' ' + $(destCPD).attr('alt') +
-							'</nobr></div>');
-			$(shdwCPD).text(c);
-			$(shdwCPD).attr('class', $(shdwCPD).attr('class') + ' noEmpty');
+			$(destCPD).html( '<div class="cellContent"><nobr>' + formatNumber(c) + '</nobr></div>');
 		}else{
 			$(destCPD).html( '<small>[ n/a ]</small>' );
-			$(shdwCPD).text('');
 		}
 	};
 
@@ -587,7 +592,22 @@ console.dir(response);
 			}
 		}
 	};
-	
+	function size_format (ns) {
+		if (ns >= 1000000000) {
+		     ns = formatNumber(ns / 1000000000, 1) + 'G';
+		} else { 
+			if (ns >= 1000000) {
+	     		ns = formatNumber(ns / 1000000, 1) + 'M';
+	   	} else { 
+				if (ns >= 1000) {
+	    		ns = formatNumber(ns / 1000, 1) + 'K';
+	  		} else {
+	    		ns = formatNumber(ns, 0);
+				};
+	 		};
+		};
+	  return ns;
+	};	
 	function calculateSumsOfRows () {
 		if(this.showFooter === true) {
 
