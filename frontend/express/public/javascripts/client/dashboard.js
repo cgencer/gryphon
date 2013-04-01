@@ -7,6 +7,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var clickTotal = 0;
 	var installTotal = 0;
 	var widget1;
+	var selGrpStckFlag = false;
 	tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
@@ -25,6 +26,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	};
 
 	$(document).ready( function() {
+
+
+//		console.dir(normalizeTimeslot(null, {y:2013, m:3, d:20}, {y:2013, m:4, d:2}));
 
 		$.datepicker.setDefaults( $.datepicker.regional['en'] );
 		$("#containerForCalendar").datepicker({'numberOfMonths':2});
@@ -155,11 +159,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 						if(Object.keys(pr[col]).length > 0) {
 							if(typeof pr[col].c == 'undefined'){
 								o['CLICK'] = 0;
+								o['tsC'] = {};
 							}else{
 								o['CLICK'] = Number(pr[col].c);
+								o['tsC'] = pr[col];
 								cT += Number(pr[col].c);
 							}
 						}else{
+							o['tsC'] = {};
 							o['CLICK'] = 0;
 						}
 						break;
@@ -167,12 +174,15 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 						if(Object.keys(pr[col]).length > 0) {
 							if(typeof pr[col].c == 'undefined'){
 								o['INSTALL'] = 0;
+								o['tsI'] = {};
 							}else{
 								o['INSTALL'] = Number(pr[col].c);
+								o['tsI'] = pr[col];
 								cI += Number(pr[col].c);
 							}
 						}else{
 							o['INSTALL'] = 0;
+							o['tsI'] = {};
 						}
 						break;
 					default:
@@ -184,7 +194,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 		$('#bigNumbersTotalClick').text( size_format(cT) );
 		$('#bigNumbersTotalInstall').text( size_format(cI) );
-		$('#bigNumbersAverageCR').text( '%'+formatNumber(cT/cI,2) );
+		$('#bigNumbersAverageCR').text( '%'+formatNumber(cI/cT,2) );
+		console.dir(no);
 		
 		return no;
 	};
@@ -243,6 +254,10 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 		});
 
+/*
+	TODO on adding new columns () first detach, then attach the grouping to the widget
+*/
+
 		// had to iterate each cell to bind event, whereafter removal of the event can be made on each cell
 		$(document).on('click', 'td.editMe', function () {
 			if(!_ts.editingFlag) {
@@ -255,7 +270,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 					$(this).parent('tr').blur();
 					$(this).html('<input type="text" class="realLiveWire" style="width:'+cellWidth+'px;" value="'+cellRealValue+'" />');
 					$(this).children('input').focus();
-					_ts.editingFlag = true;					
+					_ts.editingFlag = true;
 				}
 			}
 		});
@@ -276,6 +291,68 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 
 //ColVis_Button TableTools_Button ui-button ui-state-default ColVis_MasterButton
+	};
+	function normalizeTimeslot (tsC, tsI, tsO, begin, end) {
+
+		// 0. begin ve end yillari farkli ise [begin > endOfYear + (ay atlamalari) + beginOfYear > end]
+		// 1. begin ve end farkli aylardaysa [ begin > endOfMonth + (ay atlamalari) + beginofThisMonth > end ] :byDay :ay araligi uzun olabilir
+		// 2. begin ve end ayni ayda ise [beign > end] :byDay
+		// 3. end = null ise [begin] :byHour :24hrs
+
+		if(end != null) {
+			var days = [];
+			var xBegin = begin;
+			var xEnd = end;
+
+			var onDay = xBegin.clone();
+			for(var i=0; i < xBegin.diffDays(xEnd); i++) {
+				onDay.addDays(1);
+				o = {'date': onDay.toString('yyyy-MM-dd'), 'value': 0};
+				onDay = onDay.clone();
+				days.push(o);
+			}
+			if(tsC !== null && tsI !== null) {
+				for(var d in days) {
+					y = new XDate(days[d].date).getFullYear();
+					m = new XDate(days[d].date).getMonth() + 1;
+					g = new XDate(days[d].date).getDate();
+
+					days[d] = {'date': days[d].date};
+					if(typeof tsC[y] !== 'undefined') {
+						if(typeof tsC[y][m] !== 'undefined') {
+							if(typeof tsC[y][m][g] !== 'undefined') {
+								if(typeof tsC[y][m][g].c !== 'undefined') {
+									days[d].click = tsC[y][m][g].c;
+								}
+							}
+						}
+					}
+					if(typeof tsI[y] !== 'undefined') {
+						if(typeof tsI[y][m] !== 'undefined') {
+							if(typeof tsI[y][m][g] !== 'undefined') {
+								if(typeof tsI[y][m][g].c !== 'undefined') {
+									days[d].install = tsC[y][m][g].c;
+								}
+							}
+						}
+					}
+					if(tsO !== null) {
+						if(typeof tsO[y] !== 'undefined') {
+							if(typeof tsO[y][m] !== 'undefined') {
+								if(typeof tsO[y][m][g] !== 'undefined') {
+									if(typeof tsO[y][m][g].c !== 'undefined') {
+										days[d].organic = tsC[y][m][g].c;
+									}
+								}
+							}
+						}
+					}
+				}
+				return days;
+			}else{
+				var splits = 24;
+			}
+		}
 	};
 
 	function prepTableView (name, pack, relation, into, children) {
@@ -371,6 +448,12 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 		});
 		$('#'+tables[relation].name).dataTable().columnFilter();
+
+		dTbl = $('#'+tables[relation].name).dataTable();
+		dTbl.$('tr').click( function () {
+			var data = dTbl.fnGetData( this );
+			plotChart(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
+		});
 
 		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
 			var clicked = $(this);
@@ -541,7 +624,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		$(destCOST).html( '<div class="cellContent"><nobr>' + formatNumber(cost) + '</nobr></div>');
 
 		if(!thereIsAZero) {
-			c = Math.round((clicks / installs) * 100) / 100;
+			c = Math.round((installs / clicks) * 100) / 100;
 			$(destCR).html( '<div class="cellContent"><nobr>' + formatNumber(c) + '</nobr></div>');
 		}else{
 			$(destCR).html( '<small>[ n/a ]</small>' );
@@ -630,6 +713,30 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 		}
 	};
+
+	function plotChart (ts) {
+console.dir(ts);
+		var height = 300;
+		var set = [
+			['Date', 'Clicks', 'Installs', 'Organic']
+		];
+		for(var i in ts) {
+			clicks = (typeof ts[i].click === 'undefined') ? 0 : ts[i].click;
+			installs = (typeof ts[i].install === 'undefined') ? 0 : ts[i].install;
+			organics = (typeof ts[i].organic === 'undefined') ? 0 : ts[i].organi;
+			set.push([ts[i].date, clicks, installs, organics]);
+		}
+console.dir(set);
+		var data = google.visualization.arrayToDataTable(set);
+		var chart = new google.visualization.ComboChart(document.getElementById('datasetChart'));
+		chart.draw(data, {
+			'width': $('.span12').width(), 
+			'height': 300, 
+			'vAxis': {'title': 'Values'},
+			'hAxis': {'title': 'Date'},
+			'seriesType': 'bars',
+		});
+	}
 
 	return {
 		'fetchCallBackGroupBy1': 	fetchCallBackGroupBy1,

@@ -17,6 +17,8 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.json-2.4.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.base64.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.csv-0.71.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/visualization/d3/d3.v3.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/utils/xdate.js"></script>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jquery.dataTables.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/datatables-plugins/ColReorder.js"></script>
@@ -221,7 +223,7 @@
 						<a class="btn btn-primary dropdown-toggle pull-right" id="create-widget">Widget</a>
 					</div>
 
-					<div id="contentMap" class="span10" style="display:none;">
+					<div id="contentMap" class="span12" style="display:none;">
 						<table style="height: 500px;">
 							<tr>
 								<td valign="top"><div id="content-widget" style="width: 400px;height: 200px;" ></div></td>
@@ -229,6 +231,16 @@
 							</tr>
 						</table>
 						<div id="chart_div"></div>
+					</div>
+
+					<div id="contentMap" class="span12">
+						<ul id="selGrpStck" class="nav nav-pills pull-right">
+							<li class="active"><a href="#">grouped</a></li>
+							<li><a href="#">stacked</a></li>
+						</ul>
+					</div>
+					<div id="datasetChart" class="span12">
+
 					</div>
 
 					<div id="contentDataset" class="span12">
