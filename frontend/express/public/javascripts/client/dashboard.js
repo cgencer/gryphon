@@ -8,6 +8,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var installTotal = 0;
 	var widget1;
 	var selGrpStckFlag = false;
+	var columns = [];
 	tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
@@ -82,12 +83,12 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		                        }
 */
 		                    ],
-		                    "responseSuccessCallBack" : responseSuccessCallBack,
-		                    "responseErrorCallBack": responseErrorCallBack,
-		                    "responseColumnsCallBack":responseColumnsCallBack
+		                    'responseSuccessCallBack': 	responseSuccessCallBack,
+		                    'responseErrorCallBack': 	responseErrorCallBack,
+		                    'responseColumnsCallBack': 	responseColumnsCallBack
 		                };
 			widget1 =  new HandsomeWidget(options, 'widget-console');
-			console.dir(widget1.GetRowColumns());
+			widget1.GetRowColumns();
             //HandsomeWidget
             //HandsomeWidget.prototype.AddEvent(event)
             //HandsomeWidget.prototype.RemoveEvent(id) --- RemoveEvent(1);
@@ -195,7 +196,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		$('#bigNumbersTotalClick').text( size_format(cT) );
 		$('#bigNumbersTotalInstall').text( size_format(cI) );
 		$('#bigNumbersAverageCR').text( '%'+formatNumber(cI/cT,2) );
-		console.dir(no);
 		
 		return no;
 	};
@@ -275,6 +275,31 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 		});
 
+
+		// change the buttongroup for export into a pulldown menu
+		$('.DTTT_container').wrapInner('<ul class="dropdown-menu" />');
+		$('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" />')
+			.append('<span class="caret"></span>')
+			.insertBefore('.DTTT_container ul.dropdown-menu');
+		$('.DTTT_container button')
+			.insertBefore('<button class="btn btn-mini" />')
+			.text('Export');
+		$('.DTTT_container a').each( function (i, v) {
+			$(v).wrap('<li />');
+		});
+		$('.DTTT_container button')
+			.addClass('btn-group')
+			.removeClass('DTTT_container')
+			.removeClass('ui-buttonset')
+			.removeClass('ui-buttonset-multi');
+
+		// create filters menu
+		template = $('#filterTemplate').html();
+//		$('.ColVis_catcher.TableTools_catcher').html().insertAfter( $('.ColVis_catcher.TableTools_catcher') ).addClass('filterButton');
+		$('<div class="btn-group pull-right"><a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Filters</a><ul id="filtersList" class="dropdown-menu"></ul</div>&nbsp;').insertAfter('.ColVis');
+
+
+
 		$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
 									.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
 									.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
@@ -289,8 +314,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 									.removeClass('ColVis_Button')
 									.addClass('btn')					.addClass('btn-primary');
 
-
-//ColVis_Button TableTools_Button ui-button ui-state-default ColVis_MasterButton
 	};
 	function normalizeTimeslot (tsC, tsI, tsO, begin, end) {
 
@@ -452,7 +475,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		dTbl = $('#'+tables[relation].name).dataTable();
 		dTbl.$('tr').click( function () {
 			var data = dTbl.fnGetData( this );
-			plotChart(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
+			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
 
 		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
@@ -557,18 +580,23 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
         console.dir(response);
 
     }
-    function responseSuccessCallBack (response){
+	function responseSuccessCallBack (response){
         console.log(response);
 //		drawTable(response);
     }
-    function responseColumnsCallBack (response){
-    }
-    function responseErrorCallBack (response){
-        console.log(" JSONP responseErrorCallBack")
-    }
+	function responseColumnsCallBack (response){
+		columns = response.columns;
+		for(var i in columns) {
+			console.log(columns[i].cvname);
+			$('#filtersList').append('<li>'+columns[i].cvname+'</li>');
+		}
+	}
+	function responseErrorCallBack (response){
+		console.log(" JSONP responseErrorCallBack")
+	}
 	function fetchCallBackGroupBy2 (response){
     }
-    function drawGeoMap(arr){
+	function drawGeoMap(arr){
         var chart = new google.visualization.GeoChart(document.getElementById("content-widget"));
         var data =[ ['Country', 'Click'] ];
         for(var i in arr){
@@ -714,27 +742,71 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 	};
 
+	function plotChartHC (ts) {
+		var set = {'c':[], 'i':[], 'o':[], 'n':[], 'ci':[]};
+		for(var i in ts) {
+			clicks = (typeof ts[i].click === 'undefined') ? 0 : ts[i].click;
+			installs = (typeof ts[i].install === 'undefined') ? 0 : ts[i].install;
+			organics = (typeof ts[i].organic === 'undefined') ? 0 : ts[i].organi;
+			dt = new XDate(ts[i].date);
+
+			set['c'].push(clicks);
+			set['i'].push(installs);
+			set['ci'].push(installs/clicks);
+			set['o'].push(organics);
+			set['n'].push(dt.toString('d MMM'));
+		}
+		var chart1 = new Highcharts.Chart({
+			chart: {
+				renderTo: 'datasetChart',
+				type: 'area'
+			},
+			title: {
+				text: 'Clicks / Installs / Organics'
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'top',
+				x: -10,
+				y: 100,
+				borderWidth: 0
+			},
+			crosshairs: [true,true],
+			xAxis: {'categories': set['n']},
+			yAxis: [{ 'title': { 'text': 'Clicks' }},
+					{ 'title': { 'text': 'Installs'}},
+					{ 'title': { 'text': 'Organics'}, 'opposite': true},
+					{ 'title': { 'text': 'CR'}, 'opposite': true }],
+
+			series: [{'name': 'Clicks', 	'data': set['c']},
+					 {'name': 'Installs', 	'data': set['i']},
+					 {'name': 'Organics', 	'data': set['o']},
+			    	 {'name': 'CR', 		'data': set['ci']}]
+	    });
+	}
+
 	function plotChart (ts) {
-console.dir(ts);
 		var height = 300;
 		var set = [
-			['Date', 'Clicks', 'Installs', 'Organic']
+			['Date', 'Clicks', 'Installs', 'Organic', 'CR']
 		];
 		for(var i in ts) {
 			clicks = (typeof ts[i].click === 'undefined') ? 0 : ts[i].click;
 			installs = (typeof ts[i].install === 'undefined') ? 0 : ts[i].install;
 			organics = (typeof ts[i].organic === 'undefined') ? 0 : ts[i].organi;
-			set.push([ts[i].date, clicks, installs, organics]);
+			dt = new XDate(ts[i].date);
+			set.push([dt.toString('d MMM'), clicks, installs, organics, (installs/clicks)]);
 		}
-console.dir(set);
 		var data = google.visualization.arrayToDataTable(set);
 		var chart = new google.visualization.ComboChart(document.getElementById('datasetChart'));
 		chart.draw(data, {
 			'width': $('.span12').width(), 
 			'height': 300, 
-			'vAxis': {'title': 'Values'},
+			'vAxes': [{'title': 'Clicks'}, {'title': 'Installs'}, {'title': 'Organics'}],
 			'hAxis': {'title': 'Date'},
-			'seriesType': 'bars',
+			'seriesType': 'line',
+			'series': {3: {'type': 'line'}}
 		});
 	}
 

@@ -17,7 +17,7 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.json-2.4.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.base64.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.csv-0.71.min.js"></script>
-	<script language="javascript" type="text/javascript" src="/javascripts/visualization/d3/d3.v3.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/visualization/highcharts/highcharts.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/xdate.js"></script>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jquery.dataTables.min.js"></script>
@@ -239,7 +239,7 @@
 							<li><a href="#">stacked</a></li>
 						</ul>
 					</div>
-					<div id="datasetChart" class="span12">
+					<div id="datasetChart" class="span12" style="height:300px;">
 
 					</div>
 
@@ -382,6 +382,17 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+
+	<div id="filterTemplate" class="hide" style="display:none;">
+		<button class="ColVis_Button TableTools_Button ui-button ui-state-default" style="width: 118px;">
+			<span>
+				<span class="ColVis_radio">
+					<input type="checkbox" checked="checked">
+				</span>
+				<span class="ColVis_title">CLICK</span>
+			</span>
+		</button>
 	</div>
 </body>
 </html>

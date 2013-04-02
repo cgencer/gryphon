@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/public/javascripts/client/dashboard.js</string>
+	<string>frontend/express/views/login.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -88,7 +88,9 @@
 					<key>filename</key>
 					<string>frontend/express/views/login.html</string>
 					<key>lastUsed</key>
-					<date>2013-03-26T12:49:16Z</date>
+					<date>2013-04-01T13:01:18Z</date>
+					<key>selected</key>
+					<true/>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -100,7 +102,7 @@
 					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-03-29T16:38:36Z</date>
+					<date>2013-04-01T12:17:02Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -127,9 +129,7 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/dashboard.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-01T07:44:34Z</date>
-							<key>selected</key>
-							<true/>
+							<date>2013-04-01T13:01:18Z</date>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -276,14 +276,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>14</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>473</integer>
+				<integer>734</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>443</integer>
+			<integer>683</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/client/index.js</key>
 		<dict>
@@ -434,14 +434,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>83</integer>
+				<integer>39</integer>
 				<key>line</key>
-				<integer>20</integer>
+				<integer>172</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>41</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>172</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>50</integer>
+				<key>line</key>
+				<integer>172</integer>
+			</dict>
 		</dict>
 		<key>frontend/express/views/index.html</key>
 		<dict>
@@ -541,6 +557,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{60, 40}, {1327, 812}}</string>
+	<string>{{82, 66}, {1327, 812}}</string>
 </dict>
 </plist>
