@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/views/login.html</string>
+	<string>frontend/express/public/javascripts/client/dashboard.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -61,7 +61,7 @@
 					<key>filename</key>
 					<string>frontend/express/public/stylesheets/bootstrap.css</string>
 					<key>lastUsed</key>
-					<date>2013-03-25T16:29:53Z</date>
+					<date>2013-04-03T08:25:13Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -73,7 +73,7 @@
 					<key>filename</key>
 					<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
 					<key>lastUsed</key>
-					<date>2013-03-28T14:51:49Z</date>
+					<date>2013-04-03T08:25:05Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -88,21 +88,19 @@
 					<key>filename</key>
 					<string>frontend/express/views/login.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-01T13:01:18Z</date>
-					<key>selected</key>
-					<true/>
+					<date>2013-04-01T13:52:11Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>frontend/express/views/index.html</string>
 					<key>lastUsed</key>
-					<date>2013-03-27T11:45:48Z</date>
+					<date>2013-04-02T11:59:19Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-01T12:17:02Z</date>
+					<date>2013-04-03T13:29:34Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -123,13 +121,15 @@
 							<key>filename</key>
 							<string>frontend/express/public/stylesheets/ui/demo_table_jui.css</string>
 							<key>lastUsed</key>
-							<date>2013-03-29T12:51:06Z</date>
+							<date>2013-04-03T10:58:12Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/dashboard.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-01T13:01:18Z</date>
+							<date>2013-04-03T13:29:34Z</date>
+							<key>selected</key>
+							<true/>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -174,7 +174,7 @@
 					<key>filename</key>
 					<string>frontend/express/gryphon.js</string>
 					<key>lastUsed</key>
-					<date>2013-03-29T15:17:51Z</date>
+					<date>2013-04-02T11:58:33Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -257,33 +257,19 @@
 				<integer>48</integer>
 			</dict>
 		</dict>
-		<key>frontend/express/gryphon.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>40</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>16</integer>
-		</dict>
 		<key>frontend/express/public/javascripts/client/dashboard.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>734</integer>
+				<integer>613</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>683</integer>
+			<integer>605</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/client/index.js</key>
 		<dict>
@@ -362,29 +348,29 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>3369</integer>
+				<integer>4488</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>3338</integer>
+			<integer>4454</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>18</integer>
 				<key>line</key>
-				<integer>3369</integer>
+				<integer>4488</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>3369</integer>
+				<integer>4488</integer>
 			</dict>
 		</dict>
 		<key>frontend/express/public/stylesheets/k/dashboard.css</key>
@@ -420,44 +406,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>14</integer>
+				<integer>11</integer>
 				<key>line</key>
-				<integer>354</integer>
+				<integer>379</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>328</integer>
+			<integer>340</integer>
 		</dict>
 		<key>frontend/express/views/dashboard.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>39</integer>
+				<integer>78</integer>
 				<key>line</key>
-				<integer>172</integer>
+				<integer>43</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>41</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>172</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>50</integer>
-				<key>line</key>
-				<integer>172</integer>
-			</dict>
+			<integer>219</integer>
 		</dict>
 		<key>frontend/express/views/index.html</key>
 		<dict>
@@ -478,9 +448,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>51</integer>
 				<key>line</key>
-				<integer>20</integer>
+				<integer>14</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -490,7 +460,6 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>frontend/express/gryphon.js</string>
 		<string>frontend/express/views/index.html</string>
 		<string>frontend/express/views/login.html</string>
 		<string>frontend/express/public/javascripts/client/login.js</string>
@@ -557,6 +526,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{82, 66}, {1327, 812}}</string>
+	<string>{{77, 35}, {1327, 812}}</string>
 </dict>
 </plist>

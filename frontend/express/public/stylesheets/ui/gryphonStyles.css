@@ -383,3 +383,19 @@ thead {
 	padding:5px;
 	padding-left:15px;
 }
+ul#filtersList {
+  width:450px;
+  margin-bottom:20px;
+  overflow:hidden;
+  border-top:1px solid #ccc;
+}
+ul#filtersList li {
+  line-height:1.5em;
+  border-bottom:1px solid #ccc;
+  float:left;
+  display:inline;
+}
+.double li  { width:50%; }
+.triple li  { width:33.333%; }
+.quad li    { width:25%; }
+.six li     { width:16.666%; }

@@ -9,23 +9,26 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var widget1;
 	var selGrpStckFlag = false;
 	var columns = [];
-	var timeSlots = [];
+	var daFilters = '';
 	tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
 		{'mData':'other'}
 	];
-	google.load('visualization', '1.0', {'packages':['corechart', 'table', 'geochart']});
+	var colorTable = [
+		['#17D0E2', '#261D6E', ''],
+		['#119692', '#74E1C3', ''],
+		['#C1407A', '#6F2660', ''],
+		['#F5C643', '#FF5F00', ''],
+		['#6B47C7', '#1EAB95', ''],
+		['#3A6A5D', '#C7C7C7', ''],
+		['#655968', '#EF9539', ''],
+		['#31083B', '#76A20C', ''],
+		['#C393CF', '#8932DA', ''],
+		['#988558', '#A14127', ''],
+	];
 
-	function sMenuReceived(package) {
-		console.dir(package);
-	}
-	function fMenuReceived(package) {
-		console.dir(package);
-	}
-	function getContent() {
-	    return  $('#containerForCalendar').html();
-	};
+	//google.load('visualization', '1.0', {'packages':['corechart', 'table', 'geochart']});
 
 	$(document).ready( function() {
 
@@ -123,6 +126,11 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 										.removeClass('ui-state-disabled')
 										.addClass('btn')					.addClass('btn-primary');
 			prepTableForCalc();
+		});
+
+
+		$(document).on('click', '.openFilters' , function () {
+			$('#filtersList').html( daFilters );
 		});
 
 		cuteNSexy.setPaths(amplify.store( 'paths'));
@@ -314,9 +322,11 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		// create filters menu
 		template = $('#filterTemplate').html();
 //		$('.ColVis_catcher.TableTools_catcher').html().insertAfter( $('.ColVis_catcher.TableTools_catcher') ).addClass('filterButton');
-		$('<div class="pull-right"><button class="btn btn-primary"><span>Filters</span></button></div>' +
-			'<div id="filtersList" class="dropdown-menu ui-buttonset ui-buttonset-multi" ' +
-			'style="display: block; position: absolute; opacity: 1; width: 118px;"></div>&nbsp;').insertAfter('.ColVis');
+		$('<div class="btn-group pull-right">' +
+			'<button class="btn btn-primary">Filters</button>' + 
+			'<button class="btn btn-primary dropdown-toggle openFilters" id="dLabel" data-target="#" data-toggle="dropdown"><span class="caret"></span></button>' +
+			'<ul id="filtersList" class="dropdown-menu triple" role="menu" aria-labelledby="dLabel"><li></li></ul>' + 
+			'</div>&nbsp;').insertAfter('.ColVis');
 
 
 		$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
@@ -416,7 +426,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		var dTbl = $('#'+tables[relation].name).dataTable({
 			'aaData': pack.rows,
-			'bProcessing': true,
+//			'bProcessing': true,
 			'bJQueryUI': true,
 			'sPaginationType': 'full_numbers',
 /*
@@ -444,28 +454,21 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 */
 			'aoColumns': tableVisibleCols[relation],
 			'sScrollX': $('.span12').width(),//'100%',
-			'bScrollCollapse': true,
+//			'bScrollCollapse': true,
 			'sDefaultContent': '',
 			'iCookieDuration': 60*60*24*365, // 1 year
 			'sCookiePrefix': 'gryphonTable_',
 			'oTableTools': {
 	            'sSwfPath': './swf/copy_csv_xls_pdf.swf'
 	        },
+/*
 			'aoColumnDefs': [
-				{ "asSorting": [ "desc" ], "aTargets": [ 0, 1 ] },
-				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
-				{ "sTitle": "Installs", "aTargets": [ 'INSTALL' ] },
-
-				{'bVisible': true,	'aTargets': ['CLICK', 'INSTALL', 'DeviceInfoId', 'City', 'CountryName', 
-												'Platform', 'Resolution', 'mksubpublisher', 'mkbannertype'] },
-
-				{'bVisible': false,	'aTargets': ['RowKey', 'CountryCode', 'Carrier', 'OsVersion', 'ModelName', 
-												'AppReadableKey', 'CampReadableKey', 'ChannelReadableKey', 
-												'MakiHumanKey', 'Ip', 'MacId', 'MacMD5', 'MacSHA1', 'MacSHA1', 
-												'SDKVersion', 'SessionId', 'Token', 'Udid', 'UserAgent', 'IMEI', 
-												'Manufacturer'] },
-
+//				{ "asSorting": [ "desc" ], "aTargets": [ 0, 1 ] },
+//				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
+//				{ "sTitle": "Installs", "aTargets": [ 'INSTALL' ] },
 			],
+*/
+/*
 		    'oColumnFilterWidgets': {
 				'aiExclude': [ 0, 6 ],
 				'sSeparator': ',  ',
@@ -475,12 +478,15 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 //					{ 'fnSort': function( a, b ) { return a-b; }, 'aiTargets': [ 3 ] }
 		        ]
 		    },
+*/
 			// sDOM parameters:
 			// C: Column visibility		l: Paging size		R: Column order+resize	f: filtering		r: processing
 			// T: TableTools			i: footer info		p: paging buttons 		S: Y-scrolling		W: Column filters
-			"sDom": (relation === 'root') ? '<"H"TClfRr>t<"F"ip>' : 't',
+
+			"sDom": (relation === 'root') ? '<"H"TlCfr>t<"F"ip>' : 't',
+
 			'fnDrawCallback': function( oSettings ) {
-				$('tr').each( function (i, v) {
+				$('.dataTables_scrollBody tr').each( function (i, v) {
 					prepTableForCalc();
 					calcARow($(v), null);
 					saveCellValues();
@@ -587,31 +593,27 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}else{
 				$(this).parents('td').removeClass('checkedTick');
 			}
-//			dTbl = $('#'+tables[relation].name).dataTable();
-//			console.log('here and there...');
 
-//			var anTds = dTbl.fnGetTds( $('.dataTables_scrollBody td')[0] );
-//			console.dir(anTds);
-		
+
+			// clicked checkboxes retrieve corresponding timeslots as an array
+			var wholeSet = [];
 			dTbl = $('#'+tables[relation].name).dataTable();
 			dTbl.$('td.checkedTick').parent('tr').each( function (i, v) {
-				var set = [];
 				if( $(v).children('.var_click').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					set.push({'type': 'click', 'timeslot': data.tsC});
+					wholeSet.push({'type': 'click', 'color': colorTable[i][0], 'timeslot': data.tsC});
 				}
 				if( $(v).children('.var_install').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					set.push({'type': 'install', 'timeslot': data.tsI});
+					wholeSet.push({'type': 'install', 'color': colorTable[i][1], 'timeslot': data.tsI});
 				}
 				if( $(v).children('.var_organic').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					set.push({'type': 'organic', 'timeslot': data.tsO});
+					wholeSet.push({'type': 'organic', 'color': colorTable[i][2], 'timeslot': data.tsO});
 				}
-				console.dir(set);
-
-
 			});
+			console.dir(wholeSet);
+//			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
 
 		return dTbl;
@@ -666,18 +668,24 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		columns = response.columns;
 		var set = '';
 		for(var i in columns) {
-			set += 	'<button class="ui-button ui-state-default"><span>' +
-					'<span class="ColVis_radio"><input type="checkbox" /></span>' +
-					'<span class ="ColVis_title">'+columns[i].cvname+'</span>' +
-					'</span></button>';
+			set += 	'<li><a tabindex="-1" href="#">' + columns[i].cvname + '</a></li>';
 		}
-		$('#filtersList').html( set );
+		daFilters = set;
 	}
 	function responseErrorCallBack (response){
 		console.log(" JSONP responseErrorCallBack")
 	}
 	function fetchCallBackGroupBy2 (response){
     }
+	function sMenuReceived(package) {
+		console.dir(package);
+	}
+	function fMenuReceived(package) {
+		console.dir(package);
+	}
+	function getContent() {
+	    return  $('#containerForCalendar').html();
+	};
 	function drawGeoMap(arr){
         var chart = new google.visualization.GeoChart(document.getElementById("content-widget"));
         var data =[ ['Country', 'Click'] ];
@@ -858,13 +866,15 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			xAxis: {'categories': set['n']},
 			yAxis: [{ 'title': { 'text': 'Clicks' }},
 					{ 'title': { 'text': 'Installs'}},
-					{ 'title': { 'text': 'Organics'}, 'opposite': true},
-					{ 'title': { 'text': 'CR'}, 'opposite': true }],
+//					{ 'title': { 'text': 'Organics'}, 'opposite': true},
+//					{ 'title': { 'text': 'CR'}, 'opposite': true }
+			],
 
 			series: [{'name': 'Clicks', 	'data': set['c']},
 					 {'name': 'Installs', 	'data': set['i']},
-					 {'name': 'Organics', 	'data': set['o']},
-			    	 {'name': 'CR', 		'data': set['ci']}]
+//					 {'name': 'Organics', 	'data': set['o']},
+//			    	 {'name': 'CR', 		'data': set['ci']}
+			]
 	    });
 	}
 
