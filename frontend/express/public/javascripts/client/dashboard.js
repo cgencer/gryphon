@@ -9,6 +9,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var widget1;
 	var selGrpStckFlag = false;
 	var columns = [];
+	var timeSlots = [];
 	tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
@@ -165,6 +166,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 								o['CLICK'] = Number(pr[col].c);
 								o['tsC'] = pr[col];
 								cT += Number(pr[col].c);
+//								{'name': randomId(),'timeslot': pr[col]};
 							}
 						}else{
 							o['tsC'] = {};
@@ -186,12 +188,28 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 							o['tsI'] = {};
 						}
 						break;
+					case 'timeslotORGANIC':
+						if(Object.keys(pr[col]).length > 0) {
+							if(typeof pr[col].c == 'undefined'){
+								o['ORGANIC'] = 0;
+								o['tsO'] = {};
+							}else{
+								o['ORGANIC'] = Number(pr[col].c);
+								o['tsO'] = pr[col];
+								cI += Number(pr[col].c);
+							}
+						}else{
+							o['ORGANIC'] = 0;
+							o['tsO'] = {};
+						}
+						break;
 					default:
 						o[col] = pr[col];
 						break;
 				}
 			}
 			no['rows'].push(o);
+			
 		}
 		$('#bigNumbersTotalClick').text( size_format(cT) );
 		$('#bigNumbersTotalInstall').text( size_format(cI) );
@@ -209,7 +227,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 					$('.dataTables_scrollBody table tbody tr').each( function (c, vv) {
 						var pt = $(vv).children('td').eq(r);
 						$(pt).addClass('var_'+ar[i]);
-						if(ar[i] !== 'click' && ar[i] !== 'install') {
+						if(ar[i] !== 'click' && ar[i] !== 'install' && ar[i] !== 'organic') {
 							$(pt).addClass('editMe');
 						}
 					});
@@ -296,8 +314,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		// create filters menu
 		template = $('#filterTemplate').html();
 //		$('.ColVis_catcher.TableTools_catcher').html().insertAfter( $('.ColVis_catcher.TableTools_catcher') ).addClass('filterButton');
-		$('<div class="btn-group pull-right"><a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Filters</a><ul id="filtersList" class="dropdown-menu"></ul</div>&nbsp;').insertAfter('.ColVis');
-
+		$('<div class="pull-right"><button class="btn btn-primary"><span>Filters</span></button></div>' +
+			'<div id="filtersList" class="dropdown-menu ui-buttonset ui-buttonset-multi" ' +
+			'style="display: block; position: absolute; opacity: 1; width: 118px;"></div>&nbsp;').insertAfter('.ColVis');
 
 
 		$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
@@ -308,7 +327,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$('a.DTTT_button')			.removeClass('ui-button')			.removeClass('ui-state-default')
 									.removeClass('DTTT_button')
-									.addClass('btn')					.addClass('btn-primary');
 
 		$('button.ColVis_Button')	.removeClass('ui-button')			.removeClass('ui-state-default')
 									.removeClass('ColVis_Button')
@@ -317,9 +335,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	};
 	function normalizeTimeslot (tsC, tsI, tsO, begin, end) {
 
-		// 0. begin ve end yillari farkli ise [begin > endOfYear + (ay atlamalari) + beginOfYear > end]
-		// 1. begin ve end farkli aylardaysa [ begin > endOfMonth + (ay atlamalari) + beginofThisMonth > end ] :byDay :ay araligi uzun olabilir
-		// 2. begin ve end ayni ayda ise [beign > end] :byDay
 		// 3. end = null ise [begin] :byHour :24hrs
 
 		if(end != null) {
@@ -433,6 +448,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			'sDefaultContent': '',
 			'iCookieDuration': 60*60*24*365, // 1 year
 			'sCookiePrefix': 'gryphonTable_',
+			'oTableTools': {
+	            'sSwfPath': './swf/copy_csv_xls_pdf.swf'
+	        },
 			'aoColumnDefs': [
 				{ "asSorting": [ "desc" ], "aTargets": [ 0, 1 ] },
 				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
@@ -447,7 +465,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 												'SDKVersion', 'SessionId', 'Token', 'Udid', 'UserAgent', 'IMEI', 
 												'Manufacturer'] },
 
-//				{'bVisible': false,	'aTargets': ['_all'] },
 			],
 		    'oColumnFilterWidgets': {
 				'aiExclude': [ 0, 6 ],
@@ -528,13 +545,74 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				}
 			});
 		}
+		*/
 
 		$('#'+tables[relation].name+' tbody tr').each( function(i, v) {
-			$('<td class="driller"><div class="drillDown"></div></td>').insertBefore( $(v).children('td:first-child') );
+			if( $(v).children('.var_install, .var_click, .var_organic').length > 0 ){
+				$('<td class="plotToggler"><input type="checkbox" class="bigCheckBox" /></td>').insertBefore( $(v).children('td:first-child') );
+			}
 		});
 		$('<td style="width:32px;"></td>').insertBefore( $('#'+tables[relation].name+' thead tr td:first-child') );
 		$('<td style="width:32px;"></td>').insertBefore( $('.dataTables_scrollHead thead tr td:first-child') );
-*/
+		$('.bigCheckBox').uniform();
+		$(document).on('change', '.bigCheckBox', function () {
+			if( $(this).parent('span').hasClass('checked') ) {
+				$(this).parents('td.plotToggler')
+					.siblings('.var_install, .var_click, .var_organic')
+					.each( function (i, v) {
+						$(v).html( $(v).text() + '<input type="checkbox" class="bigCheckBoxChildren" checked="checked" />' );
+						$(v).addClass('checkedTick');
+					});
+				$('input.bigCheckBoxChildren').uniform();
+				$(this).parents('td.plotToggler')
+					.siblings('.var_install, .var_click, .var_organic')
+					.each( function (i, v) {
+						$(v).children('div.checker').addClass('pull-right');
+					});
+			}else{
+				$(this).parents('td.plotToggler')
+					.siblings('.var_install, .var_click, .var_organic')
+					.each( function (i, v) {
+						$(v).children('div.checker').remove();
+					});
+			}
+		});
+
+		
+		$(document).on('change', '.dataTables_scrollBody input[type="checkbox"]', function () {
+			if( $(this).parents('span').hasClass('checked') ) {
+				if(!$(this).parents('td').hasClass('plotToggler')) {
+					$(this).parents('td').addClass('checkedTick');
+				}
+			}else{
+				$(this).parents('td').removeClass('checkedTick');
+			}
+//			dTbl = $('#'+tables[relation].name).dataTable();
+//			console.log('here and there...');
+
+//			var anTds = dTbl.fnGetTds( $('.dataTables_scrollBody td')[0] );
+//			console.dir(anTds);
+		
+			dTbl = $('#'+tables[relation].name).dataTable();
+			dTbl.$('td.checkedTick').parent('tr').each( function (i, v) {
+				var set = [];
+				if( $(v).children('.var_click').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( v );
+					set.push({'type': 'click', 'timeslot': data.tsC});
+				}
+				if( $(v).children('.var_install').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( v );
+					set.push({'type': 'install', 'timeslot': data.tsI});
+				}
+				if( $(v).children('.var_organic').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( v );
+					set.push({'type': 'organic', 'timeslot': data.tsO});
+				}
+				console.dir(set);
+
+
+			});
+		});
 
 		return dTbl;
 	}
@@ -586,10 +664,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
     }
 	function responseColumnsCallBack (response){
 		columns = response.columns;
+		var set = '';
 		for(var i in columns) {
-			console.log(columns[i].cvname);
-			$('#filtersList').append('<li>'+columns[i].cvname+'</li>');
+			set += 	'<button class="ui-button ui-state-default"><span>' +
+					'<span class="ColVis_radio"><input type="checkbox" /></span>' +
+					'<span class ="ColVis_title">'+columns[i].cvname+'</span>' +
+					'</span></button>';
 		}
+		$('#filtersList').html( set );
 	}
 	function responseErrorCallBack (response){
 		console.log(" JSONP responseErrorCallBack")

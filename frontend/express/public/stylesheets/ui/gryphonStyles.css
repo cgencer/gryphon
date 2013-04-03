@@ -376,6 +376,9 @@ thead {
 .dataTables_paginate .btn-primary {
 	color:#B3B3B3;
 }
+.bigCheckBox {
+	width:48px;
+}
 .info_row {
 	padding:5px;
 	padding-left:15px;
