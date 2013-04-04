@@ -10,6 +10,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var selGrpStckFlag = false;
 	var columns = [];
 	var daFilters = '';
+	var charted = {};
+
 	tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
@@ -297,8 +299,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		// had to iterate each cell to bind event, whereafter removal of the event can be made on each cell
 		$(document).on('click', 'td.editMe', function () {
 			if(!_ts.editingFlag) {
-				if 	( (Number($(this).siblings('.var_click').text()) > 0 && $(this).hasClass('var_cpc') ) || 
-					(Number($(this).siblings('.var_install').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
+				if 	( (Number($(this).siblings('.column_clicks').text()) > 0 && $(this).hasClass('var_cpc') ) || 
+					(Number($(this).siblings('.column_installs').text()) > 0 && $(this).hasClass('var_cpd') ) ) {
 
 					cellRealValue = $(this).attr('alt');
 
@@ -413,6 +415,38 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 	};
 
+	function normalizeTS (ts, begin, end) {
+
+		// 3. end = null ise [begin] :byHour :24hrs
+
+		if(end != null) {
+			var days = [];
+			var xBegin = begin;
+			var xEnd = end;
+
+			for(var i=0; i < xBegin.diffDays(xEnd); i++) {
+				var onDay = xBegin.clone();
+				onDay.addDays(i);
+				y = onDay.getFullYear();
+				m = onDay.getMonth() + 1;
+				g = onDay.getDate();
+
+				days[i] = 0;
+
+				if(typeof ts[y] !== 'undefined') {
+					if(typeof ts[y][m] !== 'undefined') {
+						if(typeof ts[y][m][g] !== 'undefined') {
+							if(typeof ts[y][m][g].c !== 'undefined') {
+								days[i] = ts[y][m][g].c;
+							}
+						}
+					}
+				}
+			}
+		}
+		return days;
+	};
+	
 	function prepTableView (name, pack, relation, into, children) {
 		var hs = '', ts = '';
 		tables[relation] = {};
@@ -519,9 +553,10 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		dTbl = $('#'+tables[relation].name).dataTable();
 		dTbl.$('tr').click( function () {
-			var data = dTbl.fnGetData( this );
-			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
+//			var data = dTbl.fnGetData( this );
+//			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
+		plotChartHC(normalizeTimeslot(null, null, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 
 		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
 			var clicked = $(this);
@@ -594,27 +629,29 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		$(document).on('change', '.bigCheckBox', function () {
 			if( $(this).parent('span').hasClass('checked') ) {
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
+					.siblings('.column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
+						var id = randomId();
+						$(v).addClass(id);
+						$(v).attr('alt', id);
 						$(v).html( $(v).text() + '<input type="checkbox" class="bigCheckBoxChildren" checked="checked" />' );
 						$(v).addClass('checkedTick');
 					});
 				$('input.bigCheckBoxChildren').uniform();
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
+					.siblings('.column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
 						$(v).children('div.checker').addClass('pull-right');
 					});
 			}else{
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
+					.siblings('.column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
 						$(v).children('div.checker').remove();
 					});
 			}
 		});
 
-		
 		$(document).on('change', '.dataTables_scrollBody input[type="checkbox"]', function () {
 			if( $(this).parents('span').hasClass('checked') ) {
 				if(!$(this).parents('td').hasClass('plotToggler')) {
@@ -629,20 +666,44 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			var wholeSet = [];
 			dTbl = $('#'+tables[relation].name).dataTable();
 			dTbl.$('td.checkedTick').parent('tr').each( function (i, v) {
-				if( $(v).children('.var_click').hasClass('checkedTick') ) {
+				if( $(v).children('.column_clicks').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					wholeSet.push({'type': 'click', 'color': colorTable[i][0], 'timeslot': data.tsC});
+					wholeSet.push({'type': 'click', 'color': colorTable[i][0], 'timeslot': data.tsC, 
+									'id': $(v).children('.column_clicks').attr('alt')});
 				}
-				if( $(v).children('.var_install').hasClass('checkedTick') ) {
+				if( $(v).children('.column_installs').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					wholeSet.push({'type': 'install', 'color': colorTable[i][1], 'timeslot': data.tsI});
+					wholeSet.push({'type': 'install', 'color': colorTable[i][1], 'timeslot': data.tsI, 
+									'id': $(v).children('.column_clicks').attr('alt')});
 				}
-				if( $(v).children('.var_organic').hasClass('checkedTick') ) {
+				if( $(v).children('.column_organics').hasClass('checkedTick') ) {
 					var data = dTbl.fnGetData( v );
-					wholeSet.push({'type': 'organic', 'color': colorTable[i][2], 'timeslot': data.tsO});
+					wholeSet.push({'type': 'organic', 'color': colorTable[i][2], 'timeslot': data.tsO, 
+									'id': $(v).children('.column_clicks').attr('alt')});
 				}
 			});
 			console.dir(wholeSet);
+			var sers = charted.series;
+			for(var s=0; s<charted.series.length; s++) {
+				charted.series[s].remove();
+			}
+			for(var i in wholeSet) {
+
+				var ts = normalizeTS (wholeSet[i].timeslot, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5))
+				console.log('----------------------------------');
+				console.dir(ts);
+
+				charted.addSeries({
+					'id': 			wholeSet[i].id,
+					'animation': 	false,
+//					'name': 		wholeSet[i].type,
+					'data': 		ts,
+//					'yAxis': 		wholeSet[i].id,
+					'color': 		wholeSet[i].color,
+				}, true, false);
+			}
+			charted.redraw();
+			
 //			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
 
@@ -793,7 +854,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			$(destCPD).html( '<small>[ n/a ]</small>' );
 		}
 	};
-
 	function calcCells (input) {
 		var _ts = this;
 		thereIsAZero = false;
@@ -865,7 +925,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	function plotChartHC (ts) {
 		var set = {'c':[], 'i':[], 'o':[], 'n':[], 'ci':[]};
 		for(var i in ts) {
-			clicks = (typeof ts[i].click === 'undefined') ? 0 : ts[i].click;
+			clicks =   (typeof ts[i].click === 'undefined') ?   0 : ts[i].click;
 			installs = (typeof ts[i].install === 'undefined') ? 0 : ts[i].install;
 			organics = (typeof ts[i].organic === 'undefined') ? 0 : ts[i].organi;
 			dt = new XDate(ts[i].date);
@@ -876,10 +936,11 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			set['o'].push(organics);
 			set['n'].push(dt.toString('d MMM'));
 		}
-		var chart1 = new Highcharts.Chart({
+		charted = new Highcharts.Chart({
 			chart: {
 				renderTo: 'datasetChart',
-				type: 'area'
+				type: 'area',
+				backgroundColor: '#E9E3D5'
 			},
 			title: {
 				text: 'Clicks / Installs / Organics'
@@ -892,7 +953,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				y: 100,
 				borderWidth: 0
 			},
-			crosshairs: [true,true],
+			tooltip: {
+				crosshairs: [true,true]				
+			},
 			xAxis: {'categories': set['n']},
 			yAxis: [{ 'title': { 'text': 'Clicks' }},
 					{ 'title': { 'text': 'Installs'}},
@@ -900,8 +963,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 //					{ 'title': { 'text': 'CR'}, 'opposite': true }
 			],
 
-			series: [{'name': 'Clicks', 	'data': set['c']},
-					 {'name': 'Installs', 	'data': set['i']},
+			series: [{'name': 'Clicks', 	'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+					 {'name': 'Installs', 	'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
 //					 {'name': 'Organics', 	'data': set['o']},
 //			    	 {'name': 'CR', 		'data': set['ci']}
 			]
