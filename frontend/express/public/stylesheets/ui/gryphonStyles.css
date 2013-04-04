@@ -350,6 +350,11 @@ thead {
 .bigs.avgrank .bigTitle {
 	background-image: url("/images/k/header_icons/avgrank.png");
 }
+.checked {
+	background-image: url("/images/ui/checkmark.jpg");
+	background-repeat:no-repeat;
+}
+
 .darkenedColumns {
 	background-color:#575757;
 	color:#B3B3B3;

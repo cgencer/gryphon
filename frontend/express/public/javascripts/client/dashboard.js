@@ -132,6 +132,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		$(document).on('click', '.openFilters' , function () {
 			$('#filtersList').html( daFilters );
 		});
+		$(document).on('click', '.checkFlt' , function (e) {
+			e.stopPropagation();
+			if(!$(this).hasClass('checked')){
+				$(this).addClass('checked');
+			}else{
+				$(this).removeClass('checked');
+			}
+		});
 
 		cuteNSexy.setPaths(amplify.store( 'paths'));
 		cuteNSexy.setDictionary(amplify.store( 'dictionary'));
@@ -157,6 +165,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		pack.columns.push({'cvname':'cpd', 	'cname':'cpd', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
 		pack.columns.push({'cvname':'cr', 	'cname':'cr', 	'editable':true, 'process':'', 'visible':true, 'order':max++});
 		pack.columns.push({'cvname':'cost', 'cname':'cost', 'editable':true, 'process':'', 'visible':true, 'order':max++});
+		pack.columns.unshift({'cvname':'YOYO', 'cname':'yoyo', 'editable':false,'process':'', 'visible':true, 'order':max++});
 		tables['root'].dataSet = pack;
 
 		var no = {'columns': pack.columns, 'rows': []};
@@ -216,6 +225,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 						break;
 				}
 			}
+			o['YOYO'] = 'XOXO';
 			no['rows'].push(o);
 			
 		}
@@ -461,13 +471,25 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			'oTableTools': {
 	            'sSwfPath': './swf/copy_csv_xls_pdf.swf'
 	        },
-/*
+			'oColReorder': {
+				'aiOrder': [ 8, 0, 1, 4, 5, 6, 7, 2, 3 ]
+			},
 			'aoColumnDefs': [
-//				{ "asSorting": [ "desc" ], "aTargets": [ 0, 1 ] },
-//				{ "sTitle": "Clicks", "aTargets": [ 'CLICK' ] },
-//				{ "sTitle": "Installs", "aTargets": [ 'INSTALL' ] },
+				{ 'sWidth': '30px', 			'aTargets': [ 8 ] },
+				{ 'sWidth': '75px', 			'aTargets': [ 0, 1 ] },
+				{ 'sWidth': '125px', 			'aTargets': [ 2 ] },
+				{ 'asSorting': [ 'desc' ], 		'aTargets': [ 0, 1 ] },
+				{ 'aDataSort': [ 0, 1 ], 		'aTargets': [ 0, 1 ] },
+				{ 'sTitle': "Clicks", 			'aTargets': [ 0 ] },
+				{ 'sTitle': "Installs", 		'aTargets': [ 1 ] },
+				{ 'sClass': 'column_clicks', 	'aTargets': [ 0 ] },
+				{ 'sClass': 'column_installs', 	'aTargets': [ 1 ] },
+				{ 'sClass': 'column_cpc',	 	'aTargets': [ 4 ] },
+				{ 'sClass': 'column_cpd', 		'aTargets': [ 5 ] },
+				{ 'sClass': 'column_cr',	 	'aTargets': [ 6 ] },
+				{ 'sClass': 'column_cost',	 	'aTargets': [ 7 ] },
 			],
-*/
+
 /*
 		    'oColumnFilterWidgets': {
 				'aiExclude': [ 0, 6 ],
@@ -483,7 +505,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			// C: Column visibility		l: Paging size		R: Column order+resize	f: filtering		r: processing
 			// T: TableTools			i: footer info		p: paging buttons 		S: Y-scrolling		W: Column filters
 
-			"sDom": (relation === 'root') ? '<"H"TlCfr>t<"F"ip>' : 't',
+			"sDom": (relation === 'root') ? 'R<"H"TlCfr>t<"F"ip>' : 't',
 
 			'fnDrawCallback': function( oSettings ) {
 				$('.dataTables_scrollBody tr').each( function (i, v) {
@@ -553,31 +575,39 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 		*/
 
-		$('#'+tables[relation].name+' tbody tr').each( function(i, v) {
-			if( $(v).children('.var_install, .var_click, .var_organic').length > 0 ){
-				$('<td class="plotToggler"><input type="checkbox" class="bigCheckBox" /></td>').insertBefore( $(v).children('td:first-child') );
-			}
+//		$('td:contains("YOYO")').html();
+
+
+		// replace any placeholders now and forever
+		$('td:contains("XOXO")').each( function () {
+			$(this).addClass('plotToggler').html('<input type="checkbox" class="bigCheckBox" />');
 		});
-		$('<td style="width:32px;"></td>').insertBefore( $('#'+tables[relation].name+' thead tr td:first-child') );
-		$('<td style="width:32px;"></td>').insertBefore( $('.dataTables_scrollHead thead tr td:first-child') );
 		$('.bigCheckBox').uniform();
+		$(document).on('click', 'td', function () {
+			$('td:contains("XOXO")').each( function () {
+				$(this).addClass('plotToggler').html('<input type="checkbox" class="bigCheckBox" />');
+			});
+			$('.bigCheckBox').uniform();
+		});
+		$('td:contains("YOYO")').text('');
+
 		$(document).on('change', '.bigCheckBox', function () {
 			if( $(this).parent('span').hasClass('checked') ) {
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic')
+					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
 						$(v).html( $(v).text() + '<input type="checkbox" class="bigCheckBoxChildren" checked="checked" />' );
 						$(v).addClass('checkedTick');
 					});
 				$('input.bigCheckBoxChildren').uniform();
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic')
+					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
 						$(v).children('div.checker').addClass('pull-right');
 					});
 			}else{
 				$(this).parents('td.plotToggler')
-					.siblings('.var_install, .var_click, .var_organic')
+					.siblings('.var_install, .var_click, .var_organic, .column_clicks, .column_installs, .column_organics')
 					.each( function (i, v) {
 						$(v).children('div.checker').remove();
 					});
@@ -668,7 +698,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		columns = response.columns;
 		var set = '';
 		for(var i in columns) {
-			set += 	'<li><a tabindex="-1" href="#">' + columns[i].cvname + '</a></li>';
+			set += 	'<li class="checkFlt"><a tabindex="-1" href="#">' + columns[i].cvname + '</a></li>';
 		}
 		daFilters = set;
 	}
