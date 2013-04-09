@@ -1,111 +1,102 @@
 var GryphonDashboard = (function(GryphonDashboard, $, undefined){
-
+/*
+	TODO Graph1 ve Graph2 pulldowns: Feed plotting input with calculated datas as CPC / CPD / Cost				2 hrs
+				subtask: on-the-fly calculations written onto the datatable										4 hrs
+				subtask: build plottingarray from the visible datatable											2 hrs
+*/
+/*
+	TODO save costs: 																							2 hrs
+				subtask: record edited fields into an array and send this as JSON to the server trough ajax		2 hrs
+*/
+/*
+	TODO Calendar selection																						2 hrs
+				subtask: write selected dates into session data and read from it								5 hrs
+*/
+/*
+	TODO Management sections																					
+				subtask: study handsome-calls on management screen workflow										4 hrs
+				subtask: list table																				2 hrs
+				subtask: edit row in modal																		3 hrs
+				subtask: create/edit app screen																	4 hrs
+				subtask: add new line to pulldowns																3 hrs
+				subtask: create user/org																		3 hrs
+				subtask: report permissions																		4 hrs
+*/
+/*
+	TODO use Fractions from the pulldown to build widget calls													6 hrs
+*/
+/*
+	TODO consistent table button styles																			2 hrs
+*/
+/*
+	TODO Breadcrumbs																							2 hrs
+*/
+/*
+	TODO darkbox on loading data & management modals & error screens											1 hrs
+*/
+/*
+	TODO editable columns																						6 hrs
+*/
+/*
+	TODO User session & menus according																			
+				subtask: saving of last column ordering of the datatable
+*/
+/*
+	TODO SDK Wizard																								8 hrs
+*/
+/*
+	TODO login screen content
+*/
+/*
+	TODO localization																							12 hrs
+*/
 	var tables = {'root':{'name':''}};
 	var initialCost = 10000;
 	var editingFlag = false;
 	var _ts = this;
 	var clickTotal = 0;
 	var installTotal = 0;
-	var widget1;
+	var gryphonModel;
 	var selGrpStckFlag = false;
 	var columns = [];
 	var daFilters = '';
 	var charted = {};
-
-	tableVisibleCols = [
+	var selectedFractions = [];
+	var dateRange = {'begin': new XDate(2013, (3-1), 20), 'end': new XDate(2013, (4-1), 5)};
+	var gryphonModelUrl = 'http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport';
+	var widgetTemplate = {
+		'type': 			'groupby',
+		'byValues': 		null,
+		'columns': 			[ ],
+	};
+	var tableVisibleCols = [
 		{'mData':'test'},
 		{'mData':'column'},
 		{'mData':'other'}
 	];
 	var colorTable = [
-		['#17D0E2', '#261D6E', ''],
-		['#119692', '#74E1C3', ''],
-		['#C1407A', '#6F2660', ''],
-		['#F5C643', '#FF5F00', ''],
-		['#6B47C7', '#1EAB95', ''],
-		['#3A6A5D', '#C7C7C7', ''],
-		['#655968', '#EF9539', ''],
-		['#31083B', '#76A20C', ''],
-		['#C393CF', '#8932DA', ''],
-		['#988558', '#A14127', ''],
+		['#17D0E2', '#261D6E', '#b4afe1'],
+		['#119692', '#74E1C3', '#78ff00'],
+		['#C1407A', '#6F2660', '#1343b1'],
+		['#F5C643', '#FF5F00', '#de1919'],
+		['#6B47C7', '#1EAB95', '#c69613'],
+		['#3A6A5D', '#C7C7C7', '#f626af'],
+		['#655968', '#EF9539', '#d0a67a'],
+		['#31083B', '#76A20C', '#147fe3'],
+		['#C393CF', '#8932DA', '#0bd989'],
+		['#988558', '#A14127', '#f48a6e'],
 	];
-
 	//google.load('visualization', '1.0', {'packages':['corechart', 'table', 'geochart']});
 
 	$(document).ready( function() {
 
-
-//		console.dir(normalizeTimeslot(null, {y:2013, m:3, d:20}, {y:2013, m:4, d:2}));
-
 		$.datepicker.setDefaults( $.datepicker.regional['en'] );
-		$("#containerForCalendar").datepicker({'numberOfMonths':2});
+		$("#containerForCalendar").multiDatesPicker({'numberOfMonths':[1,2]});
 		$('a[rel=tooltip]').popover({'html':true, 'trigger':'click', 'placement':'bottom', 'content': getContent()});
-
-		$("#create-widget").click( function(){
-		 var options={
-		                    'url':"http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport",
-		                   /// "url":"http://192.168.10.13/Events/Report/MAKINA/CIRawReport",
-		                    'refreshTime': 1000,
-		                    'fetchOptions': [
-/*
-		                       {
-		                            'id': '1', 'type': 'sum', 'name': 'fetch 1', 'byColumns': null,
-									'columns': ['timeslotCLICK'], 'fetchCallBack': function (result) {
-										$('#bigNumbersTotalClick').text( size_format(result.timeslot.c) );
-									}
-		                        }, {
-		                            'id': '2', 'type': 'sum', 'name': 'fetch 1', 'byColumns': null,
-		                            'columns': ['timeslotCLICK'], 'fetchCallBack': function (result) {
-										$('#bigNumbersTotalInstall').text( size_format(result.timeslot.c) );
-									}
-								}
-*/
-		                        {
-		                            'id':"3",
-		                            'type':"groupby", // sum, group by
-		                            'name':"fetch 2",
-		                            'byColumns':['CountryCode','City'], // group bys
-		                            'byValues': null,
-		                            'columns':['timeslotCLICK','timeslotINSTALL'],// city,app,company
-		                            'fetchCallBack': fetchCallBackGroupBy1
-		                        },
-/*		                        {
-		                            "id":"3",
-		                            "type":"groupby", // sum, group by
-		                            "name":"fetch 2",
-		                            "byColumns":['Platform'], // group bys
-		                            "byValues" :['Android'],
-		                            "columns":['timeslotCLICK','timeslotINSTALL'],// city,app,company
-		                            "fetchCallBack": fetchCallBackGroupBy2
-		                        },
-		                        {
-		                            "id":"4",
-		                            "type":"keyvalues", // sum, group by
-		                            "name":"fetch 3",
-		                            "byColumns":['CountryCode','CountryName'], // group bys
-		                            "byValues":null,
-		                            "columns":null,// city,app,company
-		                            "fetchCallBack": fetchCallBackGroupBy3
-		                        }
-*/
-		                    ],
-		                    'responseSuccessCallBack': 	responseSuccessCallBack,
-		                    'responseErrorCallBack': 	responseErrorCallBack,
-		                    'responseColumnsCallBack': 	responseColumnsCallBack
-		                };
-			widget1 =  new HandsomeWidget(options, 'widget-console');
-			widget1.GetRowColumns();
-            //HandsomeWidget
-            //HandsomeWidget.prototype.AddEvent(event)
-            //HandsomeWidget.prototype.RemoveEvent(id) --- RemoveEvent(1);
-            //HandsomeWidget.prototype.GetRowColumns ---  return columns
-			console.log("widget1");
-			console.log(widget1);
-		});
 
 		$('.fg-toolbar.ui-widget-header').prepend( $('#filterBySecondaryDimension').html() );
 
-		var rowsEx = {
+		drawTable ({
 			'columns': [
 				{'visible': true, order:2, 'cvname':'test'},
 				{'visible': true, order:0, 'cvname':'column'},
@@ -117,11 +108,20 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				{'test': 5,'column': 'sdfs','other': 'xxx'},
 				{'test': 5,'column': 'sdfs','other': 'xxx'}
 			]
-		};
+		});
 
-		drawTable (rowsEx);
+		gryphonModel = new HandsomeWidget({
+			'url': 						gryphonModelUrl,
+			'refreshTime': 				1000,
+			'fetchOptions': 			[ ],
+			'responseSuccessCallBack': 	responseSuccessCallBack,
+			'responseErrorCallBack': 	responseErrorCallBack,
+			'responseColumnsCallBack': 	responseColumnsCallBack
+		}, 'widget-console');
+		gryphonModel.GetRowColumns();
+
 		// ensure that all paging buttons remain in-design...
-		$(document).on('click', '.btn, .fg-button' , function () {
+		$(document).on('click', '#contentDataset .btn, #contentDataset .ui-button, #contentDataset .fg-button' , function () {
 			$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
 										.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
 										.removeClass('ui-corner-bl')		.removeClass('ui-state-default')
@@ -130,10 +130,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			prepTableForCalc();
 		});
 
-
-		$(document).on('click', '.openFilters' , function () {
-			$('#filtersList').html( daFilters );
-		});
 		$(document).on('click', '.checkFlt' , function (e) {
 			e.stopPropagation();
 			if(!$(this).hasClass('checked')){
@@ -143,10 +139,30 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			}
 		});
 
-		cuteNSexy.setPaths(amplify.store( 'paths'));
+		$('.sideBar').height( $(window).height() );
+
+		$(document).on('click', '#create-widget' , function (e) {
+
+			selectedFractions = ['App', 'AppReadableKey', 'CountryCode', 'City'];
+
+			var t = $.extend({}, widgetTemplate, {
+				'id': 				$.base64.encode( selectedFractions.join('') ).substr(0, -2),		// cut off base64-ending
+				'name': 			selectedFractions.join('').toLowerCase(),
+				'byColumns': 		selectedFractions,
+				'fetchCallBack': 	function (response) {
+					console.dir(response);
+					drawTable( prepData( response ) );
+					gryphonModel.StopListener();
+				}
+			});
+			console.dir(t);
+			gryphonModel.AddEvent(t);
+
+		});
+
+		cuteNSexy.setPaths(amplify.store('paths'));
 		cuteNSexy.setDictionary(amplify.store( 'dictionary'));
 		
-		$('.sideBar').height( $(window).height() );
 		cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 'payload': {'userId':123} } ]);
 
 
@@ -259,15 +275,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	function drawTable (pack) {
 
 		var newcols = [];
-		for(var ci=0; ci < Object.keys(pack.columns).length; ci++) {
-			for(var col in pack.columns) {
-				if(pack.columns[col].order === ci) {
-					newcols.push({'cvname':pack.columns[col].cvname});
-				}
-			}
-		}
-		pack.columns = newcols;
+		var lastOrder = 0;
 
+		pack.columns = _.sortBy( pack.columns, 'order' );
 		var dTbl = prepTableView( randomId(), pack, 'root', '#contentDataset', 'child' );
 
 		prepTableForCalc ();
@@ -335,11 +345,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		template = $('#filterTemplate').html();
 //		$('.ColVis_catcher.TableTools_catcher').html().insertAfter( $('.ColVis_catcher.TableTools_catcher') ).addClass('filterButton');
 		$('<div class="btn-group pull-right">' +
-			'<button class="btn btn-primary">Filters</button>' + 
+			'<button class="btn btn-primary">Fractions</button>' + 
 			'<button class="btn btn-primary dropdown-toggle openFilters" id="dLabel" data-target="#" data-toggle="dropdown"><span class="caret"></span></button>' +
 			'<ul id="filtersList" class="dropdown-menu triple" role="menu" aria-labelledby="dLabel"><li></li></ul>' + 
 			'</div>&nbsp;').insertAfter('.ColVis');
 
+		$(document).on('click', '.openFilters' , function () {
+			$('#filtersList').html( daFilters );
+		});
 
 		$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
 									.removeClass('ui-corner-bl')		.removeClass('ui-corner-tl')
@@ -355,14 +368,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 									.addClass('btn')					.addClass('btn-primary');
 
 	};
-	function normalizeTimeslot (tsC, tsI, tsO, begin, end) {
+	function normalizeTimeslot (tsC, tsI, tsO) {
 
 		// 3. end = null ise [begin] :byHour :24hrs
 
 		if(end != null) {
 			var days = [];
-			var xBegin = begin;
-			var xEnd = end;
+			var xBegin = dateRange.begin;
+			var xEnd = dateRange.end;
 
 			var onDay = xBegin.clone();
 			for(var i=0; i < xBegin.diffDays(xEnd); i++) {
@@ -415,14 +428,14 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		}
 	};
 
-	function normalizeTS (ts, begin, end) {
+	function normalizeTS (ts) {
 
 		// 3. end = null ise [begin] :byHour :24hrs
 
 		if(end != null) {
 			var days = [];
-			var xBegin = begin;
-			var xEnd = end;
+			var xBegin = dateRange.begin;
+			var xEnd = dateRange.end;
 
 			for(var i=0; i < xBegin.diffDays(xEnd); i++) {
 				var onDay = xBegin.clone();
@@ -431,13 +444,15 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				m = onDay.getMonth() + 1;
 				g = onDay.getDate();
 
-				days[i] = 0;
+				days[i] = [];
+				days[i][0] = onDay.toString('d MMM');
+				days[i][1] = 0;
 
 				if(typeof ts[y] !== 'undefined') {
 					if(typeof ts[y][m] !== 'undefined') {
 						if(typeof ts[y][m][g] !== 'undefined') {
 							if(typeof ts[y][m][g].c !== 'undefined') {
-								days[i] = ts[y][m][g].c;
+								days[i][1] = ts[y][m][g].c;
 							}
 						}
 					}
@@ -455,8 +470,11 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		$(into).html( $('#datasetTableTemplate').html() );
 
 		for(var col in pack.columns) {
-			hs += '<td>' + pack.columns[col].cvname + '</td>';
+			hs += '<th>' + pack.columns[col].cvname + '</th>';
 			ts += '<td></td>';
+			if(pack.columns[col].visible === true) {
+				
+			}
 			tableVisibleCols[relation].push( {'mData': pack.columns[col].cvname} );
 		}
 		$(into + ' table').attr('id', tables[relation].name);
@@ -556,7 +574,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 //			var data = dTbl.fnGetData( this );
 //			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
-		plotChartHC(normalizeTimeslot(null, null, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
+		plotChartHC(normalizeTimeslot(null, null, null));
 
 		$(document).on('click', '.dataTables_scrollBody td.editMe', function () {
 			var clicked = $(this);
@@ -587,44 +605,18 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			$(this).attr('alt', i);
 		});
 
-/*		CLICKROW
-		
-		if(children !== false) {
-			$(document).on('click', '#'+tables[relation].name+' tbody tr td.driller', function (event) {
-
-				tbl = tables[relation].rel;
-				pnt = this;
-				pnt = tbl.fnGetNodes( $(this).parent('tr').attr('alt') );
-
-				if ( tbl.fnIsOpen( pnt ) ) {
-					tbl.fnClose( pnt );
-				} else {
-					tbl.fnOpen( pnt, "", "info_row" );
-
-					tables[children] = {};
-					tables[children].name = randomId();
-					var dTblChild = prepTableView( randomId(), pack, children, '#'+tables[relation].name+' .info_row', 'grandchildren' );
-					tables[children].rel = dTblChild;
-				}
-			});
-		}
-		*/
-
-//		$('td:contains("YOYO")').html();
-
-
 		// replace any placeholders now and forever
 		$('td:contains("XOXO")').each( function () {
 			$(this).addClass('plotToggler').html('<input type="checkbox" class="bigCheckBox" />');
 		});
 		$('.bigCheckBox').uniform();
-		$(document).on('click', 'td', function () {
+		$(document).on('click', 'th, #contentDataset .btn, #contentDataset .ui-button, #contentDataset .fg-button', function () {
 			$('td:contains("XOXO")').each( function () {
 				$(this).addClass('plotToggler').html('<input type="checkbox" class="bigCheckBox" />');
 			});
 			$('.bigCheckBox').uniform();
 		});
-		$('td:contains("YOYO")').text('');
+		$('th:contains("YOYO")').text('');
 
 		$(document).on('change', '.bigCheckBox', function () {
 			if( $(this).parent('span').hasClass('checked') ) {
@@ -665,50 +657,44 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			// clicked checkboxes retrieve corresponding timeslots as an array
 			var wholeSet = [];
 			dTbl = $('#'+tables[relation].name).dataTable();
-			dTbl.$('td.checkedTick').parent('tr').each( function (i, v) {
-				if( $(v).children('.column_clicks').hasClass('checkedTick') ) {
-					var data = dTbl.fnGetData( v );
+			dTbl.$('td.checkedTick').parent('tr').each( function (i, vv) {
+				if( $(vv).children('.column_clicks').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( vv );
 					wholeSet.push({'type': 'click', 'color': colorTable[i][0], 'timeslot': data.tsC, 
-									'id': $(v).children('.column_clicks').attr('alt')});
+									'id': $(vv).children('.column_clicks').attr('alt')});
 				}
-				if( $(v).children('.column_installs').hasClass('checkedTick') ) {
-					var data = dTbl.fnGetData( v );
+				if( $(vv).children('.column_installs').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( vv );
 					wholeSet.push({'type': 'install', 'color': colorTable[i][1], 'timeslot': data.tsI, 
-									'id': $(v).children('.column_clicks').attr('alt')});
+									'id': $(vv).children('.column_clicks').attr('alt')});
 				}
-				if( $(v).children('.column_organics').hasClass('checkedTick') ) {
-					var data = dTbl.fnGetData( v );
+				if( $(vv).children('.column_organics').hasClass('checkedTick') ) {
+					var data = dTbl.fnGetData( vv );
 					wholeSet.push({'type': 'organic', 'color': colorTable[i][2], 'timeslot': data.tsO, 
-									'id': $(v).children('.column_clicks').attr('alt')});
+									'id': $(vv).children('.column_clicks').attr('alt')});
 				}
 			});
-			console.dir(wholeSet);
-			var sers = charted.series;
-			for(var s=0; s<charted.series.length; s++) {
-				charted.series[s].remove();
-			}
-			for(var i in wholeSet) {
+			plotMe (wholeSet);
 
-				var ts = normalizeTS (wholeSet[i].timeslot, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5))
-				console.log('----------------------------------');
-				console.dir(ts);
-
-				charted.addSeries({
-					'id': 			wholeSet[i].id,
-					'animation': 	false,
-//					'name': 		wholeSet[i].type,
-					'data': 		ts,
-//					'yAxis': 		wholeSet[i].id,
-					'color': 		wholeSet[i].color,
-				}, true, false);
-			}
-			charted.redraw();
-			
-//			plotChartHC(normalizeTimeslot(data.tsC, data.tsI, null, new XDate(2013, (3-1), 20), new XDate(2013, (4-1), 5)));
 		});
 
 		return dTbl;
-	}
+	};
+
+	function normalize(arr, max) {
+		var max = arr[0];
+		var min = arr[0];
+		for(var x=0; x<arr.length; x++) {
+			max = Math.max(m, arr[x]);
+		}
+		for(var x=0; x<arr.length; x++) {
+			min = Math.min(m, arr[x]);
+		}
+		for(var x=0; x<arr.length; x++) {
+			arr[x] = (arr[x] - min) / (max - min);
+		}
+		return arr;
+	};
 	function randomId (len) {
 		if(len == undefined){len = 36;}
 		var s = [];
@@ -742,8 +728,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		return array.join(''); 
 	};
     function fetchCallBackGroupBy1 (response){
+		console.dir(response);
 		drawTable( prepData(response) );
-		widget1.StopListener();
+		gryphonModel.StopListener();
 //        drawGeoMap(response.response);
     }
     function fetchCallBackSum (response){
@@ -761,6 +748,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		for(var i in columns) {
 			set += 	'<li class="checkFlt"><a tabindex="-1" href="#">' + columns[i].cvname + '</a></li>';
 		}
+		console.dir(set);
 		daFilters = set;
 	}
 	function responseErrorCallBack (response){
@@ -937,39 +925,93 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			set['n'].push(dt.toString('d MMM'));
 		}
 		charted = new Highcharts.Chart({
-			chart: {
-				renderTo: 'datasetChart',
-				type: 'area',
-				backgroundColor: '#E9E3D5'
+			'chart': {
+				'renderTo': 		'datasetChart',
+				'type': 			'area',
+				'animation': 		false,
+				'backgroundColor': 	'#E9E3D5'
 			},
-			title: {
-				text: 'Clicks / Installs / Organics'
+			'title': {
+				'text': 			'Clicks / Installs / Organics'
 			},
-			legend: {
-				layout: 'vertical',
-				align: 'right',
-				verticalAlign: 'top',
-				x: -10,
-				y: 100,
-				borderWidth: 0
+			'legend': {
+				'layout': 			'vertical',
+				'align': 			'right',
+				'verticalAlign': 	'top',
+				x: 					-10,
+				y: 					10,
+				'borderWidth': 		0
 			},
-			tooltip: {
-				crosshairs: [true,true]				
+			'tooltip': {
+				'crosshairs': 		[true, true]				
 			},
-			xAxis: {'categories': set['n']},
-			yAxis: [{ 'title': { 'text': 'Clicks' }},
-					{ 'title': { 'text': 'Installs'}},
-//					{ 'title': { 'text': 'Organics'}, 'opposite': true},
-//					{ 'title': { 'text': 'CR'}, 'opposite': true }
-			],
-
-			series: [{'name': 'Clicks', 	'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-					 {'name': 'Installs', 	'data': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-//					 {'name': 'Organics', 	'data': set['o']},
-//			    	 {'name': 'CR', 		'data': set['ci']}
-			]
+			'xAxis': 				{'id': 999999, 'categories': set['n']},
+			'yAxis': 				[{ 'title': { 'text': '' }}],
+			'series': 				[]
 	    });
 	}
+
+	function plotMe (wholeSet) {
+		var sers = charted.series;
+		var axes = charted.yAxis;
+		for(var s=0; s<charted.series.length; s++) {
+			charted.series[s].remove();
+		}
+		for(var s=0; s<charted.yAxis.length; s++) {
+			charted.yAxis[s].remove();
+		}
+
+		for(var i in wholeSet) {
+
+			var opp;
+			var lineType = '';
+			switch (wholeSet[i].type) {
+				case 'click':
+					lineType = 'ShortDot';
+					opp = false;
+					break;
+				case 'install':
+					lineType = 'ShortDash';
+					opp = true;
+					break;
+				case 'organic':
+					lineType = 'Dot';
+					opp = true;
+					break;
+				case 'action':
+					lineType = 'DashDot';
+					opp = false;
+					break;
+			}
+
+	        charted.addAxis({
+	            'id': 			wholeSet[i].id,
+	            'title': 		{ text: '' },
+	            'lineWidth': 	2,
+				'type': 		'linear',
+	            'lineColor': 	wholeSet[i].color,
+	            'opposite': 	opp
+	        }, false, false, false);
+
+			charted.addSeries({
+				'id': 			wholeSet[i].id,
+				'animation': 	false,
+				'name': 		wholeSet[i].type,
+				'data': 		normalizeTS (wholeSet[i].timeslot),
+				'stacking': 	'normal',
+				'dashStyle': 	lineType,
+				'yAxis': 		wholeSet[i].id,
+				'color': 		wholeSet[i].color,
+			}, true, false);
+		}
+
+		for(var s=0; s<charted.xAxis.length; s++) {
+			if(charted.xAxis[s].id === 999999) {
+				charted.xAxis[s].remove();
+			}
+		}
+
+	};
 
 	function plotChart (ts) {
 		var height = 300;

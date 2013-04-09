@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
+	<string>frontend/express/public/javascripts/client/dashboard.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -100,7 +100,7 @@
 					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-03T13:57:43Z</date>
+					<date>2013-04-05T13:22:29Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -127,7 +127,9 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/dashboard.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-03T18:40:45Z</date>
+							<date>2013-04-05T13:22:29Z</date>
+							<key>selected</key>
+							<true/>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -206,9 +208,7 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-03T18:40:45Z</date>
-							<key>selected</key>
-							<true/>
+							<date>2013-04-04T08:14:13Z</date>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -256,6 +256,20 @@
 				<key>line</key>
 				<integer>48</integer>
 			</dict>
+		</dict>
+		<key>frontend/express/public/javascripts/client/dashboard.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>340</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>332</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/client/index.js</key>
 		<dict>
@@ -406,14 +420,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>80</integer>
+				<integer>76</integer>
 				<key>line</key>
-				<integer>25</integer>
+				<integer>10</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>189</integer>
+			<integer>2</integer>
 		</dict>
 		<key>frontend/express/views/index.html</key>
 		<dict>
@@ -451,6 +465,7 @@
 		<string>frontend/express/public/javascripts/client/login.js</string>
 		<string>frontend/express/views/dashboard.html</string>
 		<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
+		<string>frontend/express/public/javascripts/client/dashboard.js</string>
 		<string>frontend/express/public/stylesheets/ui/demo_table_jui.css</string>
 		<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
 		<string>frontend/express/public/stylesheets/bootstrap.css</string>
@@ -511,6 +526,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{99, 45}, {1327, 812}}</string>
+	<string>{{85, -12}, {1327, 812}}</string>
 </dict>
 </plist>

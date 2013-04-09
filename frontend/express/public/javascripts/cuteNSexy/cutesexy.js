@@ -147,12 +147,14 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				}
 			}
 		};
+
 //=========================================================================================================
 		function fetchIt (payLoad, _s, _f, src) {
 			var _t = this;
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
+console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+console.dir(payLoad);
 
-			console.dir(payLoad);
 			if(_appName === ''){_appName = 'q';}
 
 			var cid = (_cloudid !== '') ? _cloudid : '';
@@ -161,8 +163,10 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 */
 			var cmd = payLoad.command;
 			var urlPattern = (src === 'handsome') ?
-				'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data) :
-				_domain + '/' + _service + '/' + cid + '/' + payLoad.command + '?request=' + JSON.stringify(payLoad.data);			
+				'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data):
+				_domain + '/' + _service + '/' + cid + '/' + payLoad.command + '?request=' + JSON.stringify(payLoad.data);
+
+//console.log(urlPattern);
 
 			buffer.jqxhrs.push( $.ajax({
 				url: urlPattern,
@@ -188,7 +192,6 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					data = data[i];
 				}
 			}
-
 			var cmd = (data._type.slice(-8) == 'Response') ? data._type.replace('Response', '') : 'err';
 
 			// prechecks
@@ -209,69 +212,44 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			}
 
 			var resString = _dictionary[ cmd ].result;
-			realCallbackS( data[resString], cmd );
-			delete buffer._sss[ _sssP ];
-			$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
-			return true;
-
+			var _e = '';
 			var cfgP = _dictionary[cmd];
+			var permFlag = true;
+
+			preC:
 			for(var cfk in cfgP.check) {
 				var ea = cfgP.check[cfk];
-				var checkFlag = true;
 				for(var k in cfgP.check[cfk]) {
 					var ref = cfgP.check[cfk][k];
-					if(type(ref) == 'string') {
-						if(data[k] != ref){
-							checkFlag = false;
-						}
-					}else if(type(ref) == 'regexp') {
-						if(ref.test(data[k]) == false){
-							checkFlag = false;
-							_e = "RegExp check of the property "+k+" in "+cmd+" failed";
-						}
+
+					var checkFlag = true;
+					switch (type(ref)) {
+						case 'string':
+							checkFlag = (data[k] != ref) ? false : true;
+							if(!checkFlag){permFlag = false;_e = 'failed String match on '+k+"\n value is: "+data[k];}
+							break;
+						case 'regexp':
+							checkFlag = ref.test(data[k]);
+							if(!checkFlag){permFlag = false;_e = 'failed RegExp match on '+k+"\n value is: "+data[k];}
+							break;
 					}
 				}
-				var resString = _dictionary[ cmd ].result;
-				console.info("> retrieved " + cmd + " command, the result label is " + resString);
+			}
 
-				// postchecks
-/*
-				if(checkFlag == true) {
-//					console.log('checks done successfully...');
-//					console.log(_dictionary[ payLoad.command ].result);
-					if( _dictionary[ payLoad.command ].result == 'copyTheWholePackage') {
-
-						_s(data);
-
-					} else if(type(_dictionary[ payLoad.command ].result) == 'string') {
-
-						_s(data[_dictionary[ payLoad.command ].result]);
-
-					} else if(type(_dictionary[ payLoad.command ].result) == 'array') {
-
-						var _t = {};
-						var res = _dictionary[ payLoad.command ].result;
-						for(var ar in res) {
-							_t[ res[ar] ] = data[ res[ar] ] ;
-							console.log('>>>>>>>>>>' + res[ar]);
-							console.dir(data[ res[ar] ]);
-						}
-					}
-					_s(_t);
-				} else {
-					_f(_e);
-				}
-				*/
-
-				// use the right callback for the command!
-				if(this.type( realCallbackS ) == 'function') {
+			// use the right callback for the command!
+			if(checkFlag && permFlag) {
+				if(typeof (realCallbackS) == 'function') {
 					realCallbackS( data[resString], cmd );
 					delete buffer._sss[ _sssP ];
 				}
-
-				$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
-				
+			} else {
+				if(typeof (realCallbackF) == 'function') {
+					realCallbackF( _e );
+				}
 			}
+
+			$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
+			return checkFlag;
 		};
 //=========================================================================================================
 		function setAppName (name) {
@@ -311,6 +289,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			}else{
 				_dictionary = newDict;
 			}
+			console.log('dictionary redefined...');
 			return true;
 		};
 		function getSessionID () {

@@ -1,32 +1,3 @@
-/*
- * Namespace DTCR - "DataTables ColReorder" plug-in
- */
-
-table.DTCR_clonedTable {
-	background-color: white;
-	z-index: 202;
-}
-
-div.DTCR_pointer {
-	width: 1px;
-	background-color: #0259C4;
-	z-index: 201;
-}
-
-body.alt div.DTCR_pointer {
-	margin-top: -15px;
-	margin-left: -9px;
-	width: 18px;
-	background: url('images/ui/insert.png') no-repeat top left;
-}
-/*
- * Namespace Column filter
- */
-.column-filter-widget { float:left; padding: 5px; }
-.column-filter-widget select { display: block; }
-.column-filter-widgets a.filter-term { display: block; text-decoration: none; padding-left: 10px; font-size: 90%; }
-.column-filter-widgets a.filter-term:hover { text-decoration: line-through !important; }
-.column-filter-widget-selected-terms { clear:left; }
 
 /*
  * Namespace Gryphon
@@ -57,78 +28,6 @@ body {
 .sideBar {
 	background-color: #323232;
 	height:100%;
-}
-/*
- * Namespace JQuiery UI patches
- */
-#ui-datepicker-div { display:none }
-.ui-datepicker-group .ui-widget-header {
-	background:none;
-	border:0;
-	font-weight:normal;
-}
-.dataTables_wrapper .ui-widget-header {
-	background:none;
-	background-color: #464646;
-	color:#ffffff;
-	border:0;
-	font-weight:normal;	
-}
-.ui-corner-tr, .ui-corner-tr {
-	border-top-left-radius:0;
-	border-top-right-radius:0;
-}
-.dataTables_wrapper select, textarea, input[type="text"] {
-	padding:0;
-	margin:0;
-	color:#575757;
-}
-.ui-datepicker .ui-datepicker-header {
-	padding:0;
-	color:#F4F1E9;
-}
-.ui-datepicker-multi-2 .ui-datepicker-group {
-	width:40%;
-}
-.popover-content .ui-widget.ui-datepicker {
-	font-size:1em;
-}
-.ui-datepicker-group {
-	background-color:#3c3c3c;
-}
-.ui-datepicker-calendar {
-	background-color:#ffffff;	
-}
-.ui-datepicker-calendar th {
-	font-weight:normal;
-	font-size:10px;
-}
-.dataTables_wrapper .ui-toolbar {
-	padding:0;
-}
-.dataTables_wrapper table thead tr {
-	background-color:#B3B3B3;
-	color:#dadada;	
-	padding-top: 3px;
-}
-.dataTables_wrapper table {
-}
-.dataTables_wrapper label {
-	margin:0;
-	font-weight:normal;
-	font-size:12px;
-}
-..dataTables_wrapper .dataTables_info {
-	font-weight:normal;
-	font-size:12px;
-}
-.dataTables_wrapper table thead tr .ui-state-default,
-.dataTables_wrapper table thead tr .ui-widget-content .ui-state-default, 
-.dataTables_wrapper table thead tr .ui-widget-header .ui-state-default {
-	background:none;
-	background-color:#B3B3B3;
-	color:#ffffff;
-	border:none;
 }
 /*
  * Namespace Twitter Bootstrap patches
@@ -217,35 +116,6 @@ thead {
 .modal-body {
 	padding:0;
 }
-.bigs, .pulldowns, .breadcrumbs {
-	padding-left:10px;
-}
-.bigs {
-	padding-top:10px;
-}
-.bigTitle {
-	background-color: #ededed;
-	height:56px;
-	text-align:center;
-	font-family: Geneva, Arial, Helvetica, sans-serif;
-	font-size:14px;
-	line-height:48px;
-	text-indent:18px;
-	color:#464646;
-}
-.bigData {
-	background-color: #ffffff;
-	height:70px;
-	text-align:center;
-	font-family: Geneva, Arial, Helvetica, sans-serif;
-	font-weight:bold;
-	font-size:40px;
-	line-height:50px;
-	color:#464646;
-}
-.breadcrumbs {
-	padding:10px;
-}
 .tooltip-inner {
 	display:inline;
 	width:250px;
@@ -266,141 +136,13 @@ thead {
 .ui-widget-header {
 	font-weight:none;
 }
-.makina-select-box {
-	padding-left:10px;
-}
-.makina-select-box ul {
-	font-size: 12px;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-	.makina-select-box ul:first-child > li {
-		border: 1px solid #000000;
-	}
-	.makina-select-box .makina-select-box-options {
-		z-index: 10;
-	}
-	.makina-select-box ul li {
-		display: block;
-		position: relative;
-		float: left;
-		font-family: Geneva, Arial, Helvetica, sans-serif;
-		color:#575757;
-	}
-	.makina-select-box li ul {
-		display: none;
-	}
-	.makina-select-box .makina-selected {
-		background-image: url("/images/k/select-box-icon-right.png");
-		background-repeat: no-repeat;
-		background-position: right;
-	}
-	.makina-select-box ul li a {
-		display: block;
-		text-decoration: none;
-		color:#575757;
-		padding: 5px 40px 5px 25px;
-		background: #B3B3B3;
-		white-space: nowrap;
-	}
-	.makina-select-box ul ul li {
-		padding: 0px;
-	}
-	.makina-select-box ul ul li a {
-		border-top: 1px solid #000000;
-	}
-	.makina-select-box li:hover ul {
-		display: block;
-		position: absolute;
-	}
-	.makina-select-box li:hover li {
-		float: none;
-		font-size: 12px;
-		font-family: Geneva, Arial, Helvetica, sans-serif;
-		color:#575757;
-	}
-	.makina-select-box li:hover li a:hover {
-		background: #EF9539;
-	}
 
 .row-fluid [class*="span"] {
 	margin-left:0;
 }
-.bigs .bigTitle {
-	background-repeat:no-repeat;
-	background-position:0.6em 0.4em;
-	text-indent:1.5em;
-}
-.bigs.clicks .bigTitle {
-	background-image: url("/images/k/header_icons/totalclicks.png");
-}
-.bigs.installs .bigTitle {
-	background-image: url("/images/k/header_icons/totalclicks.png");
-}
-.bigs.avgcr .bigTitle {
-	background-image: url("/images/k/header_icons/avgconvrate.png");
-}
-.bigs.paidvsorg .bigTitle {
-	background-image: url("/images/k/header_icons/totalclicks.png");
-}
-.bigs.toprank .bigTitle {
-	background-image: url("/images/k/header_icons/highest.png");
-}
-.bigs.avgrank .bigTitle {
-	background-image: url("/images/k/header_icons/avgrank.png");
-}
-.checked {
-	background-image: url("/images/ui/checkmark.jpg");
-	background-repeat:no-repeat;
-}
 
-.darkenedColumns {
-	background-color:#575757;
-	color:#B3B3B3;
-}
-.drillDown {
-	background-repeat:no-repeat;
-	background-image:url('/images/dashboard/drilldown.png');
-	width:32px;
-	height:32px;
-}
-#contentDataset {
-	padding-left:10px;
-}
-#contentDataset table tr.odd {
-	background-color:#F4F1EA;
-}
-.dataTables_info {
-	padding-left:5px;
-	color:#B3B3B3;
-}
+
+
 .paging_full_numbers .ui-button {
 	color:#B3B3B3 !important;	
 }
-.dataTables_paginate .btn-primary {
-	color:#B3B3B3;
-}
-.bigCheckBox {
-	width:48px;
-}
-.info_row {
-	padding:5px;
-	padding-left:15px;
-}
-ul#filtersList {
-  width:450px;
-  margin-bottom:20px;
-  overflow:hidden;
-  border-top:1px solid #ccc;
-}
-ul#filtersList li {
-  line-height:1.5em;
-  border-bottom:1px solid #ccc;
-  float:left;
-  display:inline;
-}
-.double li  { width:50%; }
-.triple li  { width:33.333%; }
-.quad li    { width:25%; }
-.six li     { width:16.666%; }
