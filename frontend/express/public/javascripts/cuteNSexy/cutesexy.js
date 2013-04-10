@@ -119,6 +119,20 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				if(type(set) !== 'undefined') {
 					if(type(set.mandatory) !== 'undefined') {
 						for(var mk in set.mandatory) {
+
+/*
+	TODO nested checking of objects needs to be replanned 
+*/								
+/*
+							if(set.mandatory[mk].indexOf('.') > -1) {
+								console.dir(payLoad);
+								eval('var tempVar = payLoad.'+set.mandatory[mk]);
+
+								if(type(tempVar) == 'undefined') {
+									var _e = "Key " + rec[ri] + " does not exist, exitting...";
+								}
+							}
+*/
 							if(type(payLoad[set.mandatory[mk]]) == 'undefined') {
 								var _e = "Key " + set.mandatory[mk] + " does not exist, exitting...";
 							}
@@ -131,6 +145,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			if(type(_e) == 'undefined') {				// checks for key exists
 				payLoad['_type'] = cmd + 'Request';
 				if(type(_s) == 'function') {
+					console.log('retrieving from '+_dictionary[cmd].source);
 					fetchIt( {
 						'command': cmd, 
 						'data': $.extend( baseObj( getSessionID() ), payLoad)
@@ -152,8 +167,6 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		function fetchIt (payLoad, _s, _f, src) {
 			var _t = this;
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
-console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
-console.dir(payLoad);
 
 			if(_appName === ''){_appName = 'q';}
 
@@ -162,14 +175,20 @@ console.dir(payLoad);
 	TODO if _cloudid exists in _cloudids use it
 */
 			var cmd = payLoad.command;
-			var urlPattern = (src === 'handsome') ?
-				'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data):
-				_domain + '/' + _service + '/' + cid + '/' + payLoad.command + '?request=' + JSON.stringify(payLoad.data);
-
-//console.log(urlPattern);
+			var theURL = '';
+			switch (src) {
+				case 'handsome':
+					theURL = 'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data);
+					break;
+				case 'loxodonta':
+					theURL = _domain + '/' + _service + '/' + cid + '/' + 
+							payLoad.command + '?request=' + JSON.stringify(payLoad.data);
+					break;
+			};
+			console.log('the URL is '+theURL);
 
 			buffer.jqxhrs.push( $.ajax({
-				url: urlPattern,
+				url: theURL,
 				accepts: 'application/json',
 				dataType: 'jsonp',
 				jsonpCallback: _appName,
@@ -235,11 +254,14 @@ console.dir(payLoad);
 					}
 				}
 			}
-
 			// use the right callback for the command!
 			if(checkFlag && permFlag) {
 				if(typeof (realCallbackS) == 'function') {
-					realCallbackS( data[resString], cmd );
+					if(resString === '') {
+						realCallbackS( data, cmd );
+					}else{
+						realCallbackS( data[resString], cmd );
+					}
 					delete buffer._sss[ _sssP ];
 				}
 			} else {

@@ -1,55 +1,5 @@
 var GryphonDashboard = (function(GryphonDashboard, $, undefined){
-/*
-	TODO Graph1 ve Graph2 pulldowns: Feed plotting input with calculated datas as CPC / CPD / Cost				2 hrs
-				subtask: on-the-fly calculations written onto the datatable										4 hrs
-				subtask: build plottingarray from the visible datatable											2 hrs
-*/
-/*
-	TODO save costs: 																							2 hrs
-				subtask: record edited fields into an array and send this as JSON to the server trough ajax		2 hrs
-*/
-/*
-	TODO Calendar selection																						2 hrs
-				subtask: write selected dates into session data and read from it								5 hrs
-*/
-/*
-	TODO Management sections																					
-				subtask: study handsome-calls on management screen workflow										4 hrs
-				subtask: list table																				2 hrs
-				subtask: edit row in modal																		3 hrs
-				subtask: create/edit app screen																	4 hrs
-				subtask: add new line to pulldowns																3 hrs
-				subtask: create user/org																		3 hrs
-				subtask: report permissions																		4 hrs
-*/
-/*
-	TODO use Fractions from the pulldown to build widget calls													6 hrs
-*/
-/*
-	TODO consistent table button styles																			2 hrs
-*/
-/*
-	TODO Breadcrumbs																							2 hrs
-*/
-/*
-	TODO darkbox on loading data & management modals & error screens											1 hrs
-*/
-/*
-	TODO editable columns																						6 hrs
-*/
-/*
-	TODO User session & menus according																			
-				subtask: saving of last column ordering of the datatable
-*/
-/*
-	TODO SDK Wizard																								8 hrs
-*/
-/*
-	TODO login screen content
-*/
-/*
-	TODO localization																							12 hrs
-*/
+
 	var tables = {'root':{'name':''}};
 	var initialCost = 10000;
 	var editingFlag = false;
@@ -58,6 +8,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var installTotal = 0;
 	var gryphonModel;
 	var selGrpStckFlag = false;
+	var colorTable = [];
+	var fakeTable = {};
 	var columns = [];
 	var daFilters = '';
 	var charted = {};
@@ -74,21 +26,113 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		{'mData':'column'},
 		{'mData':'other'}
 	];
-	var colorTable = [
-		['#17D0E2', '#261D6E', '#b4afe1'],
-		['#119692', '#74E1C3', '#78ff00'],
-		['#C1407A', '#6F2660', '#1343b1'],
-		['#F5C643', '#FF5F00', '#de1919'],
-		['#6B47C7', '#1EAB95', '#c69613'],
-		['#3A6A5D', '#C7C7C7', '#f626af'],
-		['#655968', '#EF9539', '#d0a67a'],
-		['#31083B', '#76A20C', '#147fe3'],
-		['#C393CF', '#8932DA', '#0bd989'],
-		['#988558', '#A14127', '#f48a6e'],
-	];
 	//google.load('visualization', '1.0', {'packages':['corechart', 'table', 'geochart']});
+	cuteNSexy.init({
+		'domain': 		'http://alpha.loxodonta-editor.appspot.com:80',
+		'service': 		'resources/dispatcher/test/v1',
+		'cloudId': 		'ff8080813d8c00cb013d8d1e73e00009',
+		'appName': 		'loxo',
+	});
+	createDummyData();
+	function createDummyData () {
+		/*
+			TODO Graph1 ve Graph2 pulldowns: Feed plotting input with calculated datas as CPC / CPD / Cost				2 hrs
+						subtask: on-the-fly calculations written onto the datatable										4 hrs
+						subtask: build plottingarray from the visible datatable											2 hrs
+		*/
+		/*
+			TODO save costs: 																							2 hrs
+						subtask: record edited fields into an array and send this as JSON to the server trough ajax		2 hrs
+		*/
+		/*
+			TODO Calendar selection																						2 hrs
+						subtask: write selected dates into session data and read from it								5 hrs
+		*/
+		/*
+			TODO Management sections																					
+						subtask: study handsome-calls on management screen workflow										4 hrs
+						subtask: list table																				2 hrs
+						subtask: edit row in modal																		3 hrs
+						subtask: create/edit app screen																	4 hrs
+						subtask: add new line to pulldowns																3 hrs
+						subtask: create user/org																		3 hrs
+						subtask: report permissions																		4 hrs
+		*/
+		/*
+			TODO use Fractions from the pulldown to build widget calls													6 hrs
+		*/
+		/*
+			TODO consistent table button styles																			2 hrs
+		*/
+		/*
+			TODO Breadcrumbs																							2 hrs
+		*/
+		/*
+			TODO darkbox on loading data & management modals & error screens											1 hrs
+		*/
+		/*
+			TODO editable columns																						6 hrs
+		*/
+		/*
+			TODO User session & menus according																			
+						subtask: saving of last column ordering of the datatable
+		*/
+		/*
+			TODO SDK Wizard																								8 hrs
+		*/
+		/*
+			TODO login screen content
+		*/
+		/*
+			TODO localization																							12 hrs
+		*/
+		fakeTable = {'columns': [
+				{'visible': true, order:2, 'cvname':'test'},	{'visible': true, order:0, 'cvname':'column'},
+				{'visible': true, order:1, 'cvname':'other'},	{'visible': true, order:3, 'cvname':'oth'},
+				{'visible': true, order:4, 'cvname':'lda'},		{'visible': true, order:5, 'cvname':'mov'},
+				{'visible': true, order:5, 'cvname':'stx'},		{'visible': true, order:5, 'cvname':'sty'},
+				{'visible': true, order:5, 'cvname':'tst'}
+			], 'rows': [
+				{'test': 0, 'column': 'sdfs', 'other':'xxx','oth':'xxx','lda':'xxx','mov':'xxx','stx':'a','sty':0,'tst':0},
+				{'test': 5, 'column': 'sdfs', 'other':'xxx','oth':'xxx','lda':'xxx','mov':'xxx','stx':'a','sty':0,'tst':0},
+				{'test': 5, 'column': 'sdfs', 'other':'xxx','oth':'xxx','lda':'xxx','mov':'xxx','stx':'a','sty':0,'tst':0},
+				{'test': 5, 'column': 'sdfs', 'other':'xxx','oth':'xxx','lda':'xxx','mov':'xxx','stx':'a','sty':0,'tst':0}
+		]}
+		colorTable = [
+			['#17D0E2', '#261D6E', '#b4afe1'],
+			['#119692', '#74E1C3', '#78ff00'],
+			['#C1407A', '#6F2660', '#1343b1'],
+			['#F5C643', '#FF5F00', '#de1919'],
+			['#6B47C7', '#1EAB95', '#c69613'],
+			['#3A6A5D', '#C7C7C7', '#f626af'],
+			['#655968', '#EF9539', '#d0a67a'],
+			['#31083B', '#76A20C', '#147fe3'],
+			['#C393CF', '#8932DA', '#0bd989'],
+			['#988558', '#A14127', '#f48a6e'],
+		]
+	}
+
+	if(Object.keys(amplify.store('paths')).length>0){cuteNSexy.setPaths(amplify.store('paths'));}else{
+		console.log('Login / Paths object not found!!!');
+	}
+	if(Object.keys(amplify.store('dictionary')).length>0){cuteNSexy.setDictionary(amplify.store('dictionary'));}else{
+		console.log('Login / Dictionary object not found!!!');
+	}
+	console.dir(amplify.store('dictionary'));
+	console.log('User ID is: '+amplify.store('uid'));
+	cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 
+									'payload': {'userId':amplify.store('uid')} } ]);
 
 	$(document).ready( function() {
+
+		$(document).on('click', '#managementUser' , function () {
+			console.log('clicked!');
+			cuteNSexy.runChainedEvents([ {'cmd': 'ListUsers', 'success': function (ret) {
+				console.dir(ret);
+			}, 'fail': fMenuReceived, 'payload': {
+				'userId': amplify.store('uid'), 'pager': {} 
+			} } ]);
+		});
 
 		$.datepicker.setDefaults( $.datepicker.regional['en'] );
 		$("#containerForCalendar").multiDatesPicker({'numberOfMonths':[1,2]});
@@ -96,19 +140,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$('.fg-toolbar.ui-widget-header').prepend( $('#filterBySecondaryDimension').html() );
 
-		drawTable ({
-			'columns': [
-				{'visible': true, order:2, 'cvname':'test'},
-				{'visible': true, order:0, 'cvname':'column'},
-				{'visible': true, order:1, 'cvname':'other'}
-			],
-			'rows': [
-				{'test': 0,'column': 'sdfs','other': 'xxx'},
-				{'test': 5,'other': 'xxx','column': 'sdfs'},
-				{'test': 5,'column': 'sdfs','other': 'xxx'},
-				{'test': 5,'column': 'sdfs','other': 'xxx'}
-			]
-		});
+		drawTable (fakeTable);
 
 		gryphonModel = new HandsomeWidget({
 			'url': 						gryphonModelUrl,
@@ -141,6 +173,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$('.sideBar').height( $(window).height() );
 
+
 		$(document).on('click', '#create-widget' , function (e) {
 
 			selectedFractions = ['App', 'AppReadableKey', 'CountryCode', 'City'];
@@ -157,13 +190,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			});
 			console.dir(t);
 			gryphonModel.AddEvent(t);
-
 		});
 
-		cuteNSexy.setPaths(amplify.store('paths'));
-		cuteNSexy.setDictionary(amplify.store( 'dictionary'));
-		
-		cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 'payload': {'userId':123} } ]);
 
 
 	});
@@ -372,7 +400,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		// 3. end = null ise [begin] :byHour :24hrs
 
-		if(end != null) {
+		if(dateRange.end != null) {
 			var days = [];
 			var xBegin = dateRange.begin;
 			var xEnd = dateRange.end;

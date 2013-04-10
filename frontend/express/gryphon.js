@@ -39,6 +39,8 @@ var Gryphon = (function(Gryphon, undefined){
 	app.get('/login', login);
 	app.get('/dashboard', dashboard);
 	app.post('/dashboard', dashboard);
+	app.get('/management', management);
+	app.post('/management', management);
 
 	app.get('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
 	app.post('/stern/selectby/:where/page/:begin/limit/:len', getEntries);
@@ -55,6 +57,9 @@ var Gryphon = (function(Gryphon, undefined){
 	};
 	function dashboard (req, res) {
 		res.sendfile('views/dashboard.html');
+	};
+	function management (req, res) {
+		res.sendfile('views/management.html');
 	};
 
 }(Gryphon = Gryphon || {}));

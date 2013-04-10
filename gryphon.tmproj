@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/public/javascripts/client/dashboard.js</string>
+	<string>frontend/express/views/management.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -65,9 +65,15 @@
 				</dict>
 				<dict>
 					<key>filename</key>
+					<string>frontend/express/public/stylesheets/client/management.css</string>
+					<key>selected</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>filename</key>
 					<string>frontend/express/public/stylesheets/k/dashboard.css</string>
 					<key>lastUsed</key>
-					<date>2013-03-26T12:01:33Z</date>
+					<date>2013-04-10T11:19:11Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -98,9 +104,15 @@
 				</dict>
 				<dict>
 					<key>filename</key>
+					<string>frontend/express/views/management.html</string>
+					<key>lastUsed</key>
+					<date>2013-04-10T11:36:41Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-05T13:22:29Z</date>
+					<date>2013-04-10T11:14:49Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -121,15 +133,19 @@
 							<key>filename</key>
 							<string>frontend/express/public/stylesheets/ui/demo_table_jui.css</string>
 							<key>lastUsed</key>
-							<date>2013-04-03T15:13:35Z</date>
+							<date>2013-04-10T11:19:21Z</date>
+						</dict>
+						<dict>
+							<key>filename</key>
+							<string>frontend/express/public/javascripts/client/management.js</string>
+							<key>lastUsed</key>
+							<date>2013-04-10T11:20:17Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/dashboard.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-05T13:22:29Z</date>
-							<key>selected</key>
-							<true/>
+							<date>2013-04-10T11:20:11Z</date>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -174,7 +190,7 @@
 					<key>filename</key>
 					<string>frontend/express/gryphon.js</string>
 					<key>lastUsed</key>
-					<date>2013-04-02T11:58:33Z</date>
+					<date>2013-04-10T11:36:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -257,19 +273,49 @@
 				<integer>48</integer>
 			</dict>
 		</dict>
+		<key>frontend/express/gryphon.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>39</integer>
+				<key>line</key>
+				<integer>58</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>frontend/express/public/javascripts/client/dashboard.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>68</integer>
 				<key>line</key>
-				<integer>340</integer>
+				<integer>1077</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>332</integer>
+			<integer>1012</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1077</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>68</integer>
+				<key>line</key>
+				<integer>1077</integer>
+			</dict>
 		</dict>
 		<key>frontend/express/public/javascripts/client/index.js</key>
 		<dict>
@@ -314,6 +360,20 @@
 				<key>line</key>
 				<integer>27</integer>
 			</dict>
+		</dict>
+		<key>frontend/express/public/javascripts/client/management.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/cuteNSexy/cutesexy.js</key>
 		<dict>
@@ -420,14 +480,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>76</integer>
+				<integer>41</integer>
 				<key>line</key>
-				<integer>10</integer>
+				<integer>16</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>2</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>409</integer>
+			</dict>
 		</dict>
 		<key>frontend/express/views/index.html</key>
 		<dict>
@@ -457,6 +533,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>frontend/express/views/management.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>62</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
@@ -464,8 +554,11 @@
 		<string>frontend/express/views/login.html</string>
 		<string>frontend/express/public/javascripts/client/login.js</string>
 		<string>frontend/express/views/dashboard.html</string>
+		<string>frontend/express/views/management.html</string>
+		<string>frontend/express/gryphon.js</string>
 		<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
 		<string>frontend/express/public/javascripts/client/dashboard.js</string>
+		<string>frontend/express/public/javascripts/client/management.js</string>
 		<string>frontend/express/public/stylesheets/ui/demo_table_jui.css</string>
 		<string>frontend/express/public/stylesheets/ui/gryphonStyles.css</string>
 		<string>frontend/express/public/stylesheets/bootstrap.css</string>
@@ -526,6 +619,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{85, -12}, {1327, 812}}</string>
+	<string>{{85, 0}, {1327, 812}}</string>
 </dict>
 </plist>
