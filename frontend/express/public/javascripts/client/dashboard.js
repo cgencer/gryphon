@@ -120,6 +120,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	}
 	console.dir(amplify.store('dictionary'));
 	console.log('User ID is: '+amplify.store('uid'));
+	console.log('Sess ID is: '+amplify.store('sid'));
+	if(amplify.store('sid')!=''){cuteNSexy.setSessionID(amplify.store('sid'));}else{amplify.store('sid',cuteNSexy.getSessionID());}	
+
 	cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 
 									'payload': {'userId':amplify.store('uid')} } ]);
 

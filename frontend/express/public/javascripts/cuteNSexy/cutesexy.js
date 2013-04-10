@@ -30,9 +30,13 @@ $('document').ajaxError(function (event, XMLHttpRequest, ajaxOptions, thrownErro
 });
 var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		var _this = this;
+		this.singletonInstance = null;
 		var _domain = "http://mkevt.nmdapps.com";
 		var _service = "makinaweb";
 		var _cloudid = '';
+		var _urlL = '';
+		var _urlM = '';
+		var _glbFail;
 		var _appName = 'grabHandsome';
 		var _paths = [];
 		var _dictionary = {};
@@ -67,10 +71,18 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					setAppName(iObj.appName);
 				}
 			}
-			cleanUp();
+			initBuffer();
 			createUUID();
 		};
-		function cleanUp () {
+		var getInstance = function() {
+			if (!this.singletonInstance) {
+				this.singletonInstance = createInstance();
+			}
+			return this.singletonInstance;
+		}
+	    return getInstance();
+
+		function initBuffer () {
 			buffer = {
 				salt: 				'',
 				jqxhrs: 			[],
@@ -82,13 +94,23 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				sid: 				'',
 			};
 		};
+		function cleanUp () {
+			buffer.rq = {};
+			buffer.rp = {};
+		};
 //=========================================================================================================
 		// calls chained methods as such:
 		// runChainedEvents([ ['ListApps', {}, countlyHandsome.ListAppsDone],
 		//   				  ['ListApps', {}, countlyHandsome.ListAppsDone] , globalFailMethod]);
-		function runChainedEvents ( arr ){
+		function runChainedEvents ( arr, fail ){
 			var nextEventItem = arr.shift();
-			run(nextEventItem.cmd, nextEventItem.payload, nextEventItem.success, nextEventItem.fail);
+			// if global fail is defined, use it, otherwise use sepereate fail methods
+			if (!typeof (fail) == 'undefined' && typeof (nextEventItem.fail) == 'undefined') {
+				nextEventItem.fail = fail;
+				_glbFail = fail;
+			}
+			if(typeof (nextEventItem.isReal) == 'undefined') {nextEventItem.isReal = true;}
+			run(nextEventItem.cmd, nextEventItem.payload, nextEventItem.success, nextEventItem.fail, nextEventItem.isReal);
 
 			$(document).one(nextEventItem.cmd + "ReceivedAndProccessedChainedSet", function () {
 				if(arr.length > 0){
@@ -96,7 +118,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 				}
 			});
 		};
-		function run (cmd, payLoad, _s, _f) {
+		function run (cmd, payLoad, _s, _f, _real) {
 			cleanUp();
 			buffer.salt = $.base64.encode( createUUID() );
 
@@ -148,23 +170,31 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					console.log('retrieving from '+_dictionary[cmd].source);
 					fetchIt( {
 						'command': cmd, 
-						'data': $.extend( baseObj( getSessionID() ), payLoad)
-					}, _s, _f, _dictionary[cmd].source );
+						'data': $.extend( baseObj(), payLoad)
+					}, _s, _f, _dictionary[cmd].source, _real );
 				}else{
 					_e = 'No Function supplied as callback!';
 					if(type(_s) == 'function') {
-						_f(_e);
+						if(type(_glbFail) == 'function') {
+							_glbFail(_e);
+						}else{
+							_f(_e);
+						}
 					}
 				}
 			} else {
 				if(type(_f) == 'function') {
-					_f(_e);
+					if(type(_glbFail) == 'function') {
+						_glbFail(_e);
+					}else{
+						_f(_e);
+					}
 				}
 			}
 		};
 
 //=========================================================================================================
-		function fetchIt (payLoad, _s, _f, src) {
+		function fetchIt (payLoad, _s, _f, src, _real) {
 			var _t = this;
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
@@ -179,29 +209,33 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			switch (src) {
 				case 'handsome':
 					theURL = 'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data);
+					_urlM = theURL;
 					break;
 				case 'loxodonta':
 					theURL = _domain + '/' + _service + '/' + cid + '/' + 
 							payLoad.command + '?request=' + JSON.stringify(payLoad.data);
+					_urlL = theURL;
 					break;
 			};
 			console.log('the URL is '+theURL);
 
-			buffer.jqxhrs.push( $.ajax({
-				url: theURL,
-				accepts: 'application/json',
-				dataType: 'jsonp',
-				jsonpCallback: _appName,
-				contentType: "application/json; charset=utf-8",
-				cache: false,
-				crossDomain: true,
-		        type: 'GET'
+			if(_real) {
+				buffer.jqxhrs.push( $.ajax({
+					url: theURL,
+					accepts: 'application/json',
+					dataType: 'jsonp',
+					jsonpCallback: _appName,
+					contentType: "application/json; charset=utf-8",
+					cache: false,
+					crossDomain: true,
+			        type: 'GET'
 
-			}).done( function(data, textStatus, jqXHR) {
+				}).done( function(data, textStatus, jqXHR) {
 
-				doTheTwist(data, textStatus, jqXHR, src);
+					doTheTwist(data, textStatus, jqXHR, src);
 
-			}));
+				}));
+			}
 		};
 		function doTheTwist (data, textStatus, jqXHR, src) {
 			//by-pass the checks for now...
@@ -290,6 +324,12 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			_service = newService;
 			return true;
 		};
+		function getURL (isLoxo) {
+			if(isLoxo)
+				return _urlL;
+			else
+				return _urlM;
+		};
 		function setDomain (newDomain) {
 			if( (newDomain.substr(0,7) === 'http://') && (newDomain.length > 10) ) {
 				if(newDomain.substr(-1,1) === '/') {
@@ -315,10 +355,13 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			return true;
 		};
 		function getSessionID () {
-			if(buffer.sid == '') {
-				buffer.sid = createUUID();
+			if(buffer.sid == '' || typeof(buffer.sid) == 'undefined') {
+				setSessionID (createUUID());
 			}
 			return buffer.sid;
+		};
+		function setSessionID (sid) {
+			buffer.sid = sid;
 		};
 		function createUUID () {
 		    // http://www.ietf.org/rfc/rfc4122.txt
@@ -348,25 +391,29 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			tostring = Object.prototype.toString;
 		    return types[typeof o] || types[tostring.call(o)] || (o ? 'object' : 'null');
 		};
-		function baseObj (sid) { return ({'callTag': "", 'registerId': "", 'verb': "", 
-				'session': sid, 'callbackTag': buffer.salt });};
+		function baseObj () { return ({'callTag': "", 'registerId': "", 'verb': "", 
+				'session': getSessionID(), 'callbackTag': buffer.salt });};
 		function isDefined (v) {
 		    return (typeof(window[v]) == "undefined")?  false: true;
 		};
 		function K () { return this; };
+	    function createInstance () {
 		return {						// only these methods are accessible from the outside
 			'init': init,
 			'setService': setService,
 			'setDomain': setDomain,
 			'setPaths': setPaths,
+			'getURL': getURL,
 			'setDictionary': setDictionary,
 			'setCloudId': setCloudId,
 			'setCloudIds': setCloudIds,
 			'getSessionID': getSessionID,
+			'setSessionID': setSessionID,
 			'setAppName': setAppName,
 			'runChainedEvents': runChainedEvents,
 										// and these variables
 			'response': buffer.rp
 		};
+    	}
 
 }(window.cuteNSexy = window.cuteNSexy || {}, jQuery));

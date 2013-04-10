@@ -19,6 +19,7 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 	function sGetCommandDict(package) {
 		cuteNSexy.setDictionary(package);
 		amplify.store( 'dictionary', package );
+		amplify.store( 'sid', cuteNSexy.getSessionID() );
 
 		$('#loginModal').modal({'backdrop': 'static', 'show': true, 'keyboard': false});
 
@@ -41,7 +42,6 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 	function fail(err) {
 		console.log('error received:\n'+err);
 	};
-http://mkevt.nmdapps.com/makinaweb/GetMenuItems/?request=%7B%22callTag%22:%22%22,%22registerId%22:%22%22,%22verb%22:%22%22,%22session%22:%22f733aa49-b66a-4fff-827e-e2bb141ada97%22,%22callbackTag%22:%22YWE1NWY5MWYtZGRhNy00MDU5LTk5NzktZGY2YmY1OTQ2ZWI4%22,%22userId%22:%220.00001Y@USER%22,%22_type%22:%22GetMenuItemsRequest%22%7D&callback=grabHandsome&_=1365519688980
 
 	$(document).ready( function() {
 		console.log('starting the login procedure...');
