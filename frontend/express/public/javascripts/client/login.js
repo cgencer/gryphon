@@ -3,18 +3,26 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 	_this = this;
 	// init with a fake object to get the dictionary
 	cuteNSexy.init({
-		'domain': 		'http://alpha.loxodonta-editor.appspot.com:80',
+		'domain': 		'http://alpha.loxodonta-editor.appspot.com',
 		'service': 		'resources/dispatcher/test/v1',
 		'cloudId': 		'ff8080813d8c00cb013d8d1e73e00009',
 		'appName': 		'loxo',
 		'dictionary': {	 
 				 'GetCommandPaths': {'source': 'loxodonta', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'pathList'},
+		'GetManagementTableSettings': {'source': 'loxodonta', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'tableSet'},
+		'GetManagementObjectSet': {'source': 'loxodonta', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'objectSet'},
 			'GetCommandDictionary': {'source': 'loxodonta', 'mandatory': [], 'clean': [], 'check': [{'status': "OK"}], 'result': 'dictionary'}
 		}
 	});
 
 	function sGetCommandPaths(package) {
 		amplify.store('paths', package);
+	};
+	function sGetTableSettings(package) {
+		amplify.store('tableset', package);
+	};
+	function sGetObjectSet(package) {
+		amplify.store('objectset', package);
 	};
 	function sGetCommandDict(package) {
 		cuteNSexy.setDictionary(package);
@@ -45,9 +53,11 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 
 	$(document).ready( function() {
 		console.log('starting the login procedure...');
-		cuteNSexy.runChainedEvents([ 	{'cmd': 'GetCommandPaths', 'success': sGetCommandPaths, 'fail': fail },
-										{'cmd': 'GetCommandDictionary', 'success': sGetCommandDict, 'fail': fail }
-		]);
+		cuteNSexy.runChainedEvents([ 	{'cmd': 'GetCommandPaths', 'success': sGetCommandPaths },
+										{'cmd': 'GetManagementOnjectSet', 'success': sGetObjectSet },
+										{'cmd': 'GetManagementTableSettings', 'success': sGetTableSettings },
+										{'cmd': 'GetCommandDictionary', 'success': sGetCommandDict }
+		], fail);
 
 		
 	});

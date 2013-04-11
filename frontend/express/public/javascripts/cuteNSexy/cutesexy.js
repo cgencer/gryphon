@@ -71,12 +71,13 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 					setAppName(iObj.appName);
 				}
 			}
-			initBuffer();
+			cleanUp();
 			createUUID();
 		};
 		var getInstance = function() {
 			if (!this.singletonInstance) {
 				this.singletonInstance = createInstance();
+				initBuffer();
 			}
 			return this.singletonInstance;
 		}
@@ -103,16 +104,16 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		// runChainedEvents([ ['ListApps', {}, countlyHandsome.ListAppsDone],
 		//   				  ['ListApps', {}, countlyHandsome.ListAppsDone] , globalFailMethod]);
 		function runChainedEvents ( arr, fail ){
-			var nextEventItem = arr.shift();
+			var neu = arr.shift();
 			// if global fail is defined, use it, otherwise use sepereate fail methods
-			if (!typeof (fail) == 'undefined' && typeof (nextEventItem.fail) == 'undefined') {
-				nextEventItem.fail = fail;
+			if (!typeof (fail) == 'undefined' && typeof (neu.fail) == 'undefined') {
+				neu.fail = fail;
 				_glbFail = fail;
 			}
-			if(typeof (nextEventItem.isReal) == 'undefined') {nextEventItem.isReal = true;}
-			run(nextEventItem.cmd, nextEventItem.payload, nextEventItem.success, nextEventItem.fail, nextEventItem.isReal);
+			if(typeof (neu.isReal) == 'undefined') {neu.isReal = true;}
+			run(neu.cmd, neu.payload, neu.success, neu.fail, neu.isReal);
 
-			$(document).one(nextEventItem.cmd + "ReceivedAndProccessedChainedSet", function () {
+			$(document).one(neu.cmd + "ReceivedAndProccessedChainedSet", function () {
 				if(arr.length > 0){
 					runChainedEvents( arr );
 				}
@@ -121,11 +122,15 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		function run (cmd, payLoad, _s, _f, _real) {
 			cleanUp();
 			buffer.salt = $.base64.encode( createUUID() );
-
+console.log('___> '+cmd);
 			for(var cfk in _dictionary) {
 				if(type (_dictionary[cfk] ) == 'array'){
 					var _e = "Command does not exist in the config-file, exitting...";
-					_f(_e);
+					if(type(_glbFail) == 'function') {
+						_glbFail(_e);
+					}else{
+						_f(_e);
+					}
 				}
 			}
 			if(typeof(_e) == 'undefined') {				// checks for cfg-data exists
@@ -199,6 +204,8 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			buffer._sss.push({'s': _s, 'f': _f, 'i': buffer.salt, 'c': payLoad.command});
 
 			if(_appName === ''){_appName = 'q';}
+			
+			if(typeof(_real) == 'undefined') {_real = true;}
 
 			var cid = (_cloudid !== '') ? _cloudid : '';
 /*
@@ -330,6 +337,18 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			else
 				return _urlM;
 		};
+		function switchToLoxo () {
+			setDomain('http://alpha.loxodonta-editor.appspot.com');
+			setService('resources/dispatcher/test/v1');
+			setCloudId('ff8080813d8c00cb013d8d1e73e00009');
+			setAppName('loxo');
+		};
+		function switchToHandsome () {
+			setDomain('http://mkevt.nmdapps.com');
+			setService('makinaweb');
+			setCloudId('');
+			setAppName('handsome');
+		};
 		function setDomain (newDomain) {
 			if( (newDomain.substr(0,7) === 'http://') && (newDomain.length > 10) ) {
 				if(newDomain.substr(-1,1) === '/') {
@@ -398,22 +417,24 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 		};
 		function K () { return this; };
 	    function createInstance () {
-		return {						// only these methods are accessible from the outside
-			'init': init,
-			'setService': setService,
-			'setDomain': setDomain,
-			'setPaths': setPaths,
-			'getURL': getURL,
-			'setDictionary': setDictionary,
-			'setCloudId': setCloudId,
-			'setCloudIds': setCloudIds,
-			'getSessionID': getSessionID,
-			'setSessionID': setSessionID,
-			'setAppName': setAppName,
-			'runChainedEvents': runChainedEvents,
-										// and these variables
-			'response': buffer.rp
-		};
-    	}
+			return {						// only these methods are accessible from the outside
+				'init': init,
+				'setService': setService,
+				'setDomain': setDomain,
+				'setPaths': setPaths,
+				'getURL': getURL,
+				'switchToLoxo': switchToLoxo,
+				'switchToHandsome': switchToHandsome,
+				'setDictionary': setDictionary,
+				'setCloudId': setCloudId,
+				'setCloudIds': setCloudIds,
+				'getSessionID': getSessionID,
+				'setSessionID': setSessionID,
+				'setAppName': setAppName,
+				'runChainedEvents': runChainedEvents,
+											// and these variables
+				'response': buffer.rp
+			};
+   		}
 
 }(window.cuteNSexy = window.cuteNSexy || {}, jQuery));

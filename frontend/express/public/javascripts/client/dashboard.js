@@ -27,13 +27,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		{'mData':'other'}
 	];
 	//google.load('visualization', '1.0', {'packages':['corechart', 'table', 'geochart']});
-	cuteNSexy.init({
-		'domain': 		'http://alpha.loxodonta-editor.appspot.com:80',
-		'service': 		'resources/dispatcher/test/v1',
-		'cloudId': 		'ff8080813d8c00cb013d8d1e73e00009',
-		'appName': 		'loxo',
-	});
-	createDummyData();
 	function createDummyData () {
 		/*
 			TODO Graph1 ve Graph2 pulldowns: Feed plotting input with calculated datas as CPC / CPD / Cost				2 hrs
@@ -110,21 +103,30 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			['#C393CF', '#8932DA', '#0bd989'],
 			['#988558', '#A14127', '#f48a6e'],
 		]
-	}
+	};createDummyData();
+	function initModel () {
+		cuteNSexy.init({
+			'domain': 		'http://alpha.loxodonta-editor.appspot.com:80',
+			'service': 		'resources/dispatcher/test/v1',
+			'cloudId': 		'ff8080813d8c00cb013d8d1e73e00009',
+			'appName': 		'loxo',
+		});
+		if(Object.keys(amplify.store('paths')).length>0){cuteNSexy.setPaths(amplify.store('paths'));}else{
+			console.log('Login / Paths object not found!!!');
+		}
+		if(Object.keys(amplify.store('dictionary')).length>0){cuteNSexy.setDictionary(amplify.store('dictionary'));}else{
+			console.log('Login / Dictionary object not found!!!');
+		}
+		console.dir(amplify.store('dictionary'));
+		console.log('User ID is: '+amplify.store('uid'));
+		console.log('Sess ID is: '+amplify.store('sid'));
 
-	if(Object.keys(amplify.store('paths')).length>0){cuteNSexy.setPaths(amplify.store('paths'));}else{
-		console.log('Login / Paths object not found!!!');
-	}
-	if(Object.keys(amplify.store('dictionary')).length>0){cuteNSexy.setDictionary(amplify.store('dictionary'));}else{
-		console.log('Login / Dictionary object not found!!!');
-	}
-	console.dir(amplify.store('dictionary'));
-	console.log('User ID is: '+amplify.store('uid'));
-	console.log('Sess ID is: '+amplify.store('sid'));
-	if(amplify.store('sid')!=''){cuteNSexy.setSessionID(amplify.store('sid'));}else{amplify.store('sid',cuteNSexy.getSessionID());}	
+		if(amplify.store('sid')!=''){cuteNSexy.setSessionID(amplify.store('sid'));}
+		else{amplify.store('sid',cuteNSexy.getSessionID());}
 
-	cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 
-									'payload': {'userId':amplify.store('uid')} } ]);
+		cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived, 'fail': fMenuReceived, 
+										'payload': {'userId':amplify.store('uid')} } ]);
+	}initModel();
 
 	$(document).ready( function() {
 
