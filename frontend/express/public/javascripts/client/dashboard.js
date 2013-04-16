@@ -1,5 +1,9 @@
 var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
+	if (amplify.store('uid') === '') {
+		window.location.href = 'login';
+	}
+
 	var tables = {'root':{'name':''}};
 	var initialCost = 10000;
 	var editingFlag = false;

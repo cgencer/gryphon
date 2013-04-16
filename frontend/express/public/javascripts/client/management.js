@@ -1,5 +1,11 @@
 var GryphonManagement = (function(GryphonManagement, $, undefined){
 
+	if (amplify.store('uid') === '') {
+		window.location.href = 'login';
+	}
+
+	['']
+
 	function globalFail(err) {
 		console.log('error received:\n'+err);
 	};
@@ -21,7 +27,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		console.log('User ID is: '+amplify.store('uid'));
 		console.log('Sess ID is: '+amplify.store('sid'));
 
-		
 		if(amplify.store('sid')!=''){cuteNSexy.setSessionID(amplify.store('sid'));}
 		else{amplify.store('sid',cuteNSexy.getSessionID());}
 
@@ -40,12 +45,24 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 		objectSets = amplify.store('objectset');
 		tableSets = amplify.store('tableset');
-		createTableset('managementOrganizations', '#manager', 'ListOrganizations', {});
+		createTableset('managementApplications', '#manager', {});
+//		createTableset('managementUsers', '#manager', {});
 
+		var obj = {
+		    'food': {
+		      'healthy': {
+		          'fruits': ['apples', 'bananas', 'oranges'],
+		          'vegetables': ['salad', 'onions']
+		      },
+		      'unhealthy': {
+		          'fast food': ['burgers', 'chicken', 'pizza']
+		      }
+		    }
+		};
 
 	});
 	
-	function createTableset (menuPath, into, cmd, pl) {
+	function createTableset (menuPath, into, pl) {
 		var ts;
 		for(var i in tableSets) {
 			if(tableSets[i].path === menuPath){
@@ -53,11 +70,76 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			}
 		}
 		$(into).jqGrid({'datatype': 'local', 'colNames': ts.colNames, 'colModel': ts.colModel, 'caption': ts.caption});
-		cuteNSexy.runChainedEvents([ {'cmd': cmd, 'success': function (set) {
-			for(var i in set) $(into).jqGrid('addRowData', i, set[i]);
-		}, 'payload': pl } ]);
+
+		if(type(ts.command) === 'string') {
+
+			cuteNSexy.runChainedEvents([ 
+				{'cmd': ts.command, 'payload': pl, 'success': function (set) {
+				for(var i in set) {
+					$(into).jqGrid('addRowData', i, set[i]);
+				}
+			} } ]);
+			
+		}else if(type(ts.command) === 'array') {
+/*
+'command': [
+	{'cmd': 'ListRoles', 'payload': '', 'grab': ''},
+	{'cmd': 'ListOrganizations', 'payload': '', 'grab': 'orgId', 'select': '[FIRST]'},
+	{'cmd': 'ListUsers', 'payload': '', 'grab': '[WHOLE]'}
+],
+*/
+			var retVal, theLoad;
+			var allCalls = [];
+
+			for(var ci in ts.command) {
+				console.info('>>> next round is up <<<');
+				nextCall = {'cmd': ts.command[ci].cmd, 'payload': retVal, 'success': function (set) {
+					if(ts.command[ci].grab === '') {
+						retVal = {};
+					}else if(ts.command[ci].grab === '[WHOLE]') {
+						for(var i in set) {
+							$(into).jqGrid('addRowData', i, set[i]);
+						}
+						console.log('used all values');
+					}else{
+						retVal = {};
+						if(type(ts.command[ci].select) != 'undefined') {
+							if(ts.command[ci].select === '[FIRST]') {
+								console.log('used first item');
+								retVal[ts.command[ci].grab] = set[0];
+							}else if(ts.command[ci].select === '[LAST]') {
+								console.log('used last item');
+								retVal[ts.command[ci].grab] = set[set.length];
+							}else if(ts.command[ci].select === '[RANDOM]') {
+								console.log('used any item');
+								retVal[ts.command[ci].grab] = set[Math.random(set.length)%set.length];
+							}
+						}else{
+							retVal = {};
+						}
+					}
+				}};
+				cuteNSexy.runChainedEvents([nextCall]);
+				nextCall = {};
+			}
+		}
+
 
 	};
-
+	function type (o) {
+		var types = {
+		    'undefined'        : 'undefined',
+		    'number'           : 'number',
+		    'boolean'          : 'boolean',
+		    'string'           : 'string',
+		    '[object Function]': 'function',
+		    '[object RegExp]'  : 'regexp',
+		    '[object Array]'   : 'array',
+		    '[object Date]'    : 'date',
+		    '[object Error]'   : 'error'
+		},
+		tostring = Object.prototype.toString;
+	    return types[typeof o] || types[tostring.call(o)] || (o ? 'object' : 'null');
+	};
 
 }(window.GryphonManagement = window.GryphonManagement || {}, jQuery));
