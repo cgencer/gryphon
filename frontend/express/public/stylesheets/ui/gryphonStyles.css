@@ -66,12 +66,19 @@ body {
 
 .sideBar .accordion-heading {
 	background-repeat:no-repeat;
-	padding-left:20px;
+	padding-left:25px;
 	height:53px;
 	background-position:left center;
+	background-position:10px;
 }
 .accordion-inner {
 	padding:0;
+	margin-top:1px;
+	border:none;
+	text-indent:10px;
+}
+.accordion-inner .accordion-group {
+	margin-bottom:1px;
 }
 .sideBar .accordion-heading a {
 	padding-top:14px;

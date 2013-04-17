@@ -2,9 +2,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 	if (amplify.store('uid') === '') {
 		window.location.href = 'login';
-	}
-
-	['']
+	};
 
 	function globalFail(err) {
 		console.log('error received:\n'+err);
@@ -40,13 +38,15 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	};initModel();
 
 	var tableSets = [];
+	var tsIndex = 0;
+	var theLoad = {};
+	var whichTable = '';
+	var theModal = '';
 
 	$(document).ready(function() {
 
 		objectSets = amplify.store('objectset');
 		tableSets = amplify.store('tableset');
-		createTableset('managementApplications', '#manager', {});
-//		createTableset('managementUsers', '#manager', {});
 
 		var obj = {
 		    'food': {
@@ -60,7 +60,25 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		    }
 		};
 
+		$('div.subLinks').each( function () {
+			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
+		});
+
+		$(document).on('click', 'div.subLinks' , function () {
+			$('.rightSide').html('<table id="manager"></table>');
+			whichTable = $(this).attr('id');
+			createTableset(whichTable, '#manager', {});
+		});
+
+		$(document).on('click', '.editButton' , function () {
+			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
+			console.dir(selObj);
+			$('#'+$(this).attr('alt')+'Modal').modal('toggle');
+		});
+
 	});
+
+
 	
 	function createTableset (menuPath, into, pl) {
 		var ts;
@@ -69,7 +87,15 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				ts = tableSets[i];
 			}
 		}
-		$(into).jqGrid({'datatype': 'local', 'colNames': ts.colNames, 'colModel': ts.colModel, 'caption': ts.caption});
+		cn = ts.colNames;
+		cn.push('');
+		cm = ts.colModel;
+		cm.push({'width':50, 'name': 'editButton'});
+		$(into).jqGrid({
+			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption, 
+			'height': 'auto', 'altRows': true, 'altclass': 'tesla', 
+			'hidegrid': false, 'ignoreCase': true, 'shrinkToFit': true,
+		});
 
 		if(type(ts.command) === 'string') {
 
@@ -78,6 +104,8 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				for(var i in set) {
 					$(into).jqGrid('addRowData', i, set[i]);
 				}
+				$('[aria-describedby="manager_editButton"]').html('<button class="btn btn-primary editButton" alt="' +ts.path+ '" type="button">Edit</button>');
+				
 			} } ]);
 			
 		}else if(type(ts.command) === 'array') {
@@ -88,44 +116,76 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	{'cmd': 'ListUsers', 'payload': '', 'grab': '[WHOLE]'}
 ],
 */
-			var retVal, theLoad;
-			var allCalls = [];
 
-			for(var ci in ts.command) {
-				console.info('>>> next round is up <<<');
-				nextCall = {'cmd': ts.command[ci].cmd, 'payload': retVal, 'success': function (set) {
-					if(ts.command[ci].grab === '') {
-						retVal = {};
-					}else if(ts.command[ci].grab === '[WHOLE]') {
-						for(var i in set) {
-							$(into).jqGrid('addRowData', i, set[i]);
-						}
-						console.log('used all values');
-					}else{
-						retVal = {};
-						if(type(ts.command[ci].select) != 'undefined') {
-							if(ts.command[ci].select === '[FIRST]') {
-								console.log('used first item');
-								retVal[ts.command[ci].grab] = set[0];
-							}else if(ts.command[ci].select === '[LAST]') {
-								console.log('used last item');
-								retVal[ts.command[ci].grab] = set[set.length];
-							}else if(ts.command[ci].select === '[RANDOM]') {
-								console.log('used any item');
-								retVal[ts.command[ci].grab] = set[Math.random(set.length)%set.length];
-							}
-						}else{
-							retVal = {};
-						}
-					}
-				}};
-				cuteNSexy.runChainedEvents([nextCall]);
-				nextCall = {};
-			}
+			retVal = {};
+			tsIndex = 0;
+			
+			$(document).one(ts.command[tsIndex].cmd + 'ReceivedAndProccessedChainedSet', function () {
+				console.log('here i come...');
+				console.log('NEXT CMD: '+ts.command[tsIndex].cmd);
+				console.log(tsIndex +'<->'+ ts.command.length);
+				if(tsIndex < ts.command.length-1) {
+					callee ( ts.command[tsIndex], tsIndex );
+					tsIndex++;
+				} else {
+					tsIndex = 0;
+				}
+			});
+			// trigger the first one manually to start the chain...
+			callee ( ts.command[tsIndex], tsIndex );
+			tsIndex++;
 		}
-
-
 	};
+
+	function callee (tsItem, ci) {
+console.log('calling '+tsItem.cmd);
+		cuteNSexy.runChainedEvents( [{'cmd': tsItem.cmd, 'payload': theLoad, 'success': function (set) {
+			console.log('received '+tsItem.cmd);
+			console.dir(tsItem);
+
+			recPack (set);
+
+			console.info('NEXT:');
+			console.dir(theLoad);
+			$.event.trigger({'type': tsItem.cmd + 'ReceivedAndProccessedChainedSet'});
+
+		}}] );
+	}
+
+	function recPack () {
+		switch (tsItem.grab) {
+			case '':
+				theLoad = {};
+				break;
+			case '[WHOLE]':
+				for(var i in set) {
+					$(into).jqGrid('addRowData', i, set[i]);
+				}
+				theLoad = {};
+				break;
+			default:
+
+				if(tsItem.command[ci].select === '[FIRST]') {
+
+					console.log('used first item');
+					theLoad[tsItem.grab] = set[0][tsItem.grab];
+
+				}else if(tsItem.select === '[LAST]') {
+
+					console.log('used last item');
+					theLoad[tsItem.grab] = set[set.length][tsItem.grab];
+
+				}else if(tsItem.select === '[RANDOM]') {
+
+					console.log('used any item');
+					theLoad[tsItem.grab] = set[Math.random(set.length)%set.length][tsItem.grab];
+
+				}
+
+				break;
+		}
+	};
+
 	function type (o) {
 		var types = {
 		    'undefined'        : 'undefined',

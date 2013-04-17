@@ -50,7 +50,7 @@ var GryphonLogin = (function(GryphonLogin, $, undefined){
 	function sLogin(package, cmd) {
 		// if userLogged > load dashboard
 		amplify.store( 'uid', package.userId );
-		window.location.href = 'dash';
+		window.location.href = 'mng';
 	};
 	function parser (theSet, oS) {
 		for (var i=0; i < 2; i++) {					// 2-levels of nestedness

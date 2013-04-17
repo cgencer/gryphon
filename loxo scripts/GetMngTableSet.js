@@ -16,13 +16,11 @@ function run(request, response){
 							'command':2, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'OrgInfo'}}}
 			},
 			'caption': 'Management / Organizations',
-			'colNames': ['Desc', 'Apps', 'Users', 'Org ID', 'Name'],
+			'colNames': ['Name', 'Desc', 'Level'],
 			'colModel': [
-							{'name': 'description', 	'index': 'description', 		'width': 200}, 
-							{'name': 'numberOfApps', 	'index': 'numberOfApps', 		'width':  40, 	'align':'right'}, 
-							{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 		'width':  40, 	'align':'right'}, 
-							{'name': 'orgId', 			'index': 'orgId', 				'width': 120, 	'align':'right'}, 
-							{'name': 'orgName', 		'index': 'orgName', 			'width': 200, 	'align':'right'}, 
+							{'name': 'orgName', 		'index': 'orgName', 		'width': 200}, 
+							{'name': 'description', 	'index': 'description', 	'width': 200}, 
+							{'name': 'level', 			'index': 'level', 			'width': 120}, 
 						]
 		}, 
 		{
@@ -38,12 +36,11 @@ function run(request, response){
 				'delete': {'cmd': 'AddUpdateUser', 'data': {'command':2, 'info': {'[INJECT]': 'UserInfo'}}}
 			},
 			'caption': 'Management / Users',
-			'colNames': ['Organization', 'Full Name', 'Username', 'Email'],
+			'colNames': ['Username', 'Email', 'User Type'],
 			'colModel': [
-							{'name': 'description', 	'index': 'description', 		'width': 200}, 
-							{'name': 'numberOfApps', 	'index': 'numberOfApps', 		'width':  40, 	'align':'right'}, 
-							{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 		'width':  40, 	'align':'right'}, 
-							{'name': 'orgId', 			'index': 'orgId', 				'width': 120, 	'align':'right'}, 
+							{'name': 'name', 			'index': 'name', 			'width': 200}, 
+							{'name': 'email', 			'index': 'email', 			'width': 200}, 
+							{'name': 'primaryRole', 	'index': 'primaryRole', 	'width': 120}, 
 						]
 		}, 
 		{
@@ -90,14 +87,13 @@ function run(request, response){
 							'command':2, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'AppInfo'}}}
 			},
 			'caption': 'Management / Applications',
-			'colNames': ['Application Name', 'Platform', 'Dashboard URL', 'Market URL', 'Google Analytics Key', 'Description'],
+			'colNames': ['App', 'Platform', 'App Token', 'Description', 'URL'],
 			'colModel': [
 							{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
 							{'name': 'platform', 		'index': 'platform', 		'width':  40, 	'align':'right'}, 
-							{'name': 'countlyUrl', 		'index': 'countlyUrl', 		'width':  40, 	'align':'right'}, 
-							{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 120, 	'align':'right'}, 
-							{'name': 'googleAnalyticsKey', 'index': 'googleAnalyticsKey', 'width': 200}, 
-							{'name': 'description', 	'index': 'description', 	'width': 200}, 
+							{'name': 'appToken', 		'index': 'appToken', 		'width': 120, 	'align':'right'}, 
+							{'name': 'description', 	'index': 'description', 	'width': 120, 	'align':'right'}, 
+							{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
 						]
 		}, 
 		{
@@ -163,21 +159,22 @@ function run(request, response){
 		}, 
 		{
 			'path': 'managementMakilinks', 
-			'command': 'ListMakilinks',
+			'command': [
+				{'cmd': 'ListApps', 'payload': '', 'grab': ''},
+				{'cmd': 'ListCampaign', 'payload': '', 'grab': 'campaignId', 'select': '[FIRST]'},
+				{'cmd': 'ListMakilinks', 'payload': '', 'grab': '[WHOLE]'}
+			],
 			'manage': {
 				'add': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
 				'edit': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
 				'delete': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':2, 'info': {'[INJECT]': 'MakilinkInfo'}}}
 			},
 			'caption': 'Management / Makilinks',
-			'colNames': ['Tags', 'Makilink', 'Channel', 'Start', 'End', 'Status'],
+			'colNames': ['Makilink Name', 'Channel', 'Description'],
 			'colModel': [
 							{'name': 'tags', 			'index': 'tags', 			'width': 200}, 
 							{'name': 'makiLink', 		'index': 'makiLink', 		'width': 200, 	'align':'right'}, 
 							{'name': 'campId', 			'index': 'campId', 			'width': 120, 	'align':'right'}, 
-							{'name': 'start', 			'index': 'start', 			'width': 120, 	'align':'right'}, 
-							{'name': 'end',	 			'index': 'end', 			'width':  40, 	'align':'right'}, 
-							{'name': 'status', 			'index': 'status', 			'width':  40, 	'align':'right'}, 
 						]
 
 		}

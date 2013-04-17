@@ -115,7 +115,7 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 
 			$(document).one(neu.cmd + "ReceivedAndProccessedChainedSet", function () {
 				if(arr.length > 0){
-					runChainedEvents( arr );
+					runChainedEvents( arr, fail );
 				}
 			});
 		};

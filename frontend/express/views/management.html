@@ -6,7 +6,7 @@
 	<title>index</title>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jquery/jquery-1.8.3.min.js"></script>
-	<script language="javascript" type="text/javascript" src="/javascripts/dom/jqueryui/jquery-ui.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/dom/jqueryui-makina/js/jquery-ui-1.9.2.custom.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jqueryui/i18n/jquery.ui.datepicker-tr.js"></script>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/bootstrap/bootstrap.min.js"></script>
@@ -26,7 +26,7 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/client/management.js"></script>
 
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/uniform/themes/default/css/uniform.default.css" />
-	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/smoothness/jquery-ui-1.8.4.custom.css">
+	<link rel="stylesheet" type="text/css" charset="utf-8" href="/javascripts/dom/jqueryui-makina/css/makina/jquery-ui-1.9.2.custom.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/ui.jqgrid.css" />
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/gryphonStyles.css">
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/bootstrap.css">
@@ -42,7 +42,7 @@
 		<div class="row-fluid">
 			<div class="span2 sideBar">
 
-				<div class="makina-logo"></div>
+				<a href="http://127.0.0.1:8080/login"><div class="makina-logo"></div></a>
 				<div class="accordion" id="sideBar">
 					<div class="accordion-group selectApp">
 						<div class="accordion-heading">
@@ -102,35 +102,35 @@
 							<div class="accordion-inner">
 								<div class="accordion" id="sideBarManagement">
 									<div class="accordion-group sources">
-										<div class="accordion-heading" id="managementOrganization">
+										<div class="accordion-heading subLinks" id="managementOrganizations">
 											<a href="#managementOrganization">
 												Organization
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading" id="managementUser">
+										<div class="accordion-heading subLinks" id="managementUsers">
 											<a href="#managementUser">
 											User
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading" data-target="#managementApps" data-toggle="modal">
+										<div class="accordion-heading subLinks" id="managementApps">
 											<a href="#managementApps">
 											Apps
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading" data-target="#managementMakilinks" data-toggle="modal">
+										<div class="accordion-heading subLinks"  id="managementMakilinks">
 											<a href="#managementMakilinks">
 											Makilinks
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading" data-target="#managementSDKWizard" data-toggle="modal">
+										<div class="accordion-heading subLinks" id="managementSDK">
 											<a href="#managementSDKWizard">
 											SDK Wizard
 											</a>
@@ -149,7 +149,7 @@
 		</div>
 	</div>
 
-	<div id="managementOrganization" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="managementModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="myModalLabel">Organization Management</h3>
