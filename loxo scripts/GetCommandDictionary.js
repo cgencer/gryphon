@@ -118,8 +118,8 @@ function run(request, response){
 		'source': 'handsome',
 		'mandatory': [ ],
 		'clean': [ ],
-		'check': [ {'status': "OK"} ],
-		'result': 'infoList',
+		'check': [ ],
+		'result': 'info',
 	},
   }
    
