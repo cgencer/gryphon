@@ -73,7 +73,7 @@ function run(request, response){
 						]
 		}, 
 		{
-			'path': 'managementApplications', 
+			'path': 'managementApps', 
 			'command': 'ListApps',
 			'manage': {
 				'add': {
@@ -90,9 +90,9 @@ function run(request, response){
 			'colNames': ['App', 'Platform', 'App Token', 'Description', 'URL'],
 			'colModel': [
 							{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
-							{'name': 'platform', 		'index': 'platform', 		'width':  40, 	'align':'right'}, 
+							{'name': 'platform', 		'index': 'platform', 		'width':  60,}, 
 							{'name': 'appToken', 		'index': 'appToken', 		'width': 120, 	'align':'right'}, 
-							{'name': 'description', 	'index': 'description', 	'width': 120, 	'align':'right'}, 
+							{'name': 'description', 	'index': 'description', 	'width': 200}, 
 							{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
 						]
 		}, 

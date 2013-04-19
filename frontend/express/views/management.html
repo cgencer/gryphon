@@ -19,7 +19,9 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jquery.uniform.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jqGrid/i18n/grid.locale-en.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jqGrid/jquery.jqGrid.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/ui/jquery.loadJSON.js"></script>
 
+	<script language="javascript" type="text/javascript" src="/javascripts/utils/latinise.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/moment/moment.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/amplify.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/cuteNSexy/cutesexy.js"></script>
@@ -145,6 +147,11 @@
 
 			<div class="span10 rightSide">
 				<table id="manager"></table> 
+
+
+				
+
+
 			</div>
 		</div>
 	</div>
@@ -156,6 +163,111 @@
 		</div>
 		<div class="modal-body">
 			<p>
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
+
+	<div id="edit_managementOrganizations" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="inputName">Name</label>
+				<div class="controls">
+					<input type="text" id="inputName" placeholder="Name">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputDescription">Description</label>
+				<div class="controls">
+					<input type="password" id="inputDescription" placeholder="Description">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">Level</label>
+				<select>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+			</div>
+		</form>
+	</div>
+
+	<div id="managementAppsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Applications Management</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<form class="form-horizontal">
+					<input type="hidden" id="username" value="" />
+					<input type="hidden" id="userId" value="" />
+					<input type="hidden" id="orgId" value="" />
+					<input type="hidden" id="primaryRole" value="" />
+					<input type="hidden" id="password" value="123456" />
+
+					<input type="hidden" id="appname" value="" />
+					<input type="hidden" id="appToken" value="" />
+					<input type="hidden" id="description" value="" />
+					<input type="hidden" id="marketURL" value="" />
+					<input type="hidden" id="platform" value="" />
+
+					<div class="control-group">
+						<label class="control-label" for="organization">Org</label>
+						<div class="controls">
+							<input type="text" id="organization" placeholder="Organization" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="name">Dev</label>
+						<div class="controls">
+							<input type="text" id="name" name="name" placeholder="Name" value="" />
+						</div>
+					</div>
+
+					<div class="control-group" id="hiddenFields" style="display:none;">
+						<label class="control-label" for="name">E-mail</label>
+						<div class="controls">
+							<input type="text" id="email" value="" placeholder="E-mail">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="platform">Platform</label>
+						<div class="controls">
+							<select name="platform" class="">
+								<option value="0">Unknown</option>
+								<option value="1">IOS</option>
+								<option value="2">Android</option>
+								<option value="3">Windows</option>
+								<option value="4">Symbian</option>
+								<option value="5">Tizen</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="name">Market URL</label>
+						<div class="controls">
+							<input type="text" id="marketUrl" class="" placeholder="Market URL">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="description">Description</label>
+						<div class="controls">
+							<textarea rows="3" id="description" name="description" placeholder="Description"></textarea>
+						</div>
+					</div>
+
+				</form>
 			</p>
 		</div>
 		<div class="modal-footer">

@@ -114,6 +114,13 @@ function run(request, response){
 		'check': [ {'status': "OK"} ],
 		'result': 'deviceInfo',
 	},
+    'AddUpdateUser': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ {'status': "OK"} ],
+		'result': 'infoList',
+	},
   }
    
    
