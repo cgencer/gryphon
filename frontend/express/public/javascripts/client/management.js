@@ -45,6 +45,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var userDidSelect = false;
 	var _ts = this;
 	var _role = {};
+	var orgs = [];
 
 	$(document).ready(function() {
 
@@ -69,17 +70,54 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$('div.subLinks').each( function () {
 			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
 		});
-
 		$(document).on('click', 'div.subLinks' , function () {
-			$('.rightSide').html('<table id="manager"></table>');
+			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
+			console.log('whattafuck! '+whichTable);
 			createTableset(whichTable, '#manager', {});
 		});
 
-		$(document).on('click', '#addRow' , function () {
-
+		$(document).on('click', '.addRow' , function () {
+			$('#cloneMe').before( $('#cloneMe').clone() );
+			$('button.addRow:not(:last)').each( function (i, v) {
+				$(this).replaceWith('<button type="button" class="removeRow">-</button>');
+			})
+		});
+		$(document).on('click', '.removeRow' , function () {
+			$(this).parents('tr').remove();
+		});
+		$(document).on('blur', '#email' , function (e) {
+			ui = _.values(getDataObject('UserInfo'))[0];
+			ui.name = $('#name').val();
+			ui.username = $('#name').val().latinise().replace(/\s/, '');
+			ui.email = $('#email').val();
+			ui.password = '123456';
+			ui.primaryRole = _role;
+			ui.orgId = $("#orgId").val();
+			if(!_ts.userDidSelect) {
+				_ts.userDidSelect = false;
+				cuteNSexy.runChainedEvents([{
+					'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}], globalFail);
+			}
 		});
 
+/*
+_type					"AppInfo"
+appId					"0.00004L@APP"
+appToken				"AD90E34RT6HU12DHR56@0E3E"
+appType					0
+appname					"asfghasfhasfhasfha"
+countlyApiKey			""
+countlyAppId			null
+countlyAppKey			""
+countlyUrl				""
+description				"asdgasdgas"
+googleAnalyticsKey		"asfgasfgasf"
+iconUrl					""
+marketUrl				"asdgasdga"
+platform				5
+registerActionId		"0"
+*/
 		$(document).on('click', '.editButton' , function () {
 /*MultipleSelectMode
 			selectedIds = $("#manager").jqGrid('getGridParam','selarrrow');
@@ -96,6 +134,12 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		});
 	});
 
+	function onSort () {
+		console.info('called me? who?');
+		$('[aria-describedby="manager_editButton"]').each( function () {
+			$(this).html('<button class="btn btn-primary editButton" alt="' +whichTable+ '" type="button">Edit</button>');
+		});
+	};
 	function getDataObject (w) {
 		r = {}
 		for (var i in objectSets) {
@@ -105,14 +149,13 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		}
 		return r;
 	};
-
 	function populate(frm, data) {
 		$.each(data, function(key, value){
 			$('[id='+key+']', frm).val(value);
 		});
 	};
-
 	function fillinOrganizations (orgSet) {
+		orgs = orgSet;
 		$("#organization").autocomplete({
 			minLength: 0,
 			source: orgSet,
@@ -133,22 +176,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		console.dir(response);
 		console.info('created the user with the id '+response.userId+'...');
 	};
-	
-	$(document).on('blur', '#email' , function (e) {
-		ui = _.values(getDataObject('UserInfo'))[0];
-		ui.name = $('#name').val();
-		ui.username = $('#name').val().latinise().replace(/\s/, '');
-		ui.email = $('#email').val();
-		ui.password = '123456';
-		ui.primaryRole = _role;
-		ui.orgId = $("#orgId").val();
-		if(!_ts.userDidSelect) {
-			_ts.userDidSelect = false;
-			cuteNSexy.runChainedEvents([{
-				'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}], globalFail);
-		}
-	});
-
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
 		$("#name").autocomplete({
@@ -177,7 +204,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			.appendTo( ul );
 		};
 	};
-
 	function fillInData (theObj) {
 		stred = $.toJSON(theObj);
 		console.log(stred);
@@ -189,7 +215,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		console.log(stred);
 		return $.evalJSON(stred);
 	};
-
 	function getMatches(string, regex, index) {
 	    index || (index = 1);
 	    var matches = [];
@@ -206,14 +231,23 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				ts = tableSets[i];
 			}
 		}
-		cn = ts.colNames;
-		cn.push('');
-		cm = ts.colModel;
-		cm.push({'width':50, 'name': 'editButton'});
+		if(ts.colModel[ts.colModel.length-1].name != 'editButton') { 
+			cn = ts.colNames;
+			cn.push('');
+			cm = ts.colModel;
+			cm.push({'width':50, 'name': 'editButton'});
+		}else{
+			cn = ts.colNames;
+			cm = ts.colModel;
+		}
 		$(into).jqGrid({
-			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption, 
-			'height': 'auto', 'altRows': true, 'altclass': 'tesla', //'multiselect': true,
-			'hidegrid': false, 'ignoreCase': true, 'shrinkToFit': true,
+			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption, 'autoencode': true,
+			'altRows': true, 'altclass': 'tesla', 'hoverrows': false, //'multiselect': true,
+			'height':'auto', 'hidegrid': false, 'ignoreCase': true, 'shrinkToFit': true, 'pager': '#thePager',
+
+			'recordtext': 'View {0} - {1} of {2}', 'pgtext': 'Page {0} of {1}',
+			'emptyrecords': 'No records to view', 'loadtext': 'Loading...',
+			'rowNum': 20, 'onSortCol': onSort,
 		});
 
 		if(type(ts.command) === 'string') {
@@ -246,7 +280,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 					}
 					$(into).jqGrid('addRowData', i, set[i]);
 				}
-				$('[aria-describedby="manager_editButton"]').html('<button class="btn btn-primary editButton" alt="' +ts.path+ '" type="button">Edit</button>');
+				onSort();
 				
 			} } ]);
 			
@@ -267,60 +301,9 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				}
 			});
 			// trigger the first one manually to start the chain...
-			callee ( ts.command[tsIndex], tsIndex );
 			tsIndex++;
 		}
 	};
-
-	function callee (tsItem, ci) {
-console.log('calling '+tsItem.cmd);
-		cuteNSexy.runChainedEvents( [{'cmd': tsItem.cmd, 'payload': theLoad, 'success': function (set) {
-			console.log('received '+tsItem.cmd);
-			console.dir(tsItem);
-
-			recPack (set);
-
-			console.info('NEXT:');
-			console.dir(theLoad);
-			$.event.trigger({'type': tsItem.cmd + 'ReceivedAndProccessedChainedSet'});
-
-		}}] );
-	}
-
-	function recPack () {
-		switch (tsItem.grab) {
-			case '':
-				theLoad = {};
-				break;
-			case '[WHOLE]':
-				for(var i in set) {
-					$(into).jqGrid('addRowData', i, set[i]);
-				}
-				theLoad = {};
-				break;
-			default:
-
-				if(tsItem.command[ci].select === '[FIRST]') {
-
-					console.log('used first item');
-					theLoad[tsItem.grab] = set[0][tsItem.grab];
-
-				}else if(tsItem.select === '[LAST]') {
-
-					console.log('used last item');
-					theLoad[tsItem.grab] = set[set.length][tsItem.grab];
-
-				}else if(tsItem.select === '[RANDOM]') {
-
-					console.log('used any item');
-					theLoad[tsItem.grab] = set[Math.random(set.length)%set.length][tsItem.grab];
-
-				}
-
-				break;
-		}
-	};
-
 	function type (o) {
 		var types = {
 		    'undefined'        : 'undefined',
