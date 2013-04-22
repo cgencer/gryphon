@@ -46,6 +46,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var _ts = this;
 	var _role = {};
 	var orgs = [];
+	var apps = [];
 
 	$(document).ready(function() {
 
@@ -54,6 +55,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 		cuteNSexy.runChainedEvents([
 			{'cmd': 'ListOrganizations', 'payload': {}, 'success': fillinOrganizations},
+			{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps},
 			{'cmd': 'ListRoles', 'payload': {}, 'success': function (r) {
 				if(type(r) == 'object') {
 					_role = r;
@@ -172,6 +174,9 @@ registerActionId		"0"
 			.appendTo( ul );
 		};
 	}
+	function fillinApps (appSet) {
+		apps = appSet;
+	};
 	function createdUser (response) {
 		console.dir(response);
 		console.info('created the user with the id '+response.userId+'...');
