@@ -17,3 +17,15 @@ table tr {
 thead {
 	background-color:#B3B3B3;
 }
+.modal.large {
+    width: 80%;
+    margin-left:-40%;
+}
+.modal.medium {
+    width: 60%;
+    margin-left:-30%;
+}
+.modal.small {
+    width: 40%;
+    margin-left:-120%;
+}

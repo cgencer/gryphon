@@ -198,7 +198,7 @@
 		</form>
 	</div>
 
-	<div id="managementAppsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="managementAppsModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="myModalLabel">Applications Management</h3>
@@ -218,47 +218,36 @@
 					<input type="hidden" id="marketURL" value="" />
 					<input type="hidden" id="platform" value="" />
 
-					<div class="control-group">
-						<label class="control-label" for="organization">Org</label>
-						<div class="controls">
-							<input type="text" id="organization" placeholder="Organization" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label" for="name">Dev</label>
-						<div class="controls">
-							<input type="text" id="name" name="name" placeholder="Name" value="" />
-						</div>
-					</div>
-
-					<div class="control-group" id="hiddenFields" style="display:none;">
-						<label class="control-label" for="name">E-mail</label>
-						<div class="controls">
-							<input type="text" id="email" value="" placeholder="E-mail">
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label" for="platform">Platform</label>
-						<div class="controls">
-							<select name="platform" class="">
-								<option value="0">Unknown</option>
-								<option value="1">IOS</option>
-								<option value="2">Android</option>
-								<option value="3">Windows</option>
-								<option value="4">Symbian</option>
-								<option value="5">Tizen</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label" for="name">Market URL</label>
-						<div class="controls">
-							<input type="text" id="marketUrl" class="" placeholder="Market URL">
-						</div>
-					</div>
+					<table>
+					<tr>
+					<td><label class="control-label" for="organization">Organization </label></td>
+					<td><input type="text" id="organization" placeholder="Organization" /></td>
+					<td><label class="control-label" for="name">Developer </label></td>
+					<td><input type="text" id="name" name="name" placeholder="Name" value="" /></td>
+					</tr>
+					<tr>
+					<td></td><td></td>
+					<td class="hiddenFields" style="display:none;"><label class="control-label" for="name">E-mail </label></td>
+					<td class="hiddenFields" style="display:none;"><input type="text" id="email" value="" placeholder="E-mail"></td>
+					</tr>
+					<tr>
+					<td><label class="control-label" for="name">Platform </label></td>
+					<td>
+						<select name="platform" class="">
+						<option value="0">Unknown</option>
+						<option value="1">IOS</option>
+						<option value="2">Android</option>
+						<option value="3">Windows</option>
+						<option value="4">Symbian</option>
+						<option value="5">Tizen</option>
+					</select>
+					</td>
+					<td><label class="control-label" for="name">Market URL</label></td>
+					<td>
+						<input type="text" id="marketUrl" class="" placeholder="Market URL">
+						<button type="button" id="addRow">+</button>
+					</td>
+					</table>
 
 					<div class="control-group">
 						<label class="control-label span1" for="description">Description</label>

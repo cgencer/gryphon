@@ -76,6 +76,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			createTableset(whichTable, '#manager', {});
 		});
 
+		$(document).on('click', '#addRow' , function () {
+
+		});
+
 		$(document).on('click', '.editButton' , function () {
 /*MultipleSelectMode
 			selectedIds = $("#manager").jqGrid('getGridParam','selarrrow');
@@ -144,34 +148,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}], globalFail);
 		}
 	});
-/*
-{"request":{ 
-	"_type": "AddUpdateUserRequest", 
-	"callTag": "", 
-	"registerId": "", 
-	"session": "29b45aff-6d70-4e30-a88e-5e7aaa27c94d", 
-	"verb": "", 
-	"command": 1, 
-	"info": { 
-		"_type": "UserInfo", 
-		"email": "sdfhsfdhs", 
-		"name": "shfhs", 
-		"orgId": "0.00001V@ORG", 
-		"password": "sdfhsdfhs", 
-		"userId": "", 
-		"username": "sfdhsdfhsdfhs",
-		"primaryRole": { 
-			"_type": "RoleInfo", 
-			"description": "", 
-			"numberOfUsers": 1, 
-			"roleId": "0.00000B@ROLE", 
-			"roleName": null, 
-			"verbs": null, 
-			"visibleName": null 
-		}
-	}
-}}
-*/
+
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
 		$("#name").autocomplete({
@@ -189,7 +166,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			},
 			change: function( event, ui ) {
 				if(ui.item == null) {
-					$('#hiddenFields').css('display', 'block');
+					$('.hiddenFields').css('display', 'block');
 				}
 				$('#email').focus();
 			}
@@ -200,9 +177,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			.appendTo( ul );
 		};
 	};
-
-	$('#hiddenFields').css('display', 'block');
-
 
 	function fillInData (theObj) {
 		stred = $.toJSON(theObj);
