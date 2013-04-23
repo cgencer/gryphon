@@ -54,12 +54,12 @@
 						</div>
 						<div id="collapseApps" class="accordion-body collapse">
 							<div class="accordion-inner">
-								<div class="accordion" id="sideBarManagement">
+								<div class="accordion" id="sideBarApps">
 
 									<div class="accordion-group sources">
-										<div class="accordion-heading subLinks" id="managementApps">
-											<a href="#managementApps">
-												App1
+										<div class="accordion-heading subLinks" id="App">
+											<a href="#App">
+											[-loading-]
 											</a>
 										</div>
 									</div>
@@ -170,6 +170,24 @@
 		</div>
 		<div class="modal-body">
 			<p>
+				<form class="form-horizontal">
+					<input type="hidden" id="username" value="" />
+
+					<div class="control-group">
+						<label class="control-label span1" for="orgname">Org Name</label>
+						<div class="controls">
+							<input type="text" id="orgname" placeholder="Org Name" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="description">Description</label>
+						<div class="controls">
+							<input type="text" id="description" placeholder="Description" />
+						</div>
+					</div>
+
+				</form>
 			</p>
 		</div>
 		<div class="modal-footer">
@@ -236,16 +254,30 @@
 					<input type="hidden" id="username" value="" />
 
 					<div class="control-group">
-						<label class="control-label span1" for="orgname">User Name</label>
+						<label class="control-label span1" for="username">User Name</label>
 						<div class="controls">
-							<input type="text" id="orgname" placeholder="Org Name" />
+							<input type="text" id="username" placeholder="User Name" />
 						</div>
 					</div>
 
 					<div class="control-group">
-						<label class="control-label span1" for="description">E-mail</label>
+						<label class="control-label span1" for="email">E-mail</label>
 						<div class="controls">
-							<input type="text" id="description" placeholder="Description" />
+							<input type="text" id="email" placeholder="E-mail" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="level">Level</label>
+						<div class="controls">
+							<select name="level" class="">
+								<option value="0">Unknown</option>
+								<option value="1">IOS</option>
+								<option value="2">Android</option>
+								<option value="3">Windows</option>
+								<option value="4">Symbian</option>
+								<option value="5">Tizen</option>
+							</select>
 						</div>
 					</div>
 
@@ -325,7 +357,7 @@
 		</div>
 	</div>
 
-	<div id="managementMakılınksModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="managementMakilinksModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="myModalLabel">Users Management</h3>
@@ -355,6 +387,16 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button class="btn btn-primary">Save changes</button>
+		</div>
+	</div>
+
+	<div id="AppsTemplate" style="display:none;">
+		<div class="accordion-group sources">
+			<div class="accordion-heading subLinks" id="App">
+				<a href="#App">
+				App
+				</a>
+			</div>
 		</div>
 	</div>
 

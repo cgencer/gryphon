@@ -176,6 +176,13 @@ registerActionId		"0"
 	}
 	function fillinApps (appSet) {
 		apps = appSet;
+		$('#sideBarApps').empty();
+		for(var a in appSet) {
+			// .children('a').text( appSet[a].appname )
+			$('#sideBarApps').append( $('#AppsTemplate').html() );
+			console.log(appSet[a].appname);
+		}
+
 	};
 	function createdUser (response) {
 		console.dir(response);
