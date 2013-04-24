@@ -48,6 +48,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var _role = {};
 	var orgs = [];
 	var apps = [];
+	var camps = [];
 
 	$(document).ready(function() {
 
@@ -76,6 +77,9 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '.subLinks.appLinks' , function () {
 //			$('div#sideBarApps.accordion').collapse('toggle');
 			whichApp = $(this).attr('id');
+			if(whichApp != '') {
+				cuteNSexy.runChainedEvents([{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns}], globalFail);
+			}
 		});
 		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
@@ -86,6 +90,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('change', '#orgPulldown' , function () {
 			console.log('changed orga...');
 			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}], globalFail);
+		});
+		$(document).on('change', '#campPulldown' , function () {
+			console.log('changed campaign... >'+$("#campPulldown").val());
+			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}], globalFail);
 		});
 		$(document).on('click', '.addRow' , function () {
 			$('#cloneMe').before( $('#cloneMe').clone() );
@@ -231,6 +239,16 @@ registerActionId		"0"
 		console.dir(response);
 		console.info('created the user with the id '+response.userId+'...');
 	};
+	function fillinCampaigns (set) {
+		camps = set;
+	};
+	function fillinMakilinks (set) {
+		$('#manager').jqGrid('clearGridData');
+		for(var i in set) {
+			$('#manager').jqGrid('addRowData', i, set[i]);
+			onSort();
+		}
+	};
 	function fillinUsersofOrga (set) {
 		$('#manager').jqGrid('clearGridData');
 		for(var i in set) {
@@ -316,9 +334,17 @@ registerActionId		"0"
 		if(menuPath === 'managementUsers') {
 			$('.ui-jqgrid-title').append(' for <select name="orgPulldown" id="orgPulldown" class=""><option value="">[ select org ]</option></select>');
 		}
+		if(menuPath === 'managementMakilinks') {
+			$('.ui-jqgrid-title').append(' for <select name="campPulldown" id="campPulldown" class=""><option value="">[ select campaign ]</option></select>');
+		}
 		if(orgs.length > 0) {
 			for(var o in orgs) {
 				$('#orgPulldown').append('<option value="' + orgs[o].orgId + '">' + orgs[o].description + '</option>');
+			}
+		}
+		if(camps.length > 0) {
+			for(var o in camps) {
+				$('#campPulldown').append('<option value="' + camps[o].campId + '">' + camps[o].name + '</option>');
 			}
 		}
 
