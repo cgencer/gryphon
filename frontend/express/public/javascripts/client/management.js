@@ -153,8 +153,32 @@ registerActionId		"0"
 	};
 	function populate(frm, data) {
 		$.each(data, function(key, value){
-			$('[id='+key+']', frm).val(value);
+			$('#'+key, frm).val(value);
 		});
+		if(type(data.platform) != 'undefined') {
+			var plNo;
+			switch (data.platform) {
+				case 'Unknown':
+					plNo = 0;
+					break;
+				case 'IOS':
+					plNo = 1;
+					break;
+				case 'Android':
+					plNo = 2;
+					break;
+				case 'Windows':
+					plNo = 3;
+					break;
+				case 'Symbian':
+					plNo = 4;
+					break;
+				case 'Tizen':
+					plNo = 5;
+					break;
+			}
+			$('select#platform', frm).val(plNo);
+		}
 	};
 	function fillinOrganizations (orgSet) {
 		orgs = orgSet;
@@ -176,6 +200,15 @@ registerActionId		"0"
 	}
 	function fillinApps (appSet) {
 		apps = appSet;
+<<<<<<< HEAD
+		console.dir(appSet);
+		$('#sideBarApps').empty();
+		for(var a in appSet) {
+			$('#sideBarApps').append(	'<div class="accordion-group sources">' +
+										'<div class="accordion-heading subLinks" id="' + appSet[a].appId + '">' +
+										'<a href="#App" alt="' + appSet[a].appId + '">' + appSet[a].appname + '</a></div></div>');
+		}
+=======
 		$('#sideBarApps').empty();
 		for(var a in appSet) {
 			// .children('a').text( appSet[a].appname )
@@ -183,6 +216,7 @@ registerActionId		"0"
 			console.log(appSet[a].appname);
 		}
 
+>>>>>>> 811046a2bde4e4e7d7950d666365a6fe09e7daf0
 	};
 	function createdUser (response) {
 		console.dir(response);
@@ -252,14 +286,16 @@ registerActionId		"0"
 			cn = ts.colNames;
 			cm = ts.colModel;
 		}
-		$(into).jqGrid({
-			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption, 'autoencode': true,
-			'altRows': true, 'altclass': 'tesla', 'hoverrows': false, //'multiselect': true,
-			'height':'auto', 'hidegrid': false, 'ignoreCase': true, 'shrinkToFit': true, 'pager': '#thePager',
+		$.extend($.jgrid.defaults, {
+			'ignoreCase': true, 'shrinkToFit': true, 'altRows': true, 'hoverrows': false, 'sortorder': 'asc',
+			'height':'auto', 'hidegrid': false, 'sortname': 0, 'autoencode': true, 'viewrecords': true,
+			'recordtext': 'View {0} - {1} of {2}', 'pgtext': 'Page {0} of {1}', 'sortable': true,
+			'emptyrecords': 'No records to view', 'loadtext': 'Loading...',	'toppager': true	
+		});
 
-			'recordtext': 'View {0} - {1} of {2}', 'pgtext': 'Page {0} of {1}',
-			'emptyrecords': 'No records to view', 'loadtext': 'Loading...',
-			'rowNum': 20, 'onSortCol': onSort,
+		$(into).jqGrid({
+			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption,
+			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 'onSortCol': onSort,
 		});
 
 		if(type(ts.command) === 'string') {
@@ -270,22 +306,22 @@ registerActionId		"0"
 					if(type(set[i].platform) != 'undefined') {
 						switch (set[i].platform) {
 							case 0:
-								plName = 'Unknown'
+								plName = 'Unknown';
 								break;
 							case 1:
-								plName = 'IOS'
+								plName = 'IOS';
 								break;
 							case 2:
-								plName = 'Android'
+								plName = 'Android';
 								break;
 							case 3:
-								plName = 'Windows'
+								plName = 'Windows';
 								break;
 							case 4:
-								plName = 'Symbian'
+								plName = 'Symbian';
 								break;
 							case 5:
-								plName = 'Tizen'
+								plName = 'Tizen';
 								break;
 						}
 						set[i].platform = plName;

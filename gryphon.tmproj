@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/views/management.html</string>
+	<string>frontend/express/views/dashboard.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -112,15 +112,15 @@
 					<key>filename</key>
 					<string>frontend/express/views/management.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-23T19:36:11Z</date>
-					<key>selected</key>
-					<true/>
+					<date>2013-04-24T09:47:02Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-23T19:36:11Z</date>
+					<date>2013-04-24T09:47:02Z</date>
+					<key>selected</key>
+					<true/>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -534,36 +534,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>frontend/express/views/management.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>172</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>147</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>158</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>172</integer>
-			</dict>
-		</dict>
 		<key>loxo scripts/GetMngObjectSet.js</key>
 		<dict>
 			<key>caret</key>
@@ -598,7 +568,6 @@
 		<string>frontend/express/views/login.html</string>
 		<string>frontend/express/public/javascripts/client/login.js</string>
 		<string>frontend/express/views/dashboard.html</string>
-		<string>frontend/express/views/management.html</string>
 		<string>frontend/express/public/stylesheets/client/management.css</string>
 		<string>loxo scripts/GetMngTableSet.js</string>
 		<string>loxo scripts/GetMngObjectSet.js</string>
@@ -610,63 +579,7 @@
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
-	<key>showFileHierarchyPanel</key>
-	<true/>
-	<key>treeState</key>
-	<dict>
-		<key>loxo scripts</key>
-		<dict>
-			<key>isExpanded</key>
-			<true/>
-			<key>subItems</key>
-			<dict/>
-		</dict>
-		<key>server</key>
-		<dict>
-			<key>isExpanded</key>
-			<true/>
-			<key>subItems</key>
-			<dict/>
-		</dict>
-		<key>styles</key>
-		<dict>
-			<key>isExpanded</key>
-			<true/>
-			<key>subItems</key>
-			<dict/>
-		</dict>
-		<key>views</key>
-		<dict>
-			<key>isExpanded</key>
-			<true/>
-			<key>subItems</key>
-			<dict>
-				<key>view scripts</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-			</dict>
-		</dict>
-		<key>widgets</key>
-		<dict>
-			<key>isExpanded</key>
-			<true/>
-			<key>subItems</key>
-			<dict>
-				<key>filterTable</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-			</dict>
-		</dict>
-	</dict>
 	<key>windowFrame</key>
-	<string>{{4, -0}, {1323, 878}}</string>
+	<string>{{184, 141}, {1323, 878}}</string>
 </dict>
 </plist>
