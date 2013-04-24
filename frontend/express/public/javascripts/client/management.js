@@ -41,6 +41,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var tsIndex = 0;
 	var theLoad = {};
 	var whichTable = '';
+	var whichApp = '';
 	var theModal = '';
 	var userDidSelect = false;
 	var _ts = this;
@@ -72,13 +73,20 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$('div.subLinks').each( function () {
 			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
 		});
-		$(document).on('click', 'div.subLinks' , function () {
+		$(document).on('click', '.subLinks.appLinks' , function () {
+//			$('div#sideBarApps.accordion').collapse('toggle');
+			whichApp = $(this).attr('id');
+		});
+		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
 			console.log('whattafuck! '+whichTable);
 			createTableset(whichTable, '#manager', {});
 		});
-
+		$(document).on('change', '#orgPulldown' , function () {
+			console.log('changed orga...');
+			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}], globalFail);
+		});
 		$(document).on('click', '.addRow' , function () {
 			$('#cloneMe').before( $('#cloneMe').clone() );
 			$('button.addRow:not(:last)').each( function (i, v) {
@@ -182,7 +190,7 @@ registerActionId		"0"
 	};
 	function fillinOrganizations (orgSet) {
 		orgs = orgSet;
-		$("#organization").autocomplete({
+		$('#organization').autocomplete({
 			minLength: 0,
 			source: orgSet,
 			select: function( event, ui ) {
@@ -200,27 +208,35 @@ registerActionId		"0"
 	}
 	function fillinApps (appSet) {
 		apps = appSet;
-<<<<<<< HEAD
 		console.dir(appSet);
 		$('#sideBarApps').empty();
 		for(var a in appSet) {
+			an = appSet[a].appname;
+			cn = '';
+/*
+			if(an.match(/android/i)){
+				cn = 'mobile_android';
+			}else if(an.match(/ios/i).length>0){
+				cn = 'mobile_ios';
+			}
+*/
+			an = an.replace(/\s*[android|ios]/i, '');
+			an = (an.length > 16) ? an.substr(0, 16) + '...' : an;
 			$('#sideBarApps').append(	'<div class="accordion-group sources">' +
-										'<div class="accordion-heading subLinks" id="' + appSet[a].appId + '">' +
-										'<a href="#App" alt="' + appSet[a].appId + '">' + appSet[a].appname + '</a></div></div>');
+										'<div class="accordion-heading subLinks appLinks ' + cn + '" id="' + appSet[a].appId + '">' +
+										'<a href="#App" alt="' + appSet[a].appId + '">' + an + '</a></div></div>');
 		}
-=======
-		$('#sideBarApps').empty();
-		for(var a in appSet) {
-			// .children('a').text( appSet[a].appname )
-			$('#sideBarApps').append( $('#AppsTemplate').html() );
-			console.log(appSet[a].appname);
-		}
-
->>>>>>> 811046a2bde4e4e7d7950d666365a6fe09e7daf0
 	};
 	function createdUser (response) {
 		console.dir(response);
 		console.info('created the user with the id '+response.userId+'...');
+	};
+	function fillinUsersofOrga (set) {
+		$('#manager').jqGrid('clearGridData');
+		for(var i in set) {
+			$('#manager').jqGrid('addRowData', i, set[i]);
+			onSort();
+		}
 	};
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
@@ -297,6 +313,14 @@ registerActionId		"0"
 			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption,
 			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 'onSortCol': onSort,
 		});
+		if(menuPath === 'managementUsers') {
+			$('.ui-jqgrid-title').append(' for <select name="orgPulldown" id="orgPulldown" class=""><option value="">[ select org ]</option></select>');
+		}
+		if(orgs.length > 0) {
+			for(var o in orgs) {
+				$('#orgPulldown').append('<option value="' + orgs[o].orgId + '">' + orgs[o].description + '</option>');
+			}
+		}
 
 		if(type(ts.command) === 'string') {
 

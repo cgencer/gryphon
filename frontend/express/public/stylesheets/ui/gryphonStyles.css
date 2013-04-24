@@ -64,7 +64,7 @@ body {
 	color: #c5c5c5;
 }
 
-.sideBar .accordion-heading {
+.sideBar .accordion-heading.rootLinks {
 	background-repeat:no-repeat;
 	padding-left:25px;
 	height:53px;
@@ -83,22 +83,22 @@ body {
 .sideBar .accordion-heading a {
 	padding-top:14px;
 }
-.sideBar .accordion-group.selectApp .accordion-heading {
+.sideBar .accordion-group.selectApp .accordion-heading.rootLinks {
 	background-image: url("/images/k/left_menu_icons/selectapp.png");
 }
-.sideBar .accordion-group.dashboard .accordion-heading {
+.sideBar .accordion-group.dashboard .accordion-heading.rootLinks {
 	background-image: url("/images/k/left_menu_icons/dashboard.png");
 }
-.sideBar .accordion-group.events .accordion-heading {
+.sideBar .accordion-group.events .accordion-heading.rootLinks {
 	background-image: url("/images/k/left_menu_icons/events.png");
 }
-.sideBar .accordion-group.sources .accordion-heading {
+.sideBar .accordion-group.sources .accordion-heading.rootLinks {
 	background-image: url("/images/k/left_menu_icons/sources.png");
 }
-.sideBar .accordion-group.management .accordion-heading {
+.sideBar .accordion-group.management .accordion-heading.rootLinks {
 	background-image: url("/images/k/left_menu_icons/management.png");
 }
-#sideBarManagement .accordion-heading {
+#sideBarManagement .accordion-heading.rootLinks {
 	background-image:none;
 	height:32px;
 	padding-left:0;

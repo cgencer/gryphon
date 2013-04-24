@@ -29,3 +29,22 @@ thead {
     width: 40%;
     margin-left:-120%;
 }
+.appLinks a {
+	font-size:0.9em;
+}
+.accordion-heading.appLinks {
+	background-image:none;
+	padding-left:3px;
+	height:23px;
+	background-position:left center;
+	background-position:10px;
+	background-repeat:no-repeat;
+}
+.mobile_android {
+	background-image: url('/images/android.png');	
+	background-position:right center;
+}
+.mobile_ios {
+	background-image: url('/images/ios.png');	
+	background-position:right center;	
+}
