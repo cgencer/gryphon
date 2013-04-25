@@ -80,11 +80,16 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			if(whichApp != '') {
 				cuteNSexy.runChainedEvents([{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns}], globalFail);
 			}
+			$('#sideBarApps').collapse('toggle');
+			$('#sideBarManagement').collapse('show');
 		});
 		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
 			console.log('whattafuck! '+whichTable);
+			if(whichTable === 'managementMakilinks' && whichApp === '') {
+				$('.selector').accordion( "option", "active", 2 );
+			}
 			createTableset(whichTable, '#manager', {});
 		});
 		$(document).on('change', '#orgPulldown' , function () {
@@ -258,7 +263,7 @@ registerActionId		"0"
 	};
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
-		$("#name").autocomplete({
+		$("#userName").autocomplete({
 			minLength: 0,
 			source: userSet,
 			select: function( event, ui ) {
@@ -331,6 +336,18 @@ registerActionId		"0"
 			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption,
 			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 'onSortCol': onSort,
 		});
+
+		// FILTER / SEARCH
+		if(menuPath === 'managementMakilinks' || menuPath === 'managementApps') {
+			$('.ui-jqgrid-titlebar').append('<div id="filterer" class="pull-right" />');
+			$(into).filterToolbar({
+				'afterSearch': onSort,
+				'searchOnEnter': false,
+			});
+			$('input#gs_editButton, input#gs_appToken, input#gs_marketUrl').remove();
+		}
+
+		// EXTRA PULLDOWNA FOR NARROWING DOWN
 		if(menuPath === 'managementUsers') {
 			$('.ui-jqgrid-title').append(' for <select name="orgPulldown" id="orgPulldown" class=""><option value="">[ select org ]</option></select>');
 		}
@@ -347,6 +364,9 @@ registerActionId		"0"
 				$('#campPulldown').append('<option value="' + camps[o].campId + '">' + camps[o].name + '</option>');
 			}
 		}
+
+
+
 
 		if(type(ts.command) === 'string') {
 

@@ -159,22 +159,19 @@ function run(request, response){
 		}, 
 		{
 			'path': 'managementMakilinks', 
-			'command': [
-				{'cmd': 'ListApps', 'payload': '', 'grab': ''},
-				{'cmd': 'ListCampaign', 'payload': '', 'grab': 'campaignId', 'select': '[FIRST]'},
-				{'cmd': 'ListMakilinks', 'payload': '', 'grab': '[WHOLE]'}
-			],
+			'command': 'ListMakilinks',
 			'manage': {
 				'add': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
 				'edit': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
 				'delete': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':2, 'info': {'[INJECT]': 'MakilinkInfo'}}}
 			},
 			'caption': 'Management / Makilinks',
-			'colNames': ['Makilink Name', 'Channel', 'Description'],
+			'colNames': ['Makilink Name', 'Channel', 'Campaign', 'Description'],
 			'colModel': [
-							{'name': 'tags', 			'index': 'tags', 			'width': 200}, 
+							{'name': 'makilinkId', 		'index': 'makilinkId', 		'width': 200}, 
 							{'name': 'makiLink', 		'index': 'makiLink', 		'width': 200, 	'align':'right'}, 
 							{'name': 'campId', 			'index': 'campId', 			'width': 120, 	'align':'right'}, 
+							{'name': 'description', 	'index': 'description', 	'width': 120, 	'align':'right'}, 
 						]
 
 		}

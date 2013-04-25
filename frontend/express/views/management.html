@@ -52,7 +52,7 @@
 							Select App
 							</a>
 						</div>
-						<div id="collapseApps" class="accordion-body collapse">
+						<div id="collapseApps" class="accordion-body collapse in">
 							<div class="accordion-inner">
 								<div class="accordion" id="sideBarApps">
 
@@ -114,6 +114,7 @@
 						<div id="collapseFive" class="accordion-body collapse">
 							<div class="accordion-inner">
 								<div class="accordion" id="sideBarManagement">
+
 									<div class="accordion-group sources">
 										<div class="accordion-heading subLinks managementLinks" id="managementOrganizations">
 											<a href="#managementOrganizations">
@@ -221,17 +222,17 @@
 					</div>
 
 					<div class="control-group">
-						<label class="control-label span1" for="level">Level</label>
-						<div class="controls">
-						<select name="level" class="">
-							<option value="0">Unknown</option>
-							<option value="1">IOS</option>
-							<option value="2">Android</option>
-							<option value="3">Windows</option>
-							<option value="4">Symbian</option>
-							<option value="5">Tizen</option>
-						</select>
-						</div>
+					<label class="control-label span1" for="type">Type</label>
+					<div class="controls">
+					<select name="type" id="orgType" class="">
+						<option value="0">None</option>
+						<option value="1">Agency</option>
+						<option value="2">Client</option>
+						<option value="3">App Dev</option>
+						<option value="4">Network</option>
+						<option value="5">Publisher</option>
+					</select>
+					</div>
 					</div>
 
 				</form>
@@ -252,32 +253,42 @@
 			<p>
 				<form class="form-horizontal">
 					<input type="hidden" id="username" value="" />
-
-					<div class="control-group">
-						<label class="control-label span1" for="name">User Name</label>
-						<div class="controls">
-							<input type="text" id="name" placeholder="User Name" />
-						</div>
-					</div>
+					<input type="hidden" id="orgId" value="" />
 
 					<div class="control-group">
 						<label class="control-label span1" for="email">E-mail</label>
 						<div class="controls">
-							<input type="text" id="email" placeholder="E-mail" />
+							<input type="text" id="email" placeholder="E-mail" value="" />
 						</div>
 					</div>
 
 					<div class="control-group">
-						<label class="control-label span1" for="level">Level</label>
+						<label class="control-label span1" for="name">User Name</label>
 						<div class="controls">
-							<select name="level" class="">
-								<option value="0">Unknown</option>
-								<option value="1">IOS</option>
-								<option value="2">Android</option>
-								<option value="3">Windows</option>
-								<option value="4">Symbian</option>
-								<option value="5">Tizen</option>
-							</select>
+							<input type="text" id="name" placeholder="User Name" value="" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="password">Password</label>
+						<div class="controls">
+							<input type="text" id="password" placeholder="Password" value="" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="repassword">Re-enter Password</label>
+						<div class="controls">
+							<input type="text" id="repassword" placeholder="Re-enter Password" value="" />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label span1" for="usertype">Type</label>
+						<div class="controls">
+
+
+
 						</div>
 					</div>
 
@@ -315,7 +326,7 @@
 					<td><label class="control-label" for="organization">Organization </label></td>
 					<td><input type="text" id="organization" placeholder="Organization" /></td>
 					<td><label class="control-label" for="name">Developer </label></td>
-					<td><input type="text" id="name" name="name" placeholder="Name" value="" /></td>
+					<td><input type="text" id="userName" name="name" placeholder="Name" value="" /></td>
 					</tr>
 					<tr>
 					<td></td><td></td>
