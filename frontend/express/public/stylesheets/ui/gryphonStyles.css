@@ -63,7 +63,9 @@ body {
 .accordion-heading a {
 	color: #c5c5c5;
 }
-
+.sideBar a {
+	text-decoration: none;
+}
 .sideBar .accordion-heading.rootLinks {
 	background-repeat:no-repeat;
 	padding-left:25px;

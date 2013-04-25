@@ -135,6 +135,12 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			console.log('sorted...');
 			onSort();
 		});
+		$(document).on('click', '#addChannel' , function () {
+			$('#channelAdding').css('display', 'block');
+		});
+		$(document).on('click', '#addCampaign' , function () {
+			$('#campaignAdding').css('display', 'block');
+		});
 			
 /*
 _type					"AppInfo"
