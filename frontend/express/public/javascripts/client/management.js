@@ -49,6 +49,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var orgs = [];
 	var apps = [];
 	var camps = [];
+	XDate.parsers.push(parseDMY);
 
 	$(document).ready(function() {
 
@@ -58,6 +59,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		cuteNSexy.runChainedEvents([
 			{'cmd': 'ListOrganizations', 'payload': {}, 'success': fillinOrganizations},
 			{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps},
+			{'cmd': 'ListChannel', 'payload': {}, 'success': fillinChannels},
 			{'cmd': 'ListRoles', 'payload': {}, 'success': function (r) {
 				if(type(r) == 'object') {
 					_role = r;
@@ -72,13 +74,15 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		], globalFail);
 
 		$('div.subLinks').each( function () {
-			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
+//			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
 		});
 		$(document).on('click', '.subLinks.appLinks' , function () {
 //			$('div#sideBarApps.accordion').collapse('toggle');
 			whichApp = $(this).attr('id');
 			if(whichApp != '') {
-				cuteNSexy.runChainedEvents([{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns}], globalFail);
+				cuteNSexy.runChainedEvents([
+					{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns},
+				], globalFail);
 			}
 			$('#sideBarApps').collapse('toggle');
 			$('#sideBarManagement').collapse('show');
@@ -86,6 +90,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
+			$('#whichTable').val(whichTable);
 			console.log('whattafuck! '+whichTable);
 			if(whichTable === 'managementMakilinks' && whichApp === '') {
 				$('.selector').accordion( "option", "active", 2 );
@@ -123,7 +128,14 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 					'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}], globalFail);
 			}
 		});
-
+		$(document).on('click', 'button.addNew' , function (e) {
+			$('#'+whichTable+'Modal').modal('show');
+		});
+		$(document).on('click', '.ui-th-column' , function (e) {
+			console.log('sorted...');
+			onSort();
+		});
+			
 /*
 _type					"AppInfo"
 appId					"0.00004L@APP"
@@ -158,9 +170,9 @@ registerActionId		"0"
 	});
 
 	function onSort () {
-		console.info('called me? who?');
-		$('[aria-describedby="manager_editButton"]').each( function () {
-			$(this).html('<button class="btn btn-primary editButton" alt="' +whichTable+ '" type="button">Edit</button>');
+		w = $('#whichTable').val();
+		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
+			$(this).html('<button class="btn btn-primary editButton" alt="' + w + '" type="button">Edit</button>');
 		});
 	};
 	function getDataObject (w) {
@@ -246,6 +258,26 @@ registerActionId		"0"
 	};
 	function fillinCampaigns (set) {
 		camps = set;
+		console.info('campaigns are here:');
+		console.dir(set);
+		$("#campaign").autocomplete({
+			minLength: 0,
+			source: set,
+			select: function( event, ui ) {
+				$("#campaign").val( ui.item.name );
+				$("#campId").val( ui.item.campId );
+				_ts.userDidSelect = true;
+				return false;
+			},
+			change: function( event, ui ) {
+
+			}
+		})
+		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+			.append( "<a>" + item.name + "<br>" + new XDate(item.start.date).toString('d MMM yyyy') + ' - ' + new XDate(item.end.date).toString('d MMM yyyy') + "</a>" )
+			.appendTo( ul );
+		};
 	};
 	function fillinMakilinks (set) {
 		$('#manager').jqGrid('clearGridData');
@@ -260,6 +292,27 @@ registerActionId		"0"
 			$('#manager').jqGrid('addRowData', i, set[i]);
 			onSort();
 		}
+	};
+	function fillinChannels (chn) {
+		_ts.userDidSelect = false;
+		$("#channel").autocomplete({
+			minLength: 0,
+			source: chn,
+			select: function( event, ui ) {
+				$("#channel").val( ui.item.channelKeyName );
+				$("#channelId").val( ui.item.channelId );
+				_ts.userDidSelect = true;
+				return false;
+			},
+			change: function( event, ui ) {
+
+			}
+		})
+		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+			.append( "<a>" + item.channelKeyName + "<br><small>" + item.description + "</small></a>" )
+			.appendTo( ul );
+		};
 	};
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
@@ -326,26 +379,33 @@ registerActionId		"0"
 			cm = ts.colModel;
 		}
 		$.extend($.jgrid.defaults, {
-			'ignoreCase': true, 'shrinkToFit': true, 'altRows': true, 'hoverrows': false, 'sortorder': 'asc',
-			'height':'auto', 'hidegrid': false, 'sortname': 0, 'autoencode': true, 'viewrecords': true,
+			'ignoreCase': true, 'shrinkToFit': false, 'altRows': true, 'hoverrows': false, 'sortorder': 'asc',
+			'height':'auto', 'hidegrid': false, 'sortname': 'appname', 'autoencode': true, 'viewrecords': true,
 			'recordtext': 'View {0} - {1} of {2}', 'pgtext': 'Page {0} of {1}', 'sortable': true,
 			'emptyrecords': 'No records to view', 'loadtext': 'Loading...',	'toppager': true	
 		});
 
 		$(into).jqGrid({
 			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption,
-			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 'onSortCol': onSort,
+			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 
+			'onHeaderClick': function (gstate) { 
+				onSort(); 
+			}, 
+			'onSortCol': function (i, c, or) { 
+				onSort(); 
+			},
 		});
 
 		// FILTER / SEARCH
 		if(menuPath === 'managementMakilinks' || menuPath === 'managementApps') {
-			$('.ui-jqgrid-titlebar').append('<div id="filterer" class="pull-right" />');
 			$(into).filterToolbar({
 				'afterSearch': onSort,
 				'searchOnEnter': false,
 			});
 			$('input#gs_editButton, input#gs_appToken, input#gs_marketUrl').remove();
 		}
+
+		$('.ui-jqgrid-titlebar').append('<button class="btn btn-small btn-primary pull-right addNew" type="button">Add New</button>');
 
 		// EXTRA PULLDOWNA FOR NARROWING DOWN
 		if(menuPath === 'managementUsers') {
@@ -398,6 +458,7 @@ registerActionId		"0"
 					}
 					$(into).jqGrid('addRowData', i, set[i]);
 				}
+				$(into).jqGrid();
 				onSort();
 				
 			} } ]);
@@ -436,6 +497,9 @@ registerActionId		"0"
 		},
 		tostring = Object.prototype.toString;
 	    return types[typeof o] || types[tostring.call(o)] || (o ? 'object' : 'null');
+	};
+	function parseDMY(str) {
+		return new XDate(str.replace(/([0-9]{2})([0-9]{2})([0-9]{4})/, '$3-$2-$1'));
 	};
 
 	return {

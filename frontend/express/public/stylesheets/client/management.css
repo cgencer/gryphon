@@ -48,3 +48,15 @@ thead {
 	background-image: url('/images/ios.png');	
 	background-position:right center;	
 }
+#campPulldown {
+	font-size:0.8em;
+}
+input {
+	border:none;
+}
+input.ui-pg-input {
+	width:25px;
+}
+.ui-autocomplete {
+	font-size:0.8em;
+}

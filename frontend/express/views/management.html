@@ -20,6 +20,7 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jqGrid/i18n/grid.locale-en.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jqGrid/jquery.jqGrid.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/ui/jquery.loadJSON.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/utils/xdate.js"></script>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/latinise.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/moment/moment.min.js"></script>
@@ -38,6 +39,7 @@
 </head>
 
 <body>
+	<input type="hidden" id="whichTable" value="" />
 
 	<div class="container-fluid wholePage">
 
@@ -376,19 +378,19 @@
 		<div class="modal-body">
 			<p>
 				<form class="form-horizontal">
-					<input type="hidden" id="username" value="" />
-
+					<input type="hidden" id="channelId" value="" />
+					<input type="hidden" id="campId" value="" />
 					<div class="control-group">
-						<label class="control-label span1" for="orgname">User Name</label>
+						<label class="control-label span1" for="channel">Channel</label>
 						<div class="controls">
-							<input type="text" id="orgname" placeholder="Org Name" />
+							<input type="text" id="channel" placeholder="Channel" />
 						</div>
 					</div>
 
 					<div class="control-group">
-						<label class="control-label span1" for="description">E-mail</label>
+						<label class="control-label span1" for="campaign">Campaign</label>
 						<div class="controls">
-							<input type="text" id="description" placeholder="Description" />
+							<input type="text" id="campaign" placeholder="Campaign" />
 						</div>
 					</div>
 
