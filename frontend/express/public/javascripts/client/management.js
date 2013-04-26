@@ -91,6 +91,8 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
 			$('#whichTable').val(whichTable);
+
+			
 			console.log('whattafuck! '+whichTable);
 			if(whichTable === 'managementMakilinks' && whichApp === '') {
 				$('.selector').accordion( "option", "active", 2 );
@@ -146,8 +148,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '.saveButton' , function (e) {
 			e.preventDefault();
 
-			console.info('starting save...');
-			
 			ui = $.toJSON(_.values(getDataObject( $('form#' + $(this).attr('alt')).children('input[name="object"]').val() ) )[0]);
 			mn = $('form#' + $(this).attr('alt')).children('input[name="modal"]').val();
 
@@ -163,54 +163,14 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 			});
 
-			rq = {};
-			pl = $.evalJSON(ui);
+			theCmd = $('form#' + $(this).attr('alt')).children('input[name="command"]').val() + 
+			$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
 
-			rq.info = pl;
-			rq.command = 1;
-			rq.countlyHostId = 'mkui1.nmdapps.com'; 
-console.dir(rq);
-
-theCmd = $('form#' + $(this).attr('alt')).children('input[name="command"]').val() + 
-$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
-
-
-console.log('>'+theCmd);
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': rq, 'success': function () { $('#'+mn).modal('hide'); }}], globalFail);
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { $('#'+mn).modal('hide'); }}], globalFail);
 		});
 
 
 /*
-{"request":
-		{ "_type": "AddUpdateOrganizationRequest", 
-		"callTag": "", 
-		"registerId": "", 
-		"session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", 
-		"verb": "", 
-		"countlyHostId": "mkui1.nmdapps.com", 
-		"command": 1, 
-		"info": { 
-				"_type": "OrgInfo", 
-				"description": "Nomad A.Ş.", 
-				"orgId": "0.00001V@ORG", 
-				"orgName": "Nomad" } }}
-
-
-	{"callTag":"",
-	"registerId":"",
-	"verb":"",
-	"session":"eaa57e60-7e58-4553-908d-9f050795c5c3",
-	"callbackTag":"MjhiOWMyZTQtNjRmYi00ODUzLWI4ZGYtNWYxNmRiZjJmMGEy",
-	"request":{
-		"_type":"OrgInfo",
-		"description":"asfgasfga",
-		"orgId":"",
-		"orgName":"asfgasfg",
-		"command":1,
-		"countlyHostId":"mkui1.nmdapps.com"},
-		"_type":"AddUpdateOrganizationRequest"}
-
-
 _type					"AppInfo"
 appId					"0.00004L@APP"
 appToken				"AD90E34RT6HU12DHR56@0E3E"
@@ -228,16 +188,9 @@ platform				5
 registerActionId		"0"
 */
 		$(document).on('click', '.editButton' , function () {
-/*MultipleSelectMode
-			selectedIds = $("#manager").jqGrid('getGridParam','selarrrow');
-			if(selectedIds.length > 1) {
-			}else if(selectedIds.length == 1) {
-			}
-*/
-
 			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
 			console.dir(selObj);
-			populate('#'+$(this).attr('alt')+'Modal form', selObj);
+			populate('#'+$(this).attr('title'), selObj);
 			$('#'+$(this).attr('alt')+'Modal').modal('show');
 
 		});
@@ -245,8 +198,23 @@ registerActionId		"0"
 
 	function onSort () {
 		w = $('#whichTable').val();
+		f = '';
+		switch (w) {
+			case 'managementOrganizations':
+				f = 'orgForm';
+				break;
+			case 'managementUsers':
+				f = 'userForm';
+				break;
+			case 'managementApps':
+				f = 'appForm';
+				break;
+			case 'managementMakilinks':
+				f = 'makilinkForm';
+				break;
+		}
 		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
-			$(this).html('<button class="btn btn-primary editButton" alt="' + w + '" type="button">Edit</button>');
+			$(this).html('<button class="btn btn-primary editButton" title="' + f + '" alt="' + w + '" type="button">Edit</button>');
 		});
 	};
 	function getDataObject (w) {
@@ -260,7 +228,7 @@ registerActionId		"0"
 	};
 	function populate(frm, data) {
 		$.each(data, function(key, value){
-			$('#'+key, frm).val(value);
+			$('input[name="'+key+'"]', frm).val(value);
 		});
 		if(type(data.platform) != 'undefined') {
 			var plNo;
@@ -491,7 +459,7 @@ registerActionId		"0"
 		}
 		if(orgs.length > 0) {
 			for(var o in orgs) {
-				$('#orgPulldown').append('<option value="' + orgs[o].orgId + '">' + orgs[o].description + '</option>');
+				$('#orgPulldown').append('<option value="' + orgs[o].orgId + '">' + orgs[o].orgName + '</option>');
 			}
 		}
 		if(camps.length > 0) {
