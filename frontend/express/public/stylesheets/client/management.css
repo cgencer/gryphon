@@ -21,6 +21,10 @@ thead {
     width: 80%;
     margin-left:-40%;
 }
+.modal.normal {
+    width: 70%;
+    margin-left:-40%;
+}
 .modal.medium {
     width: 60%;
     margin-left:-30%;

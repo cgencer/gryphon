@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 	<title>index</title>
 
 	<script language="javascript" type="text/javascript" src="/javascripts/dom/jquery/jquery-1.8.3.min.js"></script>
@@ -166,67 +166,42 @@
 		</div>
 	</div>
 
-	<div id="managementModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-			<h3 id="myModalLabel">Organization Management</h3>
-		</div>
-		<div class="modal-body">
-			<p>
-				<form class="form-horizontal">
-					<input type="hidden" id="username" value="" />
-
-					<div class="control-group">
-						<label class="control-label span1" for="orgname">Org Name</label>
-						<div class="controls">
-							<input type="text" id="orgname" placeholder="Org Name" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label span1" for="description">Description</label>
-						<div class="controls">
-							<input type="text" id="description" placeholder="Description" />
-						</div>
-					</div>
-
-				</form>
-			</p>
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
-		</div>
-	</div>
-
 	<div id="managementOrganizationsModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
 			<h3 id="myModalLabel">Organization Management</h3>
 		</div>
 		<div class="modal-body">
-			<p>
-				<form class="form-horizontal">
-					<input type="hidden" id="username" value="" />
 
-					<div class="control-group">
-						<label class="control-label span1" for="orgName">Org Name</label>
-						<div class="controls">
-							<input type="text" id="orgName" placeholder="Org Name" />
-						</div>
-					</div>
+			<form id="orgForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="Organization" />
+				<input type="hidden" name="object" 			value="OrgInfo" />
+				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
 
-					<div class="control-group">
-						<label class="control-label span1" for="description">Description</label>
-						<div class="controls">
-							<input type="text" id="description" placeholder="Description" />
-						</div>
-					</div>
+				<input type="hidden" name="orgName" 		value="" />
+				<input type="hidden" name="orgType" 		value="" />
+				<input type="hidden" name="description" 	value="" />
+			</form>
 
-					<div class="control-group">
-					<label class="control-label span1" for="type">Type</label>
-					<div class="controls">
-					<select name="type" id="orgType" class="">
+			<div class="control-group">
+				<label class="control-label span1" for="orgName">Org Name</label>
+				<div class="controls">
+					<input type="text" name="orgName" class="formCopy" alt="orgForm" placeholder="Org Name" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label span1" for="description">Description</label>
+				<div class="controls">
+					<input type="text" name="description" class="formCopy" alt="orgForm" placeholder="Description" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label span1" for="orgType">Type</label>
+				<div class="controls">
+					<select name="type" name="orgType" class="formCopy" alt="orgForm" >
 						<option value="0">None</option>
 						<option value="1">Agency</option>
 						<option value="2">Client</option>
@@ -234,15 +209,13 @@
 						<option value="4">Network</option>
 						<option value="5">Publisher</option>
 					</select>
-					</div>
-					</div>
+				</div>
+			</div>
 
-				</form>
-			</p>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
+			<button class="btn btn-primary saveButton" alt="orgForm">Save changes</button>
 		</div>
 	</div>
 
@@ -252,36 +225,48 @@
 			<h3 id="myModalLabel">Users Management</h3>
 		</div>
 		<div class="modal-body">
-			<p>
-				<form class="form-horizontal">
+			<form id="userForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="Organization" />
+				<input type="hidden" name="object" 			value="OrgInfo" />
+				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
+
+				<input type="hidden" name="username" 		value="" />
+				<input type="hidden" name="name" 			value="" />
+				<input type="hidden" name="email"	 		value="" />
+				<input type="hidden" name="orgId" 			value="" />
+				<input type="hidden" name="password" 		value="" />
+				<input type="hidden" name="primaryRole" 	value="" />
+			</form>
+
 					<input type="hidden" id="username" value="" />
 					<input type="hidden" id="orgId" value="" />
 
 					<div class="control-group">
 						<label class="control-label span1" for="email">E-mail</label>
 						<div class="controls">
-							<input type="text" id="email" placeholder="E-mail" value="" />
+							<input type="text" name="email" class="formCopy" alt="userForm" placeholder="E-mail" value="" />
 						</div>
 					</div>
 
 					<div class="control-group">
 						<label class="control-label span1" for="name">User Name</label>
 						<div class="controls">
-							<input type="text" id="name" placeholder="User Name" value="" />
+							<input type="text" name="name" class="formCopy" alt="userForm" placeholder="User Name" value="" />
 						</div>
 					</div>
 
 					<div class="control-group">
 						<label class="control-label span1" for="password">Password</label>
 						<div class="controls">
-							<input type="text" id="password" placeholder="Password" value="" />
+							<input type="text" name="password" class="formCopy" alt="userForm" placeholder="Password" value="" />
 						</div>
 					</div>
 
 					<div class="control-group">
 						<label class="control-label span1" for="repassword">Re-enter Password</label>
 						<div class="controls">
-							<input type="text" id="repassword" placeholder="Re-enter Password" value="" />
+							<input type="text" name="repassword" class="formCopy" alt="userForm" placeholder="Re-enter Password" value="" />
 						</div>
 					</div>
 
@@ -299,17 +284,42 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
+			<button class="btn btn-primary saveButton">Save changes</button>
 		</div>
 	</div>
 
-	<div id="managementAppsModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="managementAppsModal" class="modal normal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
 			<h3 id="myModalLabel">Applications Management</h3>
 		</div>
 		<div class="modal-body">
-			<p>
+			<form id="appForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="App" />
+				<input type="hidden" name="object" 			value="AppInfo" />
+				<input type="hidden" name="modal" 			value="managementAppsModal" />
+
+				<input type="hidden" name="appname" 		value="" />
+				<input type="hidden" name="appToken" 		value="" />
+				<input type="hidden" name="description"	 	value="" />
+				<input type="hidden" name="marketURL" 		value="" />
+				<input type="hidden" name="platform" 		value="" />
+			</form>
+			<form id="userForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="User" />
+				<input type="hidden" name="object" 			value="UserInfo" />
+				<input type="hidden" name="modal" 			value="managementAppsModal" />
+
+				<input type="hidden" name="username" 		value="" />
+				<input type="hidden" name="name" 			value="" />
+				<input type="hidden" name="email"	 		value="" />
+				<input type="hidden" name="orgId" 			value="" />
+				<input type="hidden" name="password" 		value="" />
+				<input type="hidden" name="primaryRole" 	value="" />
+			</form>
+
 				<form class="form-horizontal">
 					<input type="hidden" id="username" value="" />
 					<input type="hidden" id="userId" value="" />
@@ -317,155 +327,140 @@
 					<input type="hidden" id="primaryRole" value="" />
 					<input type="hidden" id="password" value="123456" />
 
-					<input type="hidden" id="appname" value="" />
-					<input type="hidden" id="appToken" value="" />
-					<input type="hidden" id="description" value="" />
-					<input type="hidden" id="marketURL" value="" />
-					<input type="hidden" id="platform" value="" />
 
 					<table>
 					<tr>
 					<td><label class="control-label" for="organization">Organization </label></td>
-					<td><input type="text" id="organization" placeholder="Organization" /></td>
+					<td><input type="text" name="organization" class="formCopy" alt="userForm" placeholder="Organization" /></td>
 					<td><label class="control-label" for="name">Developer </label></td>
-					<td><input type="text" id="userName" name="name" placeholder="Name" value="" /></td>
+					<td><input type="text" name="userName" class="formCopy" alt="userForm" placeholder="Name" value="" /></td>
 					</tr>
 					<tr>
 					<td></td><td></td>
 					<td class="hiddenFields" style="display:none;"><label class="control-label" for="name">E-mail </label></td>
-					<td class="hiddenFields" style="display:none;"><input type="text" id="email" value="" placeholder="E-mail"></td>
+					<td class="hiddenFields" style="display:none;"><input type="text" name="email" class="formCopy" alt="userForm"value="" placeholder="E-mail"></td>
 					</tr>
 					<tr id="cloneMe">
-					<td><label class="control-label" for="platform">Platform </label></td>
-					<td>
-						<select id="platform" name="platform" class="">
-						<option value="0">Unknown</option>
-						<option value="1">IOS</option>
-						<option value="2">Android</option>
-						<option value="3">Windows</option>
-						<option value="4">Symbian</option>
-						<option value="5">Tizen</option>
-					</select>
+					<td colspan="2">
+						<div class="btn-group pull-right" data-toggle="buttons-radio">
+							<button type="button" class="btn btn-small btn-primary disabled">Platform</button>
+							<button type="button" class="btn btn-small btn-primary">IOS</button>
+							<button type="button" class="btn btn-small btn-primary">Android</button>
+							<button type="button" class="btn btn-small btn-primary">Symbian</button>
+							<button type="button" class="btn btn-small btn-primary">Windows</button>
+							<button type="button" class="btn btn-small btn-primary">Tizen</button>
+						</div>
 					</td>
+					
 					<td><label class="control-label" for="name">Market URL</label></td>
 					<td>
 						<input type="text" id="marketUrl" class="" placeholder="Market URL">
 						<button type="button" class="addRow">+</button>
 					</td>
+					</tr><tr>
+						<td>
+							<label class="control-label span1" for="description">Description</label>
+						</td>
+						<td colspan="3">
+							<textarea rows="2" style="width:590px;" id="description" name="description" placeholder="Description"></textarea>
+						</td>
+					</tr>
 					</table>
-
-					<div class="control-group">
-						<label class="control-label span1" for="description">Description</label>
-						<div class="controls">
-							<textarea rows="3" id="description" name="description" placeholder="Description"></textarea>
-						</div>
-					</div>
 
 				</form>
 			</p>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
+			<button class="btn btn-primary saveButton">Save changes</button>
 		</div>
 	</div>
 
 	<div id="managementMakilinksModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<form class="form-horizontal">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-			<h3 id="myModalLabel">Users Management</h3>
+			<h3 id="myModalLabel">Makilink Management</h3>
 		</div>
 		<div class="modal-body">
-			<p>
-				<form class="form-horizontal">
-					<input type="hidden" id="channelId" value="" />
-					<input type="hidden" id="campId" value="" />
-					<div class="control-group">
-						<label class="control-label span1" for="channel">Channel</label>
-						<div class="controls">
-							<input type="text" id="channel" placeholder="Channel" />
-							<button type="button" id="addChannel">+</button>
+			<form id="appForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="App" />
+				<input type="hidden" name="object" 			value="AppInfo" />
+				<input type="hidden" name="modal" 			value="managementAppsModal" />
+
+				<input type="hidden" name="channelId" 		value="" />
+				<input type="hidden" name="campId" 			value="" />
+				<input type="hidden" name="description"	 	value="" />
+				<input type="hidden" name="marketURL" 		value="" />
+				<input type="hidden" name="platform" 		value="" />
+			</form>
+
+			<input type="hidden" id="channelId" value="" />
+			<input type="hidden" id="campId" value="" />
+
+			<table width="100%">
+				<tr>
+					<td>Channel</td>
+					<td>
+						<input type="text" id="channel" placeholder="Channel" value="" /><button type="button" id="addChannel">+</button>
+					</td>
+				</tr>
+
+				<tr class="channelAdding" style="display:none;">
+					<td class="btn-group pull-right" data-toggle="buttons-radio" id="installTrack">
+						<button type="button" class="btn btn-small btn-primary disabled">Install Track</button>
+						<button type="button" class="btn btn-small btn-primary">None</button>
+						<button type="button" class="btn btn-small btn-primary">UI</button>
+						<button type="button" class="btn btn-small btn-primary">SDK</button>
+						<button type="button" class="btn btn-small btn-primary">Makilink</button>
+					</td>
+					<td class="btn-group pull-right" data-toggle="buttons-radio" id="clickTrack">
+						<button type="button" class="btn btn-small btn-primary disabled">Click Track</button>
+						<button type="button" class="btn btn-small btn-primary">None</button>
+						<button type="button" class="btn btn-small btn-primary">UI</button>
+						<button type="button" class="btn btn-small btn-primary">SDK</button>
+						<button type="button" class="btn btn-small btn-primary">Makilink</button>
+					</td>
+				</tr>
+				<tr class="channelAdding" style="display:none;">
+					<td class="btn-group pull-right" data-toggle="buttons-radio" id="viewTrack">
+							<button type="button" class="btn btn-small btn-primary disabled">View Track</button>
+							<button type="button" class="btn btn-small btn-primary">None</button>
+							<button type="button" class="btn btn-small btn-primary">UI</button>
+							<button type="button" class="btn btn-small btn-primary">SDK</button>
+							<button type="button" class="btn btn-small btn-primary">Makilink</button>
 						</div>
-					</div>
-
-					<div id="channelAdding" style="display:none;">
-
-						<label for="channeldescription">Description</label>
-						<input type="text" id="channeldescription" placeholder="Description" />
-
-						<label for="viewTrack">View Track</label>
-						<div class="btn-toolbar" id="viewTrack">
-							<div class="btn-group">
-								<a class="btn" href="#">None</a>
-								<a class="btn" href="#">UI</a>
-								<a class="btn" href="#">SDK</a>
-								<a class="btn" href="#">Makilink</a>
-							</div>
+					</td>
+					<td class="btn-group pull-right" data-toggle="buttons-radio" id="actionTrack">
+							<button type="button" class="btn btn-small btn-primary disabled">Action Track</button>
+							<button type="button" class="btn btn-small btn-primary">None</button>
+							<button type="button" class="btn btn-small btn-primary">UI</button>
+							<button type="button" class="btn btn-small btn-primary">SDK</button>
+							<button type="button" class="btn btn-small btn-primary">Makilink</button>
 						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Campaign</td>
+					<td>
+						<input type="text" id="campaign" placeholder="Campaign" />
+						<button type="button" id="addCampaign">+</button>
+					</td>
+				</tr>
+				<tr class="campaignAdding" style="display:none;">
+					<td>Channel</td>
+					<td>
+						<input type="text" id="channel" placeholder="Channel" />
+					</td>
+				</tr>
+			</table>
 
-						<label for="clickTrack">Click Track</label>
-						<div class="btn-toolbar" id="clickTrack">
-							<div class="btn-group">
-								<a class="btn" href="#">None</a>
-								<a class="btn" href="#">UI</a>
-								<a class="btn" href="#">SDK</a>
-								<a class="btn" href="#">Makilink</a>
-							</div>
-						</div>
-
-						<label for="installTrack">Install Track</label>
-						<div class="btn-toolbar" id="installTrack">
-							<div class="btn-group">
-								<a class="btn" href="#">None</a>
-								<a class="btn" href="#">UI</a>
-								<a class="btn" href="#">SDK</a>
-								<a class="btn" href="#">Makilink</a>
-							</div>
-						</div>
-
-						<label for="actionTrack">Action Track</label>
-						<div class="btn-toolbar" id="actionTrack">
-							<div class="btn-group">
-								<a class="btn" href="#">None</a>
-								<a class="btn" href="#">UI</a>
-								<a class="btn" href="#">SDK</a>
-								<a class="btn" href="#">Makilink</a>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="control-group">
-						<label class="control-label span1" for="campaign">Campaign</label>
-						<div class="controls">
-							<input type="text" id="campaign" placeholder="Campaign" />
-							<button type="button" id="addCampaign">+</button>
-						</div>
-					</div>
-
-					<div id="campaignAdding" style="display:none;">
-						<div class="control-group">
-							<label class="control-label span1" for="channel">Channel</label>
-							<div class="controls">
-								<input type="text" id="channel" placeholder="Channel" />
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label span1" for="channel">Channel</label>
-							<div class="controls">
-								<input type="text" id="channel" placeholder="Channel" />
-							</div>
-						</div>
-
-					</div>
-
-				</form>
-			</p>
-		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
+			<button class="btn btn-primary saveButton">Save changes</button>
 		</div>
+	</form>
 	</div>
 
 	<div id="AppsTemplate" style="display:none;">

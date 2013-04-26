@@ -15,9 +15,15 @@ var Gryphon = (function(Gryphon, undefined){
 	app.post('/dash', dashboard);
 	app.get('/mng', management);
 	app.post('/mng', management);
+	app.use(function(req, res, next) {
+//		res.contentType('text/html; charset=ISO-8859-1');
+		res.charset = 'ISO-8859-1';
+		res.header('Content-Type', 'text/html; charset=ISO-8859-1');
+		next();
+	});
 
 	app.listen(8080);
-	
+
 	function login (req, res) {
 		if(req.params.formSent === 'true'){
 		}

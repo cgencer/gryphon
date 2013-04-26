@@ -84,8 +84,8 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 					{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns},
 				], globalFail);
 			}
-			$('#sideBarApps').collapse('toggle');
-			$('#sideBarManagement').collapse('show');
+//			$('#sideBarApps').collapse('toggle');
+//			$('#sideBarManagement').collapse('show');
 		});
 		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
@@ -136,13 +136,81 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			onSort();
 		});
 		$(document).on('click', '#addChannel' , function () {
-			$('#channelAdding').css('display', 'block');
+			$('.channelAdding').css('display', 'block');
 		});
 		$(document).on('click', '#addCampaign' , function () {
-			$('#campaignAdding').css('display', 'block');
+			$('.campaignAdding').css('display', 'block');
 		});
 			
+
+		$(document).on('click', '.saveButton' , function (e) {
+			e.preventDefault();
+
+			console.info('starting save...');
+			
+			ui = $.toJSON(_.values(getDataObject( $('form#' + $(this).attr('alt')).children('input[name="object"]').val() ) )[0]);
+			mn = $('form#' + $(this).attr('alt')).children('input[name="modal"]').val();
+
+			$('input.formCopy').each( function (i, v) {
+				$('form#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
+			});
+
+			$('form#' + $(this).attr('alt')).children('input').each( function (ii, vv) {
+				console.log( $(this).attr('name') + ' = '+ $(this).val() );
+
+				rexp = new RegExp(',["]{1}([' + $(this).attr('name') + ']*)["]{1}:["]{2}', 'g');
+				ui = ui.replace(rexp, ',"$1":"' + $(this).val() + '"');
+
+			});
+
+			rq = {};
+			pl = $.evalJSON(ui);
+
+			rq.info = pl;
+			rq.command = 1;
+			rq.countlyHostId = 'mkui1.nmdapps.com'; 
+console.dir(rq);
+
+theCmd = $('form#' + $(this).attr('alt')).children('input[name="command"]').val() + 
+$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
+
+
+console.log('>'+theCmd);
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': rq, 'success': function () { $('#'+mn).modal('hide'); }}], globalFail);
+		});
+
+
 /*
+{"request":
+		{ "_type": "AddUpdateOrganizationRequest", 
+		"callTag": "", 
+		"registerId": "", 
+		"session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", 
+		"verb": "", 
+		"countlyHostId": "mkui1.nmdapps.com", 
+		"command": 1, 
+		"info": { 
+				"_type": "OrgInfo", 
+				"description": "Nomad A.Ş.", 
+				"orgId": "0.00001V@ORG", 
+				"orgName": "Nomad" } }}
+
+
+	{"callTag":"",
+	"registerId":"",
+	"verb":"",
+	"session":"eaa57e60-7e58-4553-908d-9f050795c5c3",
+	"callbackTag":"MjhiOWMyZTQtNjRmYi00ODUzLWI4ZGYtNWYxNmRiZjJmMGEy",
+	"request":{
+		"_type":"OrgInfo",
+		"description":"asfgasfga",
+		"orgId":"",
+		"orgName":"asfgasfg",
+		"command":1,
+		"countlyHostId":"mkui1.nmdapps.com"},
+		"_type":"AddUpdateOrganizationRequest"}
+
+
 _type					"AppInfo"
 appId					"0.00004L@APP"
 appToken				"AD90E34RT6HU12DHR56@0E3E"
@@ -251,8 +319,8 @@ registerActionId		"0"
 				cn = 'mobile_ios';
 			}
 */
-			an = an.replace(/\s*[android|ios]/i, '');
-			an = (an.length > 16) ? an.substr(0, 16) + '...' : an;
+//			an = an.replace(/\s*[android|ios]/i, '');
+			an = (an.length > 20) ? an.substr(0, 20) + '...' : an;
 			$('#sideBarApps').append(	'<div class="accordion-group sources">' +
 										'<div class="accordion-heading subLinks appLinks ' + cn + '" id="' + appSet[a].appId + '">' +
 										'<a href="#App" alt="' + appSet[a].appId + '">' + an + '</a></div></div>');
@@ -375,6 +443,7 @@ registerActionId		"0"
 				ts = tableSets[i];
 			}
 		}
+
 		if(ts.colModel[ts.colModel.length-1].name != 'editButton') { 
 			cn = ts.colNames;
 			cn.push('');
