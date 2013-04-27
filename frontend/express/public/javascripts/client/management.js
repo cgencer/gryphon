@@ -143,7 +143,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '#addCampaign' , function () {
 			$('.campaignAdding').css('display', 'block');
 		});
+		$(document).on('blur', '.formCopy' , function () {
+			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
 			
+		});
 
 		$(document).on('click', '.saveButton' , function (e) {
 			e.preventDefault();
@@ -190,9 +193,8 @@ registerActionId		"0"
 		$(document).on('click', '.editButton' , function () {
 			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
 			console.dir(selObj);
-			populate('#'+$(this).attr('title'), selObj);
+			populate($(this).attr('title'), $(this).attr('alt'), selObj);
 			$('#'+$(this).attr('alt')+'Modal').modal('show');
-
 		});
 	});
 
@@ -226,10 +228,13 @@ registerActionId		"0"
 		}
 		return r;
 	};
-	function populate(frm, data) {
+	function populate(frmH, frmM, data) {
+
 		$.each(data, function(key, value){
-			$('input[name="'+key+'"]', frm).val(value);
+			$('input[name="' + key + '"]', '#'+frmH).val( value );
+			$('input.'+frmM+'[name="' + key + '"]').val( value );
 		});
+
 		if(type(data.platform) != 'undefined') {
 			var plNo;
 			switch (data.platform) {
@@ -254,6 +259,7 @@ registerActionId		"0"
 			}
 			$('select#platform', frm).val(plNo);
 		}
+
 	};
 	function fillinOrganizations (orgSet) {
 		orgs = orgSet;
