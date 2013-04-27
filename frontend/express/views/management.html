@@ -240,8 +240,17 @@
 				<input type="hidden" name="name" 			value="" />
 				<input type="hidden" name="email"	 		value="" />
 				<input type="hidden" name="orgId" 			value="" />
+				<input type="hidden" name="userId" 			value="" />
 				<input type="hidden" name="password" 		value="" />
+
 				<input type="hidden" name="primaryRole" 	value="" />
+				<input type="hidden" name="description" 	value="" />
+				<input type="hidden" name="roleId" 			value="" />
+				<input type="hidden" name="roleName" 		value="" />
+				<input type="hidden" name="visibleName" 	value="" />
+				<input type="hidden" name="visibleName" 	value="" />
+				<input type="hidden" name="verbs" 			value="" />
+				<input type="hidden" name="numberOfUsers" 	value="" />
 			</form>
 
 					<input type="hidden" id="username" value="" />
@@ -264,14 +273,14 @@
 					<div class="control-group">
 						<label class="control-label span1" for="password">Password</label>
 						<div class="controls">
-							<input type="text" name="password" class="formCopy managementUsers" alt="userForm" placeholder="Password" value="" />
+							<input type="password" name="password" class="formCopy managementUsers" alt="userForm" placeholder="Password" value="" />
 						</div>
 					</div>
 
 					<div class="control-group">
 						<label class="control-label span1" for="repassword">Re-enter Password</label>
 						<div class="controls">
-							<input type="text" name="repassword" class="formCopy managementUsers" alt="userForm" placeholder="Re-enter Password" value="" />
+							<input type="password" name="repassword" class="formCopy managementUsers" alt="userForm" placeholder="Re-enter Password" value="" />
 						</div>
 					</div>
 
@@ -306,11 +315,17 @@
 				<input type="hidden" name="modal" 			value="managementAppsModal" />
 
 				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="appname" 		value="" />
+				<input type="hidden" name="orgId" 			value="" />
+				<input type="hidden" name="appId" 			value="" />
 				<input type="hidden" name="appToken" 		value="" />
+				<input type="hidden" name="appType" 		value="" />
+				<input type="hidden" name="appname" 		value="" />
 				<input type="hidden" name="description"	 	value="" />
+				<input type="hidden" name="iconUrl"	 		value="" />
 				<input type="hidden" name="marketURL" 		value="" />
-				<input type="hidden" name="platform" 		value="" />
+				<input type="hidden" name="platform" 		value="" />			<!-- COMBO -->
+				<input type="hidden" name="googleAnalyticsKey" value="" />
+				<input type="hidden" name="registerActionId" value="" />		<!-- COMBO: install/visit-->
 			</form>
 			<form id="userForm">
 				<input type="hidden" name="command"			value="AddUpdate" />
@@ -326,25 +341,17 @@
 				<input type="hidden" name="primaryRole" 	value="" />
 			</form>
 
-				<form class="form-horizontal">
-					<input type="hidden" id="username" value="" />
-					<input type="hidden" id="userId" value="" />
-					<input type="hidden" id="orgId" value="" />
-					<input type="hidden" id="primaryRole" value="" />
-					<input type="hidden" id="password" value="123456" />
-
-
 					<table>
 					<tr>
 					<td><label class="control-label" for="organization">Organization </label></td>
-					<td><input type="text" name="organization" class="formCopy" alt="userForm" placeholder="Organization" /></td>
+					<td><input type="text" name="organization" class="formCopy managementApps" alt="appForm" placeholder="Organization" /></td>
 					<td><label class="control-label" for="name">Developer </label></td>
-					<td><input type="text" name="userName" class="formCopy" alt="userForm" placeholder="Name" value="" /></td>
+					<td><input type="text" name="userName" class="formCopy managementApps" alt="userForm" placeholder="Name" value="" /></td>
 					</tr>
 					<tr>
 					<td></td><td></td>
 					<td class="hiddenFields" style="display:none;"><label class="control-label" for="name">E-mail </label></td>
-					<td class="hiddenFields" style="display:none;"><input type="text" name="email" class="formCopy" alt="userForm"value="" placeholder="E-mail"></td>
+					<td class="hiddenFields" style="display:none;"><input type="text" name="email" class="formCopy managementApps" alt="userForm"value="" placeholder="E-mail"></td>
 					</tr>
 					<tr id="cloneMe">
 					<td colspan="2">
@@ -373,8 +380,6 @@
 					</tr>
 					</table>
 
-				</form>
-			</p>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

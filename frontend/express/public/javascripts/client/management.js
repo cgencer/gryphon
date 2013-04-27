@@ -44,6 +44,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var whichApp = '';
 	var theModal = '';
 	var userDidSelect = false;
+	var selectOrgFlag = false;
 	var _ts = this;
 	var _role = {};
 	var orgs = [];
@@ -143,9 +144,9 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '#addCampaign' , function () {
 			$('.campaignAdding').css('display', 'block');
 		});
-		$(document).on('blur', '.formCopy' , function () {
+		$(document).on('change', '.formCopy' , function () {
 			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
-			
+			$('#' + $(this).attr('alt') + ' input[name="command"]').val( 2 );
 		});
 
 		$(document).on('click', '.saveButton' , function (e) {
@@ -257,28 +258,54 @@ registerActionId		"0"
 					plNo = 5;
 					break;
 			}
-			$('select#platform', frm).val(plNo);
+			$('select#platform', frmH).val(plNo);
 		}
 
 	};
 	function fillinOrganizations (orgSet) {
 		orgs = orgSet;
-		$('#organization').autocomplete({
+		selectOrgFlag = false;
+		$('input.managementApps[name="organization"]').autocomplete({
 			minLength: 0,
 			source: orgSet,
 			select: function( event, ui ) {
-				$("#organization").val( ui.item.description );
+				selectOrgFlag = true;
+				$('input.managementApps[name="organization"]').val( ui.item.orgName );
 				$("#orgId").val( ui.item.orgId );
 				cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgId").val()}, 'success': fillinUsers}], globalFail);
 				return false;
+			},
+			close: function( event, ui ) {
+				if(!selectOrgFlag) {
+					
+				}
 			}
 		})
 		.data("ui-autocomplete")._renderItem = function( ul, item ) {
 			return $( "<li>" )
-			.append( "<a>" + item.orgName + "<br><small>" + item.description + "</small></a>" )
+			.append( "<a>" + item.orgName + "</a>" )
 			.appendTo( ul );
 		};
 	}
+	$(document).on('blur', 'input.managementApps[name="organization"]' , function (e) {
+		fn = $(this).attr('alt');
+		if(!selectOrgFlag && $(this).val() != '') {
+			ui = _.values(getDataObject('OrgInfo'))[0];
+			ui.orgName = $(this).val();
+			ui.description = $(this).val();
+
+			cuteNSexy.runChainedEvents([{'cmd': 'AddUpdateOrganization', 'payload': {
+				'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': ui
+			}, 'success': function (p) {
+// PAUSE: need to put in the orgId into the form
+
+
+				console.log('arrived');
+				console.dir(p);
+//				$('#'+fn+' input[name="orgId"]').val();
+			}}], globalFail);
+		}		
+	});
 	function fillinApps (appSet) {
 		apps = appSet;
 		console.dir(appSet);
@@ -364,11 +391,14 @@ registerActionId		"0"
 	};
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
-		$("#userName").autocomplete({
+		$('input.managementApps[name="userName"]').autocomplete({
 			minLength: 0,
 			source: userSet,
 			select: function( event, ui ) {
-				$("#name").val( ui.item.name );
+				$('input.managementApps[name="userName"]').val( ui.item.name );
+
+
+
 				$("#username").val( ui.item.username );
 				$("#userId").val( ui.item.userId );
 				$("#password").val( ui.item.password );
