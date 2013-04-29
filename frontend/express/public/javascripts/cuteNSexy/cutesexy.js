@@ -99,13 +99,19 @@ var cuteNSexy = (function (cuteNSexy, $, undefined) {
 			buffer.rq = {};
 			buffer.rp = {};
 		};
-//=========================================================================================================
+		function globalFail(err) {
+			console.log('error received:\n'+err);
+		};
+		//=========================================================================================================
 		// calls chained methods as such:
 		// runChainedEvents([ ['ListApps', {}, countlyHandsome.ListAppsDone],
 		//   				  ['ListApps', {}, countlyHandsome.ListAppsDone] , globalFailMethod]);
 		function runChainedEvents ( arr, fail ){
 			var neu = arr.shift();
 			// if global fail is defined, use it, otherwise use sepereate fail methods
+			if (typeof (fail) == 'undefined' && typeof (neu.fail) == 'undefined') {
+				_glbFail = globalFail;
+			}
 			if (!typeof (fail) == 'undefined' && typeof (neu.fail) == 'undefined') {
 				neu.fail = fail;
 				_glbFail = fail;
@@ -420,6 +426,7 @@ console.log('___> '+cmd);
 	    function createInstance () {
 			return {						// only these methods are accessible from the outside
 				'init': init,
+				'run': run,
 				'setService': setService,
 				'setDomain': setDomain,
 				'setPaths': setPaths,

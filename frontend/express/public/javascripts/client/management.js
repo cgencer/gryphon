@@ -4,9 +4,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		window.location.href = 'login';
 	};
 
-	function globalFail(err) {
-		console.log('error received:\n'+err);
-	};
 	function initModel () {
 		cuteNSexy.switchToLoxo();
 		if(Object.keys(amplify.store('paths')).length>0){cuteNSexy.setPaths(amplify.store('paths'));}else{
@@ -21,7 +18,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		if(Object.keys(amplify.store('dictionary')).length>0){cuteNSexy.setDictionary(amplify.store('dictionary'));}else{
 			console.log('Login / Dictionary object not found!!!');
 		}
-		console.dir(amplify.store('dictionary'));
 		console.log('User ID is: '+amplify.store('uid'));
 		console.log('Sess ID is: '+amplify.store('sid'));
 
@@ -29,7 +25,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		else{amplify.store('sid',cuteNSexy.getSessionID());}
 
 		cuteNSexy.runChainedEvents([ {'cmd': 'GetMenuItems', 'success': sMenuReceived,
-										'payload': {'userId':amplify.store('uid')} } ], globalFail);
+										'payload': {'userId':amplify.store('uid')} } ]);
 
 		cuteNSexy.switchToHandsome();
 		function sMenuReceived(package) {
@@ -45,6 +41,8 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var theModal = '';
 	var userDidSelect = false;
 	var selectOrgFlag = false;
+	var selectNamFlag = false;
+	var newOrgFlag = false;
 	var _ts = this;
 	var _role = {};
 	var orgs = [];
@@ -72,7 +70,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 					}
 				}
 			}}
-		], globalFail);
+		]);
 
 		$('div.subLinks').each( function () {
 //			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
@@ -83,7 +81,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			if(whichApp != '') {
 				cuteNSexy.runChainedEvents([
 					{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': fillinCampaigns},
-				], globalFail);
+				]);
 			}
 //			$('#sideBarApps').collapse('toggle');
 //			$('#sideBarManagement').collapse('show');
@@ -102,11 +100,11 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		});
 		$(document).on('change', '#orgPulldown' , function () {
 			console.log('changed orga...');
-			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}], globalFail);
+			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}]);
 		});
 		$(document).on('change', '#campPulldown' , function () {
 			console.log('changed campaign... >'+$("#campPulldown").val());
-			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}], globalFail);
+			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}]);
 		});
 		$(document).on('click', '.addRow' , function () {
 			$('#cloneMe').before( $('#cloneMe').clone() );
@@ -128,9 +126,12 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			if(!_ts.userDidSelect) {
 				_ts.userDidSelect = false;
 				cuteNSexy.runChainedEvents([{
-					'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}], globalFail);
+					'cmd': 'AddUpdateUser', 'payload': {'command':1, 'info': ui}, 'success': createdUser}]);
 			}
 		});
+		
+		$(document).on('blur', 'input.managementApps[name="organization"]', addingOrga);
+
 		$(document).on('click', 'button.addNew' , function (e) {
 			$('#'+whichTable+'Modal').modal('show');
 		});
@@ -170,7 +171,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			theCmd = $('form#' + $(this).attr('alt')).children('input[name="command"]').val() + 
 			$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
 
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { $('#'+mn).modal('hide'); }}], globalFail);
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { $('#'+mn).modal('hide'); }}]);
 		});
 
 
@@ -272,7 +273,7 @@ registerActionId		"0"
 				selectOrgFlag = true;
 				$('input.managementApps[name="organization"]').val( ui.item.orgName );
 				$("#orgId").val( ui.item.orgId );
-				cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgId").val()}, 'success': fillinUsers}], globalFail);
+				cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgId").val()}, 'success': fillinUsers}]);
 				return false;
 			},
 			close: function( event, ui ) {
@@ -287,28 +288,31 @@ registerActionId		"0"
 			.appendTo( ul );
 		};
 	}
-	$(document).on('blur', 'input.managementApps[name="organization"]' , function (e) {
-		fn = $(this).attr('alt');
+
+	function addingOrga (e) {
+		console.log('this is it...');
 		if(!selectOrgFlag && $(this).val() != '') {
+
 			ui = _.values(getDataObject('OrgInfo'))[0];
 			ui.orgName = $(this).val();
 			ui.description = $(this).val();
 
-			cuteNSexy.runChainedEvents([{'cmd': 'AddUpdateOrganization', 'payload': {
-				'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': ui
-			}, 'success': function (p) {
-// PAUSE: need to put in the orgId into the form
+			newOrgFlag = true;
+			pl = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': ui};
+			console.dir(pl);
+			cuteNSexy.runChainedEvents([{'cmd': 'AddUpdateOrganization', 'success': addedOrga, 'payload': pl}]);
+		}
+	};
+	function addedOrga (p) {
+		// PAUSE: need to put in the orgId into the form
+		console.info('do i get it???');
+		log('hellooo');
+		//				$('#'+fn+' input[name="orgId"]').val();
 
-
-				console.log('arrived');
-				console.dir(p);
-//				$('#'+fn+' input[name="orgId"]').val();
-			}}], globalFail);
-		}		
-	});
+		cuteNSexy.runChainedEvents([{'cmd': 'ListOrganizations', 'payload': {}, 'success': fillinOrganizations}]);
+	};
 	function fillinApps (appSet) {
 		apps = appSet;
-		console.dir(appSet);
 		$('#sideBarApps').empty();
 		for(var a in appSet) {
 			an = appSet[a].appname;
@@ -391,35 +395,74 @@ registerActionId		"0"
 	};
 	function fillinUsers (userSet) {
 		_ts.userDidSelect = false;
-		$('input.managementApps[name="userName"]').autocomplete({
-			minLength: 0,
-			source: userSet,
-			select: function( event, ui ) {
-				$('input.managementApps[name="userName"]').val( ui.item.name );
+		selectNamFlag = false;
+		if(!newOrgFlag) {		// ensure its an old added company, new ones dont get autocomplete
+			$('input.managementApps[name="userName"]').autocomplete({
+				minLength: 0,
+				source: userSet,
+				select: function( event, ui ) {
+					$('input.managementApps[name="userName"]').val( ui.item.name );
+					selectNamFlag = true;
 
 
 
-				$("#username").val( ui.item.username );
-				$("#userId").val( ui.item.userId );
-				$("#password").val( ui.item.password );
-				$("#primaryRole").val( ui.item.primaryRole );	// JSON or not?
-				$("#email").val( ui.item.email );
-				_ts.userDidSelect = true;
-				return false;
-			},
-			change: function( event, ui ) {
-				if(ui.item == null) {
-					$('.hiddenFields').css('display', 'block');
+					$("#username").val( ui.item.username );
+					$("#userId").val( ui.item.userId );
+					$("#password").val( ui.item.password );
+					$("#primaryRole").val( ui.item.primaryRole );	// JSON or not?
+					$("#email").val( ui.item.email );
+					_ts.userDidSelect = true;
+					return false;
+				},
+				change: function( event, ui ) {
+					if(ui.item == null) {
+						$('.hiddenFields').css('display', 'block');
+					}
+					$('#email').focus();
 				}
-				$('#email').focus();
-			}
-		})
-		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-			return $( "<li>" )
-			.append( "<a>" + item.name + "<br>" + item.email + "</a>" )
-			.appendTo( ul );
-		};
+			})
+			.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				return $( "<li>" )
+				.append( "<a>" + item.name + "<br>" + item.email + "</a>" )
+				.appendTo( ul );
+			};
+		}
 	};
+	$(document).on('blur', 'input.managementApps[name="userName"]' , function (e) {
+		fn = $(this).attr('alt');
+		if(!selectNamFlag && $(this).val() != '') {
+
+			newOrgFlag = false;
+
+			ui = _.values(getDataObject('UserInfo'))[0];
+			ui.name = $(this).val();
+			ui.username = $(this).val();
+			ui.description = $(this).val();
+			ui.password = '123456';
+			ui.primaryRole = _role;
+			ui.email = $('#email').val();
+
+			cuteNSexy.runChainedEvents([{'cmd': 'AddUpdateOrganization', 'payload': {
+				'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': ui}, 'success': addedOrga }]);
+		}		
+	});
+
+	function normalize(arr, max) {
+	    // find the max value
+		var max = arr[0];
+		var min = arr[0];
+		for(var x=0; x<arr.length; x++) 
+			max = Math.max(m, arr[x]);
+		for(var x=0; x<arr.length; x++) 
+			min = Math.min(m, arr[x]);
+
+		// normalize the array
+		for(var x=0; x<arr.length; x++) 
+			arr[x] = (arr[x] - min) / (max - min);
+
+		return arr;
+	};
+
 	function fillInData (theObj) {
 		stred = $.toJSON(theObj);
 		console.log(stred);
@@ -583,6 +626,7 @@ registerActionId		"0"
 
 	return {
 		'createdUser': createdUser,
+		'addedOrga': addedOrga
 	}
 
 }(window.GryphonManagement = window.GryphonManagement || {}, jQuery));

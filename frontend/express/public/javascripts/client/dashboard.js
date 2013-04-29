@@ -151,16 +151,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		drawTable (fakeTable);
 
-		gryphonModel = new HandsomeWidget({
-			'url': 						gryphonModelUrl,
-			'refreshTime': 				1000,
-			'fetchOptions': 			[ ],
-			'responseSuccessCallBack': 	responseSuccessCallBack,
-			'responseErrorCallBack': 	responseErrorCallBack,
-			'responseColumnsCallBack': 	responseColumnsCallBack
-		}, 'widget-console');
-		gryphonModel.GetRowColumns();
-
 		// ensure that all paging buttons remain in-design...
 		$(document).on('click', '#contentDataset .btn, #contentDataset .ui-button, #contentDataset .fg-button' , function () {
 			$('a.fg-button')			.removeClass('fg-button')			.removeClass('ui-corner-tl')
@@ -182,10 +172,19 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$('.sideBar').height( $(window).height() );
 
-
 		$(document).on('click', '#create-widget' , function (e) {
 
 			selectedFractions = ['App', 'AppReadableKey', 'CountryCode', 'City'];
+
+			gryphonModel = new HandsomeWidget({
+				'url': 						gryphonModelUrl,
+				'refreshTime': 				1000,
+				'fetchOptions': 			[ ],
+				'responseSuccessCallBack': 	responseSuccessCallBack,
+				'responseErrorCallBack': 	responseErrorCallBack,
+				'responseColumnsCallBack': 	responseColumnsCallBack
+			}, 'widget-console');
+			gryphonModel.GetRowColumns();
 
 			var t = $.extend({}, widgetTemplate, {
 				'id': 				$.base64.encode( selectedFractions.join('') ).substr(0, -2),		// cut off base64-ending
@@ -199,6 +198,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 			});
 			console.dir(t);
 			gryphonModel.AddEvent(t);
+
 		});
 
 
