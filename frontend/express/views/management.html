@@ -41,6 +41,9 @@
 <body>
 	<input type="hidden" id="whichTable" value="" />
 	<input type="hidden" id="whichForm" value="" />
+	<input type="hidden" id="userId" value="" />
+	<input type="hidden" id="orgId" value="" />
+	<input type="hidden" id="appId" value="" />
 
 	<div class="container-fluid wholePage">
 
@@ -253,8 +256,6 @@
 				<input type="hidden" name="numberOfUsers" 	value="" />
 			</form>
 
-					<input type="hidden" id="username" value="" />
-					<input type="hidden" id="orgId" value="" />
 
 					<div class="control-group">
 						<label class="control-label span1" for="email">E-mail</label>
@@ -415,7 +416,7 @@
 				<tr>
 					<td>Channel</td>
 					<td>
-						<input type="text" id="channel" placeholder="Channel" value="" /><button type="button" id="addChannel">+</button>
+						<input type="text" name="channel" placeholder="Channel" value="" /><button type="button" id="addChannel">+</button>
 					</td>
 				</tr>
 
@@ -456,14 +457,14 @@
 				<tr>
 					<td>Campaign</td>
 					<td>
-						<input type="text" id="campaign" placeholder="Campaign" />
+						<input type="text" name="campaign" placeholder="Campaign" />
 						<button type="button" id="addCampaign">+</button>
 					</td>
 				</tr>
 				<tr class="campaignAdding" style="display:none;">
 					<td>Channel</td>
 					<td>
-						<input type="text" id="channel" placeholder="Channel" />
+						<input type="text" name="channel" placeholder="Channel" />
 					</td>
 				</tr>
 			</table>

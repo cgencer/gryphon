@@ -41,10 +41,11 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var theModal = '';
 	var userDidSelect = false;
 	var selectOrgFlag = false;
-	var selectNamFlag = false;
 	var newOrgFlag = false;
+	var flags = [];
 	var _ts = this;
 	var _role = {};
+	var cache = {'orgs':{},'apps':{},'camps':{}};
 	var orgs = [];
 	var apps = [];
 	var camps = [];
@@ -56,7 +57,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		tableSets = amplify.store('tableset');
 
 		cuteNSexy.runChainedEvents([
-			{'cmd': 'ListOrganizations', 'payload': {}, 'success': fillinOrganizations},
+			{'cmd': 'ListOrganizations', 'payload': {}, 'success': nfillinOrganizations},
 			{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps},
 			{'cmd': 'ListChannel', 'payload': {}, 'success': fillinChannels},
 			{'cmd': 'ListRoles', 'payload': {}, 'success': function (r) {
@@ -130,7 +131,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			}
 		});
 		
-		$(document).on('blur', 'input.managementApps[name="organization"]', addingOrga);
+//		$(document).on('blur', 'input.managementApps[name="organization"]', addingOrga);
 
 		$(document).on('click', 'button.addNew' , function (e) {
 			$('#'+whichTable+'Modal').modal('show');
@@ -263,17 +264,35 @@ registerActionId		"0"
 		}
 
 	};
+	function nfillinOrganizations (rp) {
+		cache['orgs'] = rp;
+		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', true, function (st, obj, arr) {
+			for(i in arr) {
+				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
+			}
+		}, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
+	};
+
+	function nfillinUsers (rp) {
+		console.dir(rp);
+		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, function (st, obj, arr) {
+			for(i in arr) {
+				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
+			}
+		}, null);
+	};
+
 	function fillinOrganizations (orgSet) {
-		orgs = orgSet;
+		cache['orgs'] = orgSet;
 		selectOrgFlag = false;
 		$('input.managementApps[name="organization"]').autocomplete({
 			minLength: 0,
-			source: orgSet,
+			source: cache['orgs'],
 			select: function( event, ui ) {
 				selectOrgFlag = true;
 				$('input.managementApps[name="organization"]').val( ui.item.orgName );
 				$("#orgId").val( ui.item.orgId );
-				cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgId").val()}, 'success': fillinUsers}]);
+				cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $('#orgId').val()}, 'success': nfillinUsers}]);
 				return false;
 			},
 			close: function( event, ui ) {
@@ -283,9 +302,7 @@ registerActionId		"0"
 			}
 		})
 		.data("ui-autocomplete")._renderItem = function( ul, item ) {
-			return $( "<li>" )
-			.append( "<a>" + item.orgName + "</a>" )
-			.appendTo( ul );
+			return $( "<li>" ).append( "<a>" + item['orgName'] + "</a>" ).appendTo( ul );
 		};
 	}
 
@@ -339,12 +356,12 @@ registerActionId		"0"
 		camps = set;
 		console.info('campaigns are here:');
 		console.dir(set);
-		$("#campaign").autocomplete({
+		$('input.managementApps[name="campaign"]').autocomplete({
 			minLength: 0,
 			source: set,
 			select: function( event, ui ) {
-				$("#campaign").val( ui.item.name );
-				$("#campId").val( ui.item.campId );
+				$('input.managementApps[name="campaign"]').val( ui.item.name );
+				$('#campId').val( ui.item.campId );
 				_ts.userDidSelect = true;
 				return false;
 			},
@@ -374,12 +391,12 @@ registerActionId		"0"
 	};
 	function fillinChannels (chn) {
 		_ts.userDidSelect = false;
-		$("#channel").autocomplete({
+		$('input.managementApps[name="channel"]').autocomplete({
 			minLength: 0,
 			source: chn,
 			select: function( event, ui ) {
-				$("#channel").val( ui.item.channelKeyName );
-				$("#channelId").val( ui.item.channelId );
+				$('input.managementApps[name="channel"]').val( ui.item.channelKeyName );
+				$('#channelId').val( ui.item.channelId );
 				_ts.userDidSelect = true;
 				return false;
 			},
@@ -394,24 +411,19 @@ registerActionId		"0"
 		};
 	};
 	function fillinUsers (userSet) {
-		_ts.userDidSelect = false;
-		selectNamFlag = false;
+		flags['selectuserName'] = false;
 		if(!newOrgFlag) {		// ensure its an old added company, new ones dont get autocomplete
 			$('input.managementApps[name="userName"]').autocomplete({
 				minLength: 0,
 				source: userSet,
 				select: function( event, ui ) {
 					$('input.managementApps[name="userName"]').val( ui.item.name );
-					selectNamFlag = true;
-
-
-
+					flags['selectuserName'] = true;
 					$("#username").val( ui.item.username );
 					$("#userId").val( ui.item.userId );
 					$("#password").val( ui.item.password );
 					$("#primaryRole").val( ui.item.primaryRole );	// JSON or not?
 					$("#email").val( ui.item.email );
-					_ts.userDidSelect = true;
 					return false;
 				},
 				change: function( event, ui ) {
@@ -428,24 +440,126 @@ registerActionId		"0"
 			};
 		}
 	};
-	$(document).on('blur', 'input.managementApps[name="userName"]' , function (e) {
-		fn = $(this).attr('alt');
-		if(!selectNamFlag && $(this).val() != '') {
 
-			newOrgFlag = false;
+//	fillinAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, function (st, obj, arr) {
 
-			ui = _.values(getDataObject('UserInfo'))[0];
-			ui.name = $(this).val();
-			ui.username = $(this).val();
-			ui.description = $(this).val();
-			ui.password = '123456';
-			ui.primaryRole = _role;
-			ui.email = $('#email').val();
+	function createAutoCompletes (recSet, frm, fld, saveTo, noTest, onAdd, bindToNext) {
+		flags['selected_'+fld] = false;
 
-			cuteNSexy.runChainedEvents([{'cmd': 'AddUpdateOrganization', 'payload': {
-				'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': ui}, 'success': addedOrga }]);
-		}		
-	});
+		function onChangeACContent ( event, ui ) {
+			flags['selected_'+fld] = false;
+			if(ui.item == null) {
+				$('.hiddenFields').css('display', 'block');
+			}
+			$('#email').focus();
+		};
+
+		function onSelectACItem ( event, ui ) {
+			flags['selected_'+fld] = true;
+			if(bindToNext != null) {
+				$('#'+bindToNext['by']).val( ui.item[bindToNext['by']] );
+			}
+			switch (fld) {
+				case 'organization':
+					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.orgName );
+					onAdd (saveTo, ui.item, ['orgId']);
+					break;
+				case 'userName':
+					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.name );
+					onAdd (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);		// these are the form items to save the real results to
+					break;
+			}
+
+			if(bindToNext != null) {
+				pl = {};
+				pl[bindToNext.by] = $('#'+bindToNext.by).val();
+				cuteNSexy.runChainedEvents([{'cmd': bindToNext.cmd, 'payload': pl, 'success': bindToNext.fn}]);
+			}
+			return false;
+		};
+
+		$(document).on('blur', 'input.' + frm + '[name="' + fld + '"]' , function (e) {			// was: input.managementApps[name="userName"]
+			fn = $(this).attr('alt');
+			
+			flags[fld] = false;
+			switch (fld) {
+				case 'organization': 									// create a new organization upon filling + blur
+					obj = _.values(getDataObject('OrgInfo'))[0];
+					obj['orgName'] = $(this).val();
+					obj['description'] = $(this).val();
+
+					if(!flags['selected_'+fld] && $(this).val() != '') {
+						cuteNSexy.runChainedEvents([{
+							'cmd': 		'AddUpdateOrganization', 
+							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
+							'success': 	function () {
+						
+							} 
+						}]);
+						flags['selected_'+fld] = false;
+					}
+					break;
+
+				case 'userName':
+					obj = _.values(getDataObject('UserInfo'))[0];
+					obj.name = $(this).val();
+					obj.username = $(this).val().latinise().replace(/\s/, '');
+					obj.description = $(this).val();
+					obj.password = '123456';
+					obj.primaryRole = _role;
+					obj.email = $('#email').val();
+
+					if(!flags['selected_'+fld] && $(this).val() != '') {
+						cuteNSexy.runChainedEvents([{
+							'cmd': 		'AddUpdateUser', 
+							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
+							'success': 	function () {
+
+							} 
+						}]);
+						flags['selected_'+fld] = false;
+					}
+					break;
+			}
+		});
+
+		yesCall = false;
+		if(noTest) {	// true bypasses the flag&content check
+			// call
+			yesCall = true;
+		}else {
+			if(!flags['selected_'+fld] && $(this).val() != '') {		// the flag contains false and the inputfield has content
+				// call
+				yesCall = true;
+			}else{
+				yesCall = false;
+			}
+		}
+
+		if(yesCall) {													// ensure its an old added company, new ones dont need autocompleted
+			$('input.' + frm + '[name="' + fld + '"]').autocomplete({
+				'minLength': 	0,
+				'source': 		recSet,
+				'select': 		onSelectACItem,
+				'change': 		onChangeACContent,
+			})
+			.data('ui-autocomplete')._renderItem = function( ul, item ) {
+				var detail = '';
+				switch (fld) {
+					case 'organization':
+						detail = '<a>' + item.orgName + '</a>';
+						break;
+					case 'userName':
+						detail = '<a>' + item.name + '<br>' + item.email + '</a>';
+						break;
+				}
+				return $('<li>').append(detail).appendTo(ul);
+			};
+		}
+
+	};
+
+
 
 	function normalize(arr, max) {
 	    // find the max value
@@ -536,14 +650,14 @@ registerActionId		"0"
 		if(menuPath === 'managementMakilinks') {
 			$('.ui-jqgrid-title').append(' for <select name="campPulldown" id="campPulldown" class=""><option value="">[ select campaign ]</option></select>');
 		}
-		if(orgs.length > 0) {
-			for(var o in orgs) {
-				$('#orgPulldown').append('<option value="' + orgs[o].orgId + '">' + orgs[o].orgName + '</option>');
+		if(cache['orgs'].length > 0) {
+			for(var o in cache['orgs']) {
+				$('#orgPulldown').append('<option value="' + cache['orgs'][o]['orgId'] + '">' + cache['orgs'][o]['orgName'] + '</option>');
 			}
 		}
-		if(camps.length > 0) {
-			for(var o in camps) {
-				$('#campPulldown').append('<option value="' + camps[o].campId + '">' + camps[o].name + '</option>');
+		if(cache['camps'].length > 0) {
+			for(var o in cache['camps']) {
+				$('#campPulldown').append('<option value="' + cache['camps'][o]['campId'] + '">' + cache['camps'][o]['name'] + '</option>');
 			}
 		}
 

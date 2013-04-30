@@ -19,7 +19,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	var charted = {};
 	var selectedFractions = [];
 	var dateRange = {'begin': new XDate(2013, (3-1), 20), 'end': new XDate(2013, (4-1), 5)};
-	var gryphonModelUrl = 'http://makina.nmdapps.com/Events/Report/MAKINA/CIRawReport';
+	var gryphonModelUrl = 'http://oduncu.nmdapps.com/Events/Report/MAKINA/CIRawReport';
 	var widgetTemplate = {
 		'type': 			'groupby',
 		'byValues': 		null,
