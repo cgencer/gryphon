@@ -44,6 +44,7 @@
 	<input type="hidden" id="userId" value="" />
 	<input type="hidden" id="orgId" value="" />
 	<input type="hidden" id="appId" value="" />
+	<input type="hidden" id="campId" value="" />
 
 	<div class="container-fluid wholePage">
 
@@ -399,7 +400,7 @@
 				<input type="hidden" name="command"			value="AddUpdate" />
 				<input type="hidden" name="type" 			value="App" />
 				<input type="hidden" name="object" 			value="AppInfo" />
-				<input type="hidden" name="modal" 			value="managementAppsModal" />
+				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="channelId" 		value="" />
@@ -407,6 +408,15 @@
 				<input type="hidden" name="description"	 	value="" />
 				<input type="hidden" name="marketURL" 		value="" />
 				<input type="hidden" name="platform" 		value="" />
+			</form>
+			<form id="channelForm">
+				<input type="hidden" name="command"			value="AddUpdate" />
+				<input type="hidden" name="type" 			value="Channel" />
+				<input type="hidden" name="object" 			value="ChannelInfo" />
+				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
+
+				<input type="hidden" name="command" 		value="1" />
+				<input type="hidden" name="channelId" 		value="" />
 			</form>
 
 			<input type="hidden" id="channelId" value="" />
@@ -416,7 +426,7 @@
 				<tr>
 					<td>Channel</td>
 					<td>
-						<input type="text" name="channel" placeholder="Channel" value="" /><button type="button" id="addChannel">+</button>
+						<input type="text" name="channel" class="formCopy managementMakilinks" alt="channelForm" placeholder="Channel" value="" />
 					</td>
 				</tr>
 
@@ -464,7 +474,7 @@
 				<tr class="campaignAdding" style="display:none;">
 					<td>Channel</td>
 					<td>
-						<input type="text" name="channel" placeholder="Channel" />
+						<input type="text" name="channelc" placeholder="Channel" />
 					</td>
 				</tr>
 			</table>
