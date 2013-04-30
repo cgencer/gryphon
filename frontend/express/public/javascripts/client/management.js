@@ -396,18 +396,8 @@ registerActionId		"0"
 					obj['orgName'] = $(this).val();
 					obj['description'] = $(this).val();
 
-					if(!flags['selected_'+fld] && $(this).val() != '') {
-						cuteNSexy.runChainedEvents([{
-							'cmd': 		'AddUpdateOrganization', 
-							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
-							'success': 	function () {
-								console.info('do i get it???');
-								log('hellooo');
-								cuteNSexy.runChainedEvents([{'cmd': 'ListOrganizations', 'payload': {}, 'success': nfillinOrganizations}]);
-							} 
-						}]);
-						flags['selected_'+fld] = false;
-					}
+					theCmd = 'AddUpdateOrganization';
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
 					break;
 
 				case 'userName':
@@ -419,32 +409,26 @@ registerActionId		"0"
 					obj.primaryRole = _role;
 					obj.email = $('#email').val();
 
-					if(!flags['selected_'+fld] && $(this).val() != '') {
-						cuteNSexy.runChainedEvents([{
-							'cmd': 		'AddUpdateUser', 
-							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
-							'success': 	function () {
-
-							} 
-						}]);
-						flags['selected_'+fld] = false;
-					}
+					theCmd = 'AddUpdateUser';
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
 					break;
+
 				case 'campaign':
 					obj = _.values(getDataObject('CampaignInfo'))[0];
-/*
-					if(!flags['selected_'+fld] && $(this).val() != '') {
-						cuteNSexy.runChainedEvents([{
-							'cmd': 		'AddUpdateCampaign', 
-							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
-							'success': 	function () {
 
-							} 
-						}]);
-						flags['selected_'+fld] = false;
-					}
-*/
+					theCmd = 'AddUpdateCampaign';
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theCmd = '';
+					theLoad = '';
 					break;
+			}
+			if(!flags['selected_'+fld] && $(this).val() != '') {
+				cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': 	theLoad,
+					'success': 	function () {
+
+					} 
+				}]);
+				flags['selected_'+fld] = false;
 			}
 		});
 
