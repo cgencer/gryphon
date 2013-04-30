@@ -263,38 +263,24 @@ registerActionId		"0"
 		}
 
 	};
+	function saveToForm (st, obj, arr) {
+		for(i in arr) {
+			$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
+		}
+	};
 	function nfillinOrganizations (rp) {
 		cache['orgs'] = rp;
-		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', true, function (st, obj, arr) {
-			for(i in arr) {
-				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
-			}
-		}, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
+		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', true, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
 	};
-
 	function nfillinUsers (rp) {
-		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, function (st, obj, arr) {
-			for(i in arr) {
-				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
-			}
-		}, null);
+		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, null);
 	};
-
 	function nfillinCampaigns (rp) {
 		cache['camps'] = rp;		
-		createAutoCompletes (rp, 'managementMakilinks', 'campaign', 'campaignForm', true, function (st, obj, arr) {
-			for(i in arr) {
-				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
-			}
-		}, null);
+		createAutoCompletes (cache['camps'], 'managementMakilinks', 'campaign', 'campaignForm', true, null);
 	};
-
 	function nfillinChannels (rp) {
-		createAutoCompletes (rp, 'managementMakilinks', 'channel', 'channelForm', true, function (st, obj, arr) {
-			for(i in arr) {
-				$('form#' + st + ' input#' + arr[i]).val( obj[ arr[i] ] )		// does $("form#formname input#username").val( obj.username );
-			}
-		}, null);
+		createAutoCompletes (rp, 'managementMakilinks', 'channel', 'channelForm', true, null);
 	};
 
 	function fillinChannels (chn) {
@@ -360,7 +346,7 @@ registerActionId		"0"
 		}
 	};
 
-	function createAutoCompletes (recSet, frm, fld, saveTo, noTest, onAdd, bindToNext) {
+	function createAutoCompletes (recSet, frm, fld, saveTo, noTest, bindToNext) {
 		flags['selected_'+fld] = false;
 
 		function onChangeACContent ( event, ui ) {
@@ -381,14 +367,14 @@ registerActionId		"0"
 			switch (fld) {
 				case 'organization':
 					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.orgName );
-					onAdd (saveTo, ui.item, ['orgId']);
+					saveToForm (saveTo, ui.item, ['orgId']);
 					break;
 				case 'userName':
 					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.name );
-					onAdd (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);		// these are the form items to save the real results to
+					saveToForm (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);		// these are the form items to save the real results to
 					break;
 				case 'campaign':
-					onAdd (saveTo, ui.item, ['campId']);
+					saveToForm (saveTo, ui.item, ['campId']);
 					break;
 			}
 
@@ -445,6 +431,19 @@ registerActionId		"0"
 					}
 					break;
 				case 'campaign':
+					obj = _.values(getDataObject('CampaignInfo'))[0];
+/*
+					if(!flags['selected_'+fld] && $(this).val() != '') {
+						cuteNSexy.runChainedEvents([{
+							'cmd': 		'AddUpdateCampaign', 
+							'payload': 	{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj}, 
+							'success': 	function () {
+
+							} 
+						}]);
+						flags['selected_'+fld] = false;
+					}
+*/
 					break;
 			}
 		});
