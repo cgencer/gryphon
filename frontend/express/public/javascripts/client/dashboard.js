@@ -291,6 +291,30 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		return no;
 	};
 
+	function createDummyTimeSlotData (ts, xBegin, xEnd) {
+
+		var onDay = xBegin.clone();
+		ts[onDay.getYear()] = [];
+		ts[onDay.getYear()][onDay.getMonth()+1] = [];
+		startMonth = onDay.getMonth() + 1;
+
+		for(var i=0; i < xBegin.diffDays(xEnd); i++) {
+			onDay.addDays(1);
+			if(startMonth < onDay.getMonth() + 1) {
+				// month changed
+				startMonth = onDay.getMonth() + 1;
+				ts[onDay.getYear()][onDay.getMonth()+1] = [];
+			}
+			ts[onDay.getYear()][onDay.getMonth()+1][onDay.getDay()] = [];
+
+			for(var i=6; i < 20; i++) {
+				ts[onDay.getYear()][onDay.getMonth()+1][onDay.getDay()][i] = Math.random(0, 999);
+			}
+		}
+		return ts;
+
+	};
+
 	function prepTableForCalc () {
 		// creates the var_ classes for each rows cells
 		var ar = ['cost', 'cpc', 'cpd', 'cr', 'cost', 'click', 'install'];
