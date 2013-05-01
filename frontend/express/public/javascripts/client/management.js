@@ -270,10 +270,10 @@ registerActionId		"0"
 	};
 	function nfillinOrganizations (rp) {
 		cache['orgs'] = rp;
-		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', true, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
+		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', 'addOrgPopup', true, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
 	};
 	function nfillinUsers (rp) {
-		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, null);
+		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', 'addUserPopup', true, null);
 	};
 	function nfillinCampaigns (rp) {
 		cache['camps'] = rp;
@@ -283,11 +283,11 @@ registerActionId		"0"
 				$('#campPulldown').append('<option value="' + cache['camps'][o]['campId'] + '">' + cache['camps'][o]['name'] + '</option>');
 			}
 		}
-		createAutoCompletes (cache['camps'], 'managementMakilinks', 'campaign', 'campaignForm', true, null);
+		createAutoCompletes (cache['camps'], 'managementMakilinks', 'campaign', 'campaignForm', 'addCampaignPopup', true, null);
 	};
 	function nfillinChannels (rp) {
 		cache['channels'] = rp;
-		createAutoCompletes (cache['channels'], 'managementMakilinks', 'channel', 'channelForm', true, null);
+		createAutoCompletes (cache['channels'], 'managementMakilinks', 'channel', 'channelForm', 'addChannelPopup', true, null);
 	};
 
 	function fillinChannels (chn) {
@@ -353,39 +353,123 @@ registerActionId		"0"
 		}
 	};
 
-	function createAutoCompletes (recSet, frm, fld, saveTo, noTest, bindToNext) {
+	function createAutoCompletes (recSet, frm, fld, saveTo, popUp, noTest, bindToNext) {
 		flags['selected_'+fld] = false;
+		flags['dialog_'+fld] = false;
+		theField = 'input.' + frm + '[name="' + fld + '"]';
+		lookFor = '';
+
+		switch (fld) {
+			case 'organization':
+				lookFor = 'orgName';
+				break;
+			case 'userName':
+				lookFor = 'name';
+				break;
+			case 'campaign':
+				lookFor = 'name';
+				break;
+			case 'channel':
+				lookFor = 'channelKeyName';
+				break;
+		}
+
+
+		$(document).on('keypress', theField, function (e) {
+			changes();
+		});
 
 		function onChangeACContent ( event, ui ) {
+			changes();
+		};
+		
+		function changes () {
 			flags['selected_'+fld] = false;
 
-
-			if(ui.item == null) {
-				$('.hiddenFields').css('display', 'block');
+/*
+			if(_.indexOf(_.pluck(recSet, lookFor), $(theField).val()) == -1) {
+				if(!flags['selected_'+fld]) {
+					openPopup();
+				}
+			}else{
+				if($('#dialog').dialog('isOpen')) {
+					$('#dialog').dialog('close');
+					$('#dialog').empty();
+				};				
 			}
-			$('#email').focus();
+*/
+			if( $(theField).val() == '') {
+				if(flags['dialog_'+fld]) {
+					$('#dialog').dialog('close');
+					$('#dialog').empty();
+				};
+			}
+		};
+
+		function onOpenACList ( event, ui ) {
+			if(flags['dialog_'+fld]) {
+				$('#dialog').dialog('close');
+				$('#dialog').empty();
+				flags['dialog_'+fld] = false;
+			};
+		};
+
+		function openPopup () {
+			$('#dialog').html( $(popUp).html() );
+			$('#dialog').dialog({
+				'autoOpen': true,
+				'draggable': false,
+				'title': '',
+				'dialogClass': 'no-close',
+				'modal': true,
+				'width': $(theField).width(),
+				'position': { 
+					'my': 'left top', 
+					'at': 'left bottom', 
+					'of': $(theField) 
+				},
+				'buttons': [{
+					'text': 'OK',
+					'click': function() {
+						$(this).dialog('close');
+					}
+				}]
+			});
+			flags['dialog_'+fld] = true;
+			$(theField).focus();
+			$('.ui-dialog-titlebar').css('display', 'none');
+			$('#dialog, .ui-dialog').css('z-index', $('.modal-backdrop').css('z-index') + 1000);
+		};
+
+		function onCloseACList ( event, ui ) {
+			if(!flags['selected_'+fld]) {
+console.log('from closelist '+flags['selected_'+fld]);
+				openPopup();
+			};
 		};
 
 		function onSelectACItem ( event, ui ) {
 			flags['selected_'+fld] = true;
+			flags['dialog_'+fld] = false;
 			if(bindToNext != null) {
 				$('#'+bindToNext['by']).val( ui.item[bindToNext['by']] );
 			}
 			switch (fld) {
 				case 'organization':
-					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.orgName );
+					$(theField).val( ui.item.orgName );
 					saveToForm (saveTo, ui.item, ['orgId']);
 					break;
 				case 'userName':
-					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.name );
-					saveToForm (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);		// these are the form items to save the real results to
+					$(theField).val( ui.item.name );
+					// these are the form items to save the real results to
+					saveToForm (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);
 					break;
 				case 'campaign':
-					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.name );
+					$(theField).val( ui.item.name );
 					saveToForm (saveTo, ui.item, ['campId']);
 					break;
 				case 'channel':
-					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.channelKeyName );
+					$(theField).val( ui.item.channelKeyName );
 					saveToForm (saveTo, ui.item, ['channelId']);
 					break;
 			}
@@ -395,10 +479,13 @@ registerActionId		"0"
 				pl[bindToNext.by] = $('#'+bindToNext.by).val();
 				cuteNSexy.runChainedEvents([{'cmd': bindToNext.cmd, 'payload': pl, 'success': bindToNext.fn}]);
 			}
+console.log('just inited '+flags['selected_'+fld]);
+
 			return false;
 		};
 
-		$(document).on('blur', 'input.' + frm + '[name="' + fld + '"]' , function (e) {			// was: input.managementApps[name="userName"]
+		$(document).on('blur', theField, function (e) {
+			// was: input.managementApps[name="userName"]
 			fn = $(this).attr('alt');
 			
 			flags[fld] = false;
@@ -449,7 +536,7 @@ registerActionId		"0"
 
 					} 
 				}]);
-				flags['selected_'+fld] = false;
+//				flags['selected_'+fld] = false;
 			}
 		});
 
@@ -466,13 +553,15 @@ registerActionId		"0"
 			}
 		}
 
-		if(yesCall) {													// ensure its an old added company, new ones dont need autocompleted
+		if(yesCall) {								// ensure its an old added company, new ones dont need autocompleted
 			console.log('>>>input.' + frm + '[name="' + fld + '"]');
-			$('input.' + frm + '[name="' + fld + '"]').autocomplete({
+			$(theField).autocomplete({
 				'minLength': 	0,
 				'source': 		recSet,
 				'select': 		onSelectACItem,
 				'change': 		onChangeACContent,
+				'open': 		onOpenACList,
+				'close': 		onCloseACList,
 			})
 			.data('ui-autocomplete')._renderItem = function( ul, item ) {
 				var detail = '';
@@ -492,6 +581,7 @@ registerActionId		"0"
 				}
 				return $('<li>').append(detail).appendTo(ul);
 			};
+
 		}
 
 	};

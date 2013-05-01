@@ -1,6 +1,3 @@
-// 
-// action _MUST_ contain run function, returning the response object
-//
 function run(request, response){
 
   response.dictionary = {
@@ -121,9 +118,48 @@ function run(request, response){
 		'check': [ ],
 		'result': 'info',
 	},
+    'AddUpdateOrganization': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
+    'AddUpdateApp': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
+    'AddUpdateCampaign': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
+    'AddUpdateMakilink': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
+    'AddUpdateChannel': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
+    'AddUpdateRole': {
+		'source': 'handsome',
+		'mandatory': [ ],
+		'clean': [ ],
+		'check': [ ],
+		'result': 'info',
+	},
   }
-   
-   
-   //run method _MUST_ return response object
   return response;
 }
