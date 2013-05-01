@@ -45,7 +45,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var flags = [];
 	var _ts = this;
 	var _role = {};
-	var cache = {'orgs':{},'apps':{},'camps':{}};
+	var cache = {'orgs':{},'apps':{},'camps':{},'channels':{}};
 	var orgs = [];
 	var apps = [];
 	var camps = [];
@@ -276,11 +276,18 @@ registerActionId		"0"
 		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', true, null);
 	};
 	function nfillinCampaigns (rp) {
-		cache['camps'] = rp;		
+		cache['camps'] = rp;
+		$('#campPulldown').empty().append('<option value="">[ select campaign ]</option>');
+		if(cache['camps'].length > 0) {
+			for(var o in cache['camps']) {
+				$('#campPulldown').append('<option value="' + cache['camps'][o]['campId'] + '">' + cache['camps'][o]['name'] + '</option>');
+			}
+		}
 		createAutoCompletes (cache['camps'], 'managementMakilinks', 'campaign', 'campaignForm', true, null);
 	};
 	function nfillinChannels (rp) {
-		createAutoCompletes (rp, 'managementMakilinks', 'channel', 'channelForm', true, null);
+		cache['channels'] = rp;
+		createAutoCompletes (cache['channels'], 'managementMakilinks', 'channel', 'channelForm', true, null);
 	};
 
 	function fillinChannels (chn) {
@@ -374,7 +381,12 @@ registerActionId		"0"
 					saveToForm (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);		// these are the form items to save the real results to
 					break;
 				case 'campaign':
+					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.name );
 					saveToForm (saveTo, ui.item, ['campId']);
+					break;
+				case 'channel':
+					$('input.' + frm + '[name="' + fld + '"]').val( ui.item.channelKeyName );
+					saveToForm (saveTo, ui.item, ['channelId']);
 					break;
 			}
 
@@ -421,6 +433,15 @@ registerActionId		"0"
 					theCmd = '';
 					theLoad = '';
 					break;
+
+				case 'channel':
+					obj = _.values(getDataObject('ChannelInfo'))[0];
+
+					theCmd = 'AddUpdateChannel';
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theCmd = '';
+					theLoad = '';
+					break;
 			}
 			if(!flags['selected_'+fld] && $(this).val() != '') {
 				cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': 	theLoad,
@@ -446,6 +467,7 @@ registerActionId		"0"
 		}
 
 		if(yesCall) {													// ensure its an old added company, new ones dont need autocompleted
+			console.log('>>>input.' + frm + '[name="' + fld + '"]');
 			$('input.' + frm + '[name="' + fld + '"]').autocomplete({
 				'minLength': 	0,
 				'source': 		recSet,
@@ -463,6 +485,9 @@ registerActionId		"0"
 						break;
 					case 'campaign':
 						detail = '<a>' + item.name + '<br>' + new XDate(item.start.date).toString('d MMM yyyy') + ' - ' + new XDate(item.end.date).toString('d MMM yyyy') + '</a>';
+						break;
+					case 'channel':
+						detail = '<a>' + item.channelKeyName + '<br><small>' + item.description + '<small></a>'; 
 						break;
 				}
 				return $('<li>').append(detail).appendTo(ul);

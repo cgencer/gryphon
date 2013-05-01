@@ -145,7 +145,7 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/management.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-24T09:48:19Z</date>
+							<date>2013-04-29T22:03:39Z</date>
 							<key>selected</key>
 							<true/>
 						</dict>
@@ -395,14 +395,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>70</integer>
+				<integer>32</integer>
 				<key>line</key>
 				<integer>374</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>328</integer>
+			<integer>53</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/cuteNSexy/cutesexy.js</key>
 		<dict>
@@ -592,8 +592,64 @@
 		<string>frontend/express/public/javascripts/cuteNSexy/cutesexy.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
+	<false/>
+	<key>showFileHierarchyPanel</key>
 	<true/>
+	<key>treeState</key>
+	<dict>
+		<key>loxo scripts</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict/>
+		</dict>
+		<key>server</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict/>
+		</dict>
+		<key>styles</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict/>
+		</dict>
+		<key>views</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict>
+				<key>view scripts</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+			</dict>
+		</dict>
+		<key>widgets</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict>
+				<key>filterTable</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
 	<key>windowFrame</key>
-	<string>{{340, 154}, {1323, 878}}</string>
+	<string>{{207, 0}, {1223, 878}}</string>
 </dict>
 </plist>
