@@ -79,6 +79,16 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
 			$('#' + $(this).attr('alt') + ' input[name="command"]').val( 2 );
 		});
+		// both of these are needed for the multiple copying of apps rows into their appforms 
+		$(document).on('change', '.formCopyMultiple' , function () {
+			$('form#appForm_' + $(this).parents('tr').attr('alt') + ' input[name="marketUrl"]').val( $(this).val() );
+		});
+		$(document).on('click', 'button.buttonToSelectMultiple' , function () {
+			$('form#appForm_' + $(this).parents('tr').attr('alt') + ' input[name="' + $(this).attr('title') + '"]').val( $(this).attr('alt') );
+		});
+		$(document).on('change', '#description' , function () {
+			$('.clonedRow form input[name="description"]').val( $(this).val() );
+		});
 		// =====================================================================================================
 
 		$(document).on('click', '.subLinks.appLinks' , function () {
@@ -116,7 +126,12 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '.addRow' , function () {
 
 			// clone the tr before itself and rename it
-			$('#cloneMe').before( $('#cloneMe').clone().attr('id', 'cloneMe_' + $('#numApps').val() ).addClass('clonedRow') );
+			$('#cloneMe').before( 
+				$('#cloneMe').clone()
+					.attr('id', 'cloneMe_' + $('#numApps').val() )
+					.attr('alt', $('#numApps').val() )
+					.addClass('clonedRow') 
+			);
 
 			// clone the form inside the tr
 			$('#cloneMe_' + $('#numApps').val() + ' .injectForm').append( 

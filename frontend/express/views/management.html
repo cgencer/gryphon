@@ -326,7 +326,7 @@
 				<input type="hidden" name="appname" 		value="" />
 				<input type="hidden" name="description"	 	value="" />
 				<input type="hidden" name="iconUrl"	 		value="" />
-				<input type="hidden" name="marketURL" 		value="" />
+				<input type="hidden" name="marketUrl" 		value="" />
 				<input type="hidden" name="platform" 		value="" />
 				<input type="hidden" name="googleAnalyticsKey" value="" />
 				<input type="hidden" name="registerActionId" value="" />
@@ -352,31 +352,31 @@
 					<td><label class="control-label" for="name">Developer </label></td>
 					<td><input type="text" name="userName" class="formCopy managementApps" alt="userForm" placeholder="Name" value="" /></td>
 					</tr>
-					<tr id="cloneMe">
-					<td colspan="2" class="injectForm">
-						<div class="btn-group pull-right" data-toggle="buttons-radio">
-							<button type="button" class="btn btn-small btn-primary disabled">Platform</button>
-							<button type="button" alt="1" title="platform" class="btn btn-small btn-primary buttonToSelect">IOS</button>
-							<button type="button" alt="2" title="platform" class="btn btn-small btn-primary buttonToSelect">Android</button>
-							<button type="button" alt="3" title="platform" class="btn btn-small btn-primary buttonToSelect">Symbian</button>
-							<button type="button" alt="4" title="platform" class="btn btn-small btn-primary buttonToSelect">Windows</button>
-							<button type="button" alt="5" title="platform" class="btn btn-small btn-primary buttonToSelect">Tizen</button>
-						</div>
-					</td>
+					<tr id="cloneMe" alt="">
+							<td colspan="2" class="injectForm">
+								<div class="btn-group pull-right" data-toggle="buttons-radio">
+									<button type="button" class="btn btn-small btn-primary disabled">Platform</button>
+									<button type="button" alt="1" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">IOS</button>
+									<button type="button" alt="2" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">Android</button>
+									<button type="button" alt="3" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">Symbian</button>
+									<button type="button" alt="4" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">Windows</button>
+									<button type="button" alt="5" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">Tizen</button>
+								</div>
+							</td>
 					
-					<td><label class="control-label" for="name">Market URL</label></td>
-					<td>
-						<input type="text" id="marketUrl" class="" placeholder="Market URL">
-						<button type="button" class="addRow">+</button>
-					</td>
-					</tr><tr>
-						<td>
-							<label class="control-label span1" for="description">Description</label>
-						</td>
-						<td colspan="3">
-							<textarea rows="2" style="width:590px;" id="description" name="description" placeholder="Description"></textarea>
-						</td>
-					</tr>
+							<td><label class="control-label" for="name">Market URL</label></td>
+							<td>
+								<input type="text" name="marketUrl" value="" class="formCopyMultiple managementApps" alt="appForm" placeholder="Market URL" />
+								<button type="button" class="addRow">+</button>
+							</td>
+							</tr><tr>
+								<td>
+									<label class="control-label span1" for="description">Description</label>
+								</td>
+								<td colspan="3">
+									<textarea rows="2" style="width:590px;" id="description" name="description" placeholder="Description"></textarea>
+								</td>
+							</tr>
 					</table>
 
 		</div>
