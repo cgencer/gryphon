@@ -4,24 +4,15 @@ function run(request, response){
 		{
 			'path': 'managementOrganizations', 
 			'command': 'ListOrganizations',
-			'manage': {
-				'add': {
-					'cmd': 'AddUpdateOrganization', 'data': {
-							'command':1, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'OrgInfo'}}},
-				'edit': {
-					'cmd': 'AddUpdateOrganization', 'data': {
-							'command':1, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'OrgInfo'}}},
-				'delete': {
-					'cmd': 'AddUpdateOrganization', 'data': {
-							'command':2, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'OrgInfo'}}}
-			},
+			'manage': 'AddUpdateOrganization',
 			'caption': 'Management / Organizations',
-			'colNames': ['Name', 'Desc', 'Level'],
+			'colNames': ['Id', 'Name', 'Desc', 'Level'],
 			'colModel': [
-							{'name': 'orgName', 		'index': 'orgName', 		'width': 200}, 
-							{'name': 'description', 	'index': 'description', 	'width': 200}, 
-							{'name': 'level', 			'index': 'level', 			'width': 120}, 
-						]
+				{'name': 'orgId', 			'index': 'orgId', 			'width': 200}, 
+				{'name': 'orgName', 		'index': 'orgName', 		'width': 200}, 
+				{'name': 'description', 	'index': 'description', 	'width': 200}, 
+				{'name': 'level', 			'index': 'level', 			'width': 120}, 
+			]
 		}, 
 		{
 			'path': 'managementUsers', 
@@ -30,35 +21,27 @@ function run(request, response){
 				{'cmd': 'ListOrganizations', 'payload': '', 'grab': 'orgId', 'select': '[FIRST]'},
 				{'cmd': 'ListUsers', 'payload': '', 'grab': '[WHOLE]'}
 			],
-			'manage': {
-				'add': {'cmd': 'AddUpdateUser', 'data': {'command':1, 'info': {'[INJECT]': 'UserInfo'}}},
-				'edit': {'cmd': 'AddUpdateUser', 'data': {'command':1, 'info': {'[INJECT]': 'UserInfo'}}},
-				'delete': {'cmd': 'AddUpdateUser', 'data': {'command':2, 'info': {'[INJECT]': 'UserInfo'}}}
-			},
+			'manage': 'AddUpdateUser',
 			'caption': 'Management / Users',
 			'colNames': ['Username', 'Email', 'User Type'],
 			'colModel': [
-							{'name': 'name', 			'index': 'name', 			'width': 200}, 
-							{'name': 'email', 			'index': 'email', 			'width': 200}, 
-							{'name': 'primaryRole', 	'index': 'primaryRole', 	'width': 120}, 
-						]
+				{'name': 'name', 			'index': 'name', 			'width': 200}, 
+				{'name': 'email', 			'index': 'email', 			'width': 200}, 
+				{'name': 'primaryRole', 	'index': 'primaryRole', 	'width': 120}, 
+			]
 		}, 
 		{
 			'path': 'managementUserRolesforApps', 
 			'command': 'ListUserRoleMatch',
-			'manage': {
-				'add': {'cmd': 'AddUpdateUserRoleMatch', 'data': {'command':1, 'info': {'[INJECT]': 'UserRoleMatchInfo'}}},
-				'edit': {'cmd': 'AddUpdateUserRoleMatch', 'data': {'command':1, 'info': {'[INJECT]': 'UserRoleMatchInfo'}}},
-				'delete': {'cmd': 'AddUpdateUserRoleMatch', 'data': {'command':2, 'info': {'[INJECT]': 'UserRoleMatchInfo'}}},
-			},
+			'manage': 'AddUpdateUserRoleMatch',
 			'caption': 'Management / User Roles for Apps',
 			'colNames': ['Role Key Name', 'Full Name', 'Username', 'Email'],
 			'colModel': [
-							{'name': 'description', 	'index': 'description', 		'width': 200}, 
-							{'name': 'numberOfApps', 	'index': 'numberOfApps', 		'width':  40, 	'align':'right'}, 
-							{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 		'width':  40, 	'align':'right'}, 
-							{'name': 'orgId', 			'index': 'orgId', 				'width': 120, 	'align':'right'}, 
-						]
+		{'name': 'description', 	'index': 'description', 		'width': 200}, 
+		{'name': 'numberOfApps', 	'index': 'numberOfApps', 		'width':  40, 	'align':'right'}, 
+		{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 		'width':  40, 	'align':'right'}, 
+		{'name': 'orgId', 			'index': 'orgId', 				'width': 120, 	'align':'right'}, 
+			]
 		}, 
 		{
 			'path': 'managementUserTokenforApps', 
@@ -67,113 +50,80 @@ function run(request, response){
 			'caption': 'Management / User Token for Apps',
 			'colNames': ['Full Name', 'Email', 'Token'],
 			'colModel': [
-							{'name': 'name', 			'index': 'name', 		'width': 200}, 
-							{'name': 'email', 			'index': 'email', 		'width':  40, 	'align':'right'}, 
-							{'name': 'token', 			'index': 'token', 		'width':  40, 	'align':'right'}, 
-						]
+				{'name': 'name', 			'index': 'name', 		'width': 200}, 
+				{'name': 'email', 			'index': 'email', 		'width':  40, 	'align':'right'}, 
+				{'name': 'token', 			'index': 'token', 		'width':  40, 	'align':'right'}, 
+			]
 		}, 
 		{
 			'path': 'managementApps', 
 			'command': 'ListApps',
-			'manage': {
-				'add': {
-					'cmd': 'AddUpdateApp', 'data': {
-							'command':1, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'AppInfo'}}},
-				'edit': {
-					'cmd': 'AddUpdateApp', 'data': {
-							'command':1, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'AppInfo'}}},
-				'delete': {
-					'cmd': 'AddUpdateApp', 'data': {
-							'command':2, 'countlyHostId': 'mkui1.nmdapps.com', 'info': {'[INJECT]': 'AppInfo'}}}
-			},
+			'manage': 'AddUpdateApp',
 			'caption': 'Management / Applications',
 			'colNames': ['App', 'Platform', 'App Token', 'Description', 'URL'],
 			'colModel': [
-							{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
-							{'name': 'platform', 		'index': 'platform', 		'width':  60,}, 
-							{'name': 'appToken', 		'index': 'appToken', 		'width': 120, 	'align':'right'}, 
-							{'name': 'description', 	'index': 'description', 	'width': 200}, 
-							{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
-						]
+		{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
+		{'name': 'platform', 		'index': 'platform', 		'width':  60,}, 
+		{'name': 'appToken', 		'index': 'appToken', 		'width': 120, 	'align':'right'}, 
+		{'name': 'description', 	'index': 'description', 	'width': 200}, 
+		{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
+			]
 		}, 
 		{
 			'path': 'managementRoles', 
 			'command': 'ListRoles',
-			'manage': {
-				'add': {
-					'cmd': 'AddUpdateRole', 'data': {
-							'command':1, 'info': {'[INJECT]': 'RoleInfo'}}},
-				'edit': {
-					'cmd': 'AddUpdateRole', 'data': {
-							'command':1, 'info': {'[INJECT]': 'RoleInfo'}}},
-				'delete': {
-					'cmd': 'AddUpdateRole', 'data': {
-							'command':2, 'info': {'[INJECT]': 'RoleInfo'}}}
-			},
+			'manage': 'AddUpdateRole',
 			'caption': 'Management / Roles',
 			'colNames': ['Role Key Name', 'Description', 'Role Users'],
 			'colModel': [
-							{'name': 'roleName', 		'index': 'roleName', 		'width': 200}, 
-							{'name': 'description', 	'index': 'description', 	'width':  40, 	'align':'right'}, 
-							{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 	'width':  40, 	'align':'right'}, 
-						]
+		{'name': 'roleName', 		'index': 'roleName', 		'width': 200}, 
+		{'name': 'description', 	'index': 'description', 	'width':  40, 	'align':'right'}, 
+		{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 	'width':  40, 	'align':'right'}, 
+			]
 		}, 
 		{
 			'path': 'managementChannels', 
 			'command': 'ListChannel',
-			'manage': {
-				'add': {'cmd': 'AddUpdateChannel', 'data': {'command':1, 'info': {'[INJECT]': 'ChannelInfo'}}},
-				'edit': {'cmd': 'AddUpdateChannel', 'data': {'command':1, 'info': {'[INJECT]': 'ChannelInfo'}}},
-				'delete': {'cmd': 'AddUpdateChannel', 'data': {'command':2, 'info': {'[INJECT]': 'ChannelInfo'}}}
-			},
+			'manage': 'AddUpdateChannel',
 			'caption': 'Management / Channels',
 			'colNames': ['Channel Key Name', 'Description', 'View Track', 'Click Track', 'Install Track', 'Action Track'],
 			'colModel': [
-							{'name': 'channelKeyName', 	'index': 'channelKeyName', 		'width': 200}, 
-							{'name': 'description', 	'index': 'description', 		'width': 200}, 
-							{'name': 'viewTrack', 		'index': 'viewTrack', 			'width':  40, 	'align':'right'}, 
-							{'name': 'clickTrack', 		'index': 'clickTrack', 			'width':  40, 	'align':'right'}, 
-							{'name': 'installTrack', 	'index': 'installTrack', 		'width':  40, 	'align':'right'}, 
-							{'name': 'actionTrack', 	'index': 'actionTrack', 		'width':  40, 	'align':'right'}, 
-						]
+		{'name': 'channelKeyName', 	'index': 'channelKeyName', 	'width': 200}, 
+		{'name': 'description', 	'index': 'description', 	'width': 200}, 
+		{'name': 'viewTrack', 		'index': 'viewTrack', 		'width':  40, 	'align':'right'}, 
+		{'name': 'clickTrack', 		'index': 'clickTrack', 		'width':  40, 	'align':'right'}, 
+		{'name': 'installTrack', 	'index': 'installTrack', 	'width':  40, 	'align':'right'}, 
+		{'name': 'actionTrack', 	'index': 'actionTrack', 	'width':  40, 	'align':'right'}, 
+			]
 		}, 
 		{
 			'path': 'managementCampaigns', 
 			'command': 'ListCampaign',
-			'manage': {
-				'add': {'cmd': 'AddUpdateCampaign', 'data': {'command':1, 'info': {'[INJECT]': 'CampaignInfo'}}},
-				'edit': {'cmd': 'AddUpdateCampaign', 'data': {'command':1, 'info': {'[INJECT]': 'CampaignInfo'}}},
-				'delete': {'cmd': 'AddUpdateCampaign', 'data': {'command':2, 'info': {'[INJECT]': 'CampaignInfo'}}}
-			},
+			'manage': 'AddUpdateCampaign',
 			'caption': 'Management / Campaigns',
 			'colNames': ['Campaign Name', 'Channel', 'Type', 'Start', 'End', 'Postbacks on', 'Status'],
 			'colModel': [
-							{'name': 'name', 			'index': 'name', 				'width': 200}, 
-							{'name': 'channelId', 		'index': 'channelId', 			'width': 120, 	'align':'right'}, 
-							{'name': 'campaignType', 	'index': 'campaignType', 		'width':  40, 	'align':'right'}, 
-							{'name': 'start', 			'index': 'start', 				'width': 120, 	'align':'right'}, 
-							{'name': 'end',	 			'index': 'end', 				'width': 120, 	'align':'right'}, 
-							{'name': 'postbackOnAction', 'index': 'postbackOnAction', 	'width': 120, 	'align':'right'}, 
-							{'name': 'status', 			'index': 'status', 				'width': 120, 	'align':'right'}, 
-						]
+		{'name': 'name', 			'index': 'name', 				'width': 200}, 
+		{'name': 'channelId', 		'index': 'channelId', 			'width': 120, 	'align':'right'}, 
+		{'name': 'campaignType', 	'index': 'campaignType', 		'width':  40, 	'align':'right'}, 
+		{'name': 'start', 			'index': 'start', 				'width': 120, 	'align':'right'}, 
+		{'name': 'end',	 			'index': 'end', 				'width': 120, 	'align':'right'}, 
+		{'name': 'postbackOnAction', 'index': 'postbackOnAction', 	'width': 120, 	'align':'right'}, 
+		{'name': 'status', 			'index': 'status', 				'width': 120, 	'align':'right'}, 
+			]
 		}, 
 		{
 			'path': 'managementMakilinks', 
 			'command': 'ListMakilinks',
-			'manage': {
-				'add': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
-				'edit': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':1, 'info': {'[INJECT]': 'MakilinkInfo'}}},
-				'delete': {'cmd': 'AddUpdateMakilink', 'appId':'', 'userId':'', 'data': {'command':2, 'info': {'[INJECT]': 'MakilinkInfo'}}}
-			},
+			'manage': 'AddUpdateMakilink',
 			'caption': 'Management / Makilinks',
-			'colNames': ['Makilink Name', 'Channel', 'Campaign', 'Description'],
+			'colNames': ['Name', 'Channel', 'Campaign', 'Description'],
 			'colModel': [
-							{'name': 'makilinkId', 		'index': 'makilinkId', 		'width': 200}, 
-							{'name': 'makiLink', 		'index': 'makiLink', 		'width': 200, 	'align':'right'}, 
-							{'name': 'campId', 			'index': 'campId', 			'width': 120, 	'align':'right'}, 
-							{'name': 'description', 	'index': 'description', 	'width': 120, 	'align':'right'}, 
-						]
-
+				{'name': 'tags', 		'index': 'tags', 		'width': 200}, 
+				{'name': 'makiLink', 	'index': 'makiLink', 	'width': 200, 'align':'right'}, 
+				{'name': 'campId', 		'index': 'campId', 		'width': 120, 'align':'right'}, 
+				{'name': 'description', 'index': 'description', 'width': 120, 'align':'right'}, 
+			]
 		}
 	]
 

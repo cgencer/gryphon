@@ -419,6 +419,21 @@
 				<input type="hidden" name="actionTrack" 	value="" />
 				<input type="hidden" name="channelId" 		value="" />
 			</form>
+			<form id="makilinkForm">
+				<input type="hidden" name="cmd"				value="AddUpdate" />
+				<input type="hidden" name="type" 			value="Makilink" />
+				<input type="hidden" name="object" 			value="MakilinkInfo" />
+				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
+
+				<input type="hidden" name="command" 		value="1" />
+				<input type="hidden" name="backEndUrl"		value="" />
+				<input type="hidden" name="campId"		 	value="" />
+				<input type="hidden" name="makiHumanKey"	value="" />
+				<input type="hidden" name="makiLink"		value="" />
+				<input type="hidden" name="makilinkBackEnd" value="" />
+				<input type="hidden" name="makilinkFrontEnd" value="" />
+				<input type="hidden" name="tags"		 	value="{'tagName':'name','tagValue':'###'}" />
+			</form>
 
 			<input type="hidden" id="channelId" value="" />
 			<input type="hidden" id="campId" value="" />
@@ -437,10 +452,11 @@
 						<input type="text" name="campaign" class="formCopy managementMakilinks" alt="channelForm" placeholder="campaign" />
 					</td>
 				</tr>
-				<tr class="campaignAdding" style="display:none;">
-					<td>Channel</td>
+
+				<tr>
+					<td>Makilink Name</td>
 					<td>
-						<input type="text" name="channelc" placeholder="Channel" />
+						<input type="text" name="name" class="formCopy managementMakilinks" alt="channelMakilink" placeholder="Makilink Name"  value="" />
 					</td>
 				</tr>
 			</table>

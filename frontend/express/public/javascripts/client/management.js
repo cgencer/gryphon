@@ -223,6 +223,7 @@ registerActionId		"0"
 */
 		$(document).on('click', '.editButton' , function () {
 			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
+
 			console.dir(selObj);
 			populate($(this).attr('title'), $(this).attr('alt'), selObj);
 			$('#'+$(this).attr('alt')+'Modal').modal('show');
@@ -544,7 +545,8 @@ console.log('just inited '+flags['selected_'+fld]);
 					obj['description'] = $(this).val();
 
 					theCmd = 'AddUpdateOrganization';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theForm = 'orgForm';
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
 					break;
 
 				case 'userName':
@@ -557,14 +559,14 @@ console.log('just inited '+flags['selected_'+fld]);
 					obj.email = $('#email').val();
 
 					theCmd = 'AddUpdateUser';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
 					break;
 
 				case 'campaign':
 					obj = _.values(getDataObject('CampaignInfo'))[0];
 
 					theCmd = 'AddUpdateCampaign';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
 					theCmd = '';
 					theLoad = '';
 					break;
@@ -573,7 +575,7 @@ console.log('just inited '+flags['selected_'+fld]);
 					obj = _.values(getDataObject('ChannelInfo'))[0];
 
 					theCmd = 'AddUpdateChannel';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': obj};
+					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
 					theCmd = '';
 					theLoad = '';
 					break;
@@ -652,14 +654,18 @@ console.log('just inited '+flags['selected_'+fld]);
 		return arr;
 	};
 
-	function fillInData (theObj) {
+	function fillInData (theObj, frm) {
 		stred = $.toJSON(theObj);
 		console.log(stred);
 
 		allKeys = getMatches(stred, new RegExp(',"([a-zA-Z]+)":"', 'g'), 1);
-		for(var i in allKeys) {
-			stred = stred.replace(',"['+allKeys[i]+']+":(["]{2})', ',"'+allKeys[i]+'":"'+$('#'+allKeys[i]).val()+'"');
-		}
+
+		$(frm).children('input').each( function (i, v) {
+			k = $(this).attr('name');
+			m = $(this).attr('value');
+			stred = stred.replace(',"['+k+']+":(["]{2})', ',"'+k+'":"'+m+'"');
+		});
+
 		console.log(stred);
 		return $.evalJSON(stred);
 	};
