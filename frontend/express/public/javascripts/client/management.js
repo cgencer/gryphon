@@ -63,22 +63,24 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			{'cmd': 'ListOrganizations', 'payload': {}, 'success': nfillinOrganizations},
 			{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps},
 			{'cmd': 'ListChannel', 'payload': {}, 'success': nfillinChannels},
-			{'cmd': 'ListRoles', 'payload': {}, 'success': function (r) {
-				if(type(r) == 'object') {
-					_role = r;
-				}else if(type(r) == 'array') {
-					for(var ri in r) {
-						if(r[ri].roleId === '0.00000C@ROLE'){
-							_role = r[ri];
-						}
-					}
-				}
-			}}
+			{'cmd': 'ListRoles', 'payload': {}, 'success': nfillinRoles},
 		]);
 
 		$('div.subLinks').each( function () {
 //			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
 		});
+
+		// =====================================================================================================
+		// copy of the form elements to the virtual elements
+		$(document).on('click', 'button.buttonToSelect' , function () {
+			$('input[name="' + $(this).attr('title') + '"]').val($(this).attr('alt'));
+		});
+		$(document).on('change', '.formCopy' , function () {
+			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
+			$('#' + $(this).attr('alt') + ' input[name="command"]').val( 2 );
+		});
+		// =====================================================================================================
+
 		$(document).on('click', '.subLinks.appLinks' , function () {
 //			$('div#sideBarApps.accordion').collapse('toggle');
 			whichApp = $(this).attr('id');
@@ -112,13 +114,26 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}]);
 		});
 		$(document).on('click', '.addRow' , function () {
-			$('#cloneMe').before( $('#cloneMe').clone() );
+
+			// clone the tr before itself and rename it
+			$('#cloneMe').before( $('#cloneMe').clone().attr('id', 'cloneMe_' + $('#numApps').val() ).addClass('clonedRow') );
+
+			// clone the form inside the tr
+			$('#cloneMe_' + $('#numApps').val() + ' .injectForm').append( 
+				$('form#appForm').clone().attr('id', $('form#appForm').clone().attr('id') + '_' + $('#numApps').val()) 
+			);
+
 			$('button.addRow:not(:last)').each( function (i, v) {
 				$(this).replaceWith('<button type="button" class="removeRow">-</button>');
 			})
+			$('#numApps').val(Number($('#numApps').val())+1);
 		});
 		$(document).on('click', '.removeRow' , function () {
 			$(this).parents('tr').remove();
+			$('form#appForm_'+$('#numApps').val()).remove();
+			if(Number($('#numApps').val()) > 1) {
+				$('#numApps').val(Number($('#numApps').val())-1);
+			}
 		});
 		$(document).on('blur', '#email' , function (e) {
 			ui = _.values(getDataObject('UserInfo'))[0];
@@ -148,10 +163,6 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '#addCampaign' , function () {
 			$('.campaignAdding').css('display', 'block');
 		});
-		$(document).on('change', '.formCopy' , function () {
-			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
-			$('#' + $(this).attr('alt') + ' input[name="command"]').val( 2 );
-		});
 
 		$(document).on('click', '.saveButton' , function (e) {
 			e.preventDefault();
@@ -171,7 +182,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 			});
 
-			theCmd = $('form#' + $(this).attr('alt')).children('input[name="command"]').val() + 
+			theCmd = $('form#' + $(this).attr('alt')).children('input[name="cmd"]').val() + 
 			$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
 
 			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { $('#'+mn).modal('hide'); }}]);
@@ -277,6 +288,25 @@ registerActionId		"0"
 	};
 	function nfillinUsers (rp) {
 		createAutoCompletes (rp, 'managementApps', 'userName', 'userForm', 'addUserPopup', true, null);
+	};
+	function nfillinRoles (rp) {
+		cache['roles'] = rp;
+		toIns = $('#userTypeButtons');
+		for(var i in cache['roles']) {
+			$('<button type="button" alt="' + cache['roles'][i].roleId + '" title="roleId" ' +
+			'class="btn btn-small buttonToSelect btn-primary">' + cache['roles'][i].description + '</button>').insertAfter( toIns );
+			toIns = $('button.buttonToSelect[alt="' + cache['roles'][i].roleId + '"]');
+		}
+
+		if(type(r) == 'object') {
+			_role = r;
+		}else if(type(r) == 'array') {
+			for(var ri in r) {
+				if(r[ri].roleId === '0.00000C@ROLE'){
+					_role = r[ri];
+				}
+			}
+		}
 	};
 	function nfillinCampaigns (rp) {
 		cache['camps'] = rp;
