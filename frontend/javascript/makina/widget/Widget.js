@@ -17,7 +17,7 @@ goog.require('makina.Dataset');
 /**
  *
  * @param {Object} options
- * @param {string|null} consoleWidget
+ * @param {string|null} consoleWidgetName
  * @constructor
  */
 makina.Widget = function(options,consoleWidgetName){
@@ -44,6 +44,8 @@ makina.Widget = function(options,consoleWidgetName){
 
     this._url = this.options["url"];
     this._refreshTime = this.options["refreshTime"] * 1000;
+
+    this._requestJsonData = this.options["requestJsonData"];
 
     this._responseSuccessCallBack = this.options["responseSuccessCallBack"];
     this._responseErrorCallBack = this.options["responseErrorCallBack"];
@@ -74,10 +76,11 @@ makina.Widget = function(options,consoleWidgetName){
 }
 /**
  *
- * @param eventItem
+ * @param {!Object} eventItem
+ * @param {Function=} fnCallBack
  *
  */
-makina.Widget.prototype.AddEvent = function(eventItem){
+makina.Widget.prototype.AddEvent = function(eventItem,fnCallBack){
 
     var isAdded = false;
 
@@ -87,6 +90,8 @@ makina.Widget.prototype.AddEvent = function(eventItem){
     });
 
     if(!isAdded){
+        if(goog.isFunction(fnCallBack))
+            eventItem["fetchCallBack"] = fnCallBack;
         this.fetchEvents.push(eventItem);
     }
 
@@ -118,14 +123,25 @@ makina.Widget.prototype.RemoveEvent = function(eventId){
 
 /**
  *
- * @return {Array}
+ * @return {Object}
  *
  */
 makina.Widget.prototype.GetRowColumns = function(){
 
-    return this.dataColumns;
+    var response ={
+        "columns":this.dataColumns
+    }
+    return response;
 }
 
+makina.Widget.prototype.GetResponseData = function(){
+
+    var rsData={};
+    rsData["columns"]= this.dataColumns;
+    rsData["rows"]= this.dataRows;
+    return rsData;
+
+}
 
 makina.Widget.prototype.StopListener = function(){
     this.isRunning = false;
@@ -138,6 +154,22 @@ makina.Widget.prototype.StartListener = function(){
 }
 
 
+makina.Widget.prototype.GetColumnsObjects = function(columns){
+
+    var response=[];
+    var that = this;
+
+    goog.array.forEach(columns,function(col){
+        goog.array.forEach(that.dataColumns,function(colObj){
+            if(colObj["cname"] == col)
+                response.push(colObj);
+        });
+    });
+
+    return response;
+
+
+}
 
 /**
  *
@@ -214,6 +246,7 @@ makina.Widget.prototype._ProcessFetchItems =  function(item){
     if(item["type"]== "sum"){
 
         var obj= this.ds.Sum(item["columns"]);
+        obj["columns"] = this.GetColumnsObjects(obj["columns"]);
         if(item["fetchCallBack"]!= null){
             item["fetchCallBack"](obj);
         }
@@ -222,7 +255,7 @@ makina.Widget.prototype._ProcessFetchItems =  function(item){
 
 
         var obj= this.ds.GroupBys(item["byColumns"]  , item["columns"], item["byValues"]);
-
+        obj["columns"] = this.GetColumnsObjects(obj["columns"]);
 
         if(item["fetchCallBack"]!= null){
            item["fetchCallBack"](obj);
@@ -232,6 +265,7 @@ makina.Widget.prototype._ProcessFetchItems =  function(item){
 
         console.log("Call get key Values Array");
         var obj = this.ds.GetColumnValues(item['byColumns']);
+        obj["columns"] = this.GetColumnsObjects(obj["columns"]);
 
         if(item["fetchCallBack"]!= null){
             item["fetchCallBack"](obj);
@@ -351,7 +385,10 @@ makina.Widget.prototype.RequestData = function(){
     var that = this;
 
 
-    var url =this._url+"/"+this._utcTime;
+    this._requestJsonData["utcTime"] = this._utcTime;
+
+    //var url =this._url+"?request="+JSON.stringify(this._requestJsonData);
+    var url =this._url+"?request="+ goog.json.serialize(this._requestJsonData);// JSON.stringify(this._requestJsonData);
     var jsonp = new goog.net.Jsonp(url);
     jsonp.setRequestTimeout(45*1000);//45 sn
 

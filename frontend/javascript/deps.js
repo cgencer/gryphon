@@ -2,14 +2,14 @@
 // Please do not edit.
 goog.addDependency('../../../../Registry.js', ['makina.Registry'], ['goog.structs.Map']);
 goog.addDependency('../../../../makina/Bootstrapper.js', ['makina.Bootstrapper'], ['goog.Uri', 'goog.array', 'goog.date', 'goog.debug.ErrorHandler', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.json', 'goog.net.XhrIo', 'goog.net.cookies', 'goog.storage.mechanism.HTML5LocalStorage', 'makina.Registry', 'makina.Widget', 'makina.dashboard.Start', 'makina.dom', 'makina.util']);
-goog.addDependency('../../../../makina/dashboard/Start.js', ['makina.dashboard.Start'], ['goog.crypt.base64', 'goog.dom.query', 'goog.json', 'goog.object', 'makina.Dataset']);
+goog.addDependency('../../../../makina/dashboard/Start.js', ['makina.dashboard.Start'], ['goog.crypt.base64', 'goog.dom.query', 'goog.json', 'goog.object', 'goog.ui.TableSorter']);
 goog.addDependency('../../../../makina/dataset/Dataset.js', ['makina.Dataset'], []);
 goog.addDependency('../../../../makina/dialog/Dialog.js', ['makina.dialog.Dialog'], ['goog.ui.Dialog', 'goog.ui.Popup']);
 goog.addDependency('../../../../makina/dom/dom.js', ['makina.dom'], ['goog.dom']);
 goog.addDependency('../../../../makina/template/Dashboards.js', ['makina.template.Dashboards'], []);
 goog.addDependency('../../../../makina/util/util.js', ['makina.util'], ['goog.net.Jsonp', 'makina.dialog.Dialog']);
 goog.addDependency('../../../../makina/validation/Validate.js', ['makina.validation.Validate'], []);
-goog.addDependency('../../../../makina/widget/Widget.js', ['makina.Widget'], []);
+goog.addDependency('../../../../makina/widget/Widget.js', ['makina.Widget'], ['makina.Dataset']);
 goog.addDependency('../../../../third_party/goog/closure/goog/array/array.js', ['goog.array', 'goog.array.ArrayLike'], ['goog.asserts']);
 goog.addDependency('../../../../third_party/goog/closure/goog/asserts/asserts.js', ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.string']);
 goog.addDependency('../../../../third_party/goog/closure/goog/async/conditionaldelay.js', ['goog.async.ConditionalDelay'], ['goog.Disposable', 'goog.async.Delay']);

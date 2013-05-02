@@ -42,6 +42,7 @@ makina.Dataset.prototype.SetDataset = function(dataset){
 makina.Dataset.prototype.Sum = function(columns){
 
     var response = {
+        "ms":0,
         "sum":0,
         "timeslot":{},
         "columns":columns
@@ -86,12 +87,9 @@ makina.Dataset.prototype.Sum = function(columns){
 
     var t=goog.now() - s;
 
-    var o={
-        "response":response,
-        "ms":t
-    };
+    response["ms"] = t;
 
-    return o;
+    return response;
 }
 /**
  *
@@ -137,12 +135,15 @@ makina.Dataset.prototype.Max = function(column){
     return max;
 
 }
+/*
 
+*/
 /**
  * @param {!String} byColumn
  * @param {Array.<String>}columns
  *
- */
+ *//*
+
 makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 
     var tmp_arr=[];
@@ -216,6 +217,7 @@ makina.Dataset.prototype.GroupBy = function(byColumn, columns){
 }
 
 
+*/
 
 
 /**
@@ -255,7 +257,9 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns, byValues){
                 if(goog.string.startsWith(k,"timeslot")){
                     itm[k] = that.SumTS([itm[k],items[k]]);
                 } else{
-                    itm[k]=itm[k] + items[k];
+                    if(goog.isNumber(itm[k]))
+                        itm[k] = itm[k] + items[k];
+                    else itm[k ]= "";
                 }
             }
         });
@@ -345,15 +349,13 @@ makina.Dataset.prototype.GroupBys = function(byColumns, columns, byValues){
 
     var t=goog.now() - s;
 
-    var response ={"columns":responseColumns,"rows":tmp};
-
-    var o={
-        "response":response,
-        "ms":t
+    var response ={
+        "ms":t,
+        "columns":responseColumns,
+        "rows":tmp
     };
 
-
-    return o;
+    return response;
 
 }
 
@@ -420,15 +422,11 @@ makina.Dataset.prototype.GetColumnValues = function(columns){
 
     response["columns"]=columns;
     response["rows"]=colKeys;
+    response["ms"]=t;
 
 
-    var o={
-        "response":response,
-        "ms":t
-    };
 
-
-    return o;
+    return response;
 }
 
 
@@ -583,6 +581,7 @@ makina.Dataset.prototype.SumTS = function(tsArrayData){
                 TS["c"]+= totalC;
             }
 
+
             //loop for months
             goog.object.forEach(v,function(mts,mk,mo){
                 if(mk!="c"){
@@ -607,9 +606,9 @@ makina.Dataset.prototype.SumTS = function(tsArrayData){
                     goog.object.forEach(dts,function(hts,hk,hObj){
                         if(hk!="c"){
                             if(goog.object.containsKey(TS[yk][mk][dk],hk) ){
-                                TS[yk][mk][dk][hk]["c"]+=dts["c"];
+                                TS[yk][mk][dk][hk]["c"]+=hts["c"];
                             }else{
-                                var cm={"c":dts["c"]};
+                                var cm={"c":hts["c"]};
                                 goog.object.set(TS[yk][mk][dk], hk, cm);
                             }
                         }

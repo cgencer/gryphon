@@ -2,7 +2,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 	if (amplify.store('uid') === '') {
 		window.location.href = 'login';
-	};
+	}
+	$(document).on('click', 'div.dashboard' , function () {
+		window.location.href = 'dash';
+	});
 
 	function initModel () {
 		cuteNSexy.switchToLoxo();

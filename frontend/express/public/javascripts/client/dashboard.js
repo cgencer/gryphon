@@ -3,6 +3,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	if (amplify.store('uid') === '') {
 		window.location.href = 'login';
 	}
+	$(document).on('click', 'div.management' , function () {
+		window.location.href = 'mng';
+	});
 
 	var tables = {'root':{'name':''}};
 	var initialCost = 10000;
@@ -47,12 +50,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		*/
 		/*
 			TODO Management sections																					
-						subtask: study handsome-calls on management screen workflow										4 hrs
-						subtask: list table																				2 hrs
-						subtask: edit row in modal																		3 hrs
-						subtask: create/edit app screen																	4 hrs
-						subtask: add new line to pulldowns																3 hrs
-						subtask: create user/org																		3 hrs
 						subtask: report permissions																		4 hrs
 		*/
 		/*
@@ -76,9 +73,6 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		*/
 		/*
 			TODO SDK Wizard																								8 hrs
-		*/
-		/*
-			TODO login screen content
 		*/
 		/*
 			TODO localization																							12 hrs
@@ -174,7 +168,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 		$(document).on('click', '#create-widget' , function (e) {
 
-			selectedFractions = ['App', 'AppReadableKey', 'CountryCode', 'City'];
+			selectedFractions = ['App', 'CountryCode', 'City'];
 
 			gryphonModel = new HandsomeWidget({
 				'url': 						gryphonModelUrl,
@@ -190,7 +184,10 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 				'id': 				$.base64.encode( selectedFractions.join('') ).substr(0, -2),		// cut off base64-ending
 				'name': 			selectedFractions.join('').toLowerCase(),
 				'byColumns': 		selectedFractions,
+				'byValues': 		[],
+				'columns': 			[],
 				'fetchCallBack': 	function (response) {
+					console.info('grabbed the data...');
 					console.dir(response);
 					drawTable( prepData( response ) );
 					gryphonModel.StopListener();
@@ -222,7 +219,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 		pack.columns.push({'cvname':'cost', 'cname':'cost', 'editable':true, 'process':'', 'visible':true, 'order':max++});
 		pack.columns.unshift({'cvname':'YOYO', 'cname':'yoyo', 'editable':false,'process':'', 'visible':true, 'order':max++});
 		tables['root'].dataSet = pack;
-
+zeroCnt = 0;
 		var no = {'columns': pack.columns, 'rows': []};
 		for(var row in pack.rows) {
 			var pr = pack.rows[row];
@@ -241,6 +238,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 //								{'name': randomId(),'timeslot': pr[col]};
 							}
 						}else{
+console.log(zeroCnt++);
 							o['tsC'] = {};
 							o['CLICK'] = 0;
 						}
@@ -256,6 +254,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 								cI += Number(pr[col].c);
 							}
 						}else{
+console.log(zeroCnt++);
 							o['INSTALL'] = 0;
 							o['tsI'] = {};
 						}
@@ -317,7 +316,7 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 
 	function prepTableForCalc () {
 		// creates the var_ classes for each rows cells
-		var ar = ['cost', 'cpc', 'cpd', 'cr', 'cost', 'click', 'install'];
+		var ar = ['cost', 'cpc', 'cpd', 'cr', 'click', 'install'];
 		for(var i in ar) {
 			$('.dataTables_scrollHead table thead td').each( function (r, v) {
 				if( $(v).text().toLowerCase() === ar[i]) {
@@ -407,7 +406,8 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 //		$('.ColVis_catcher.TableTools_catcher').html().insertAfter( $('.ColVis_catcher.TableTools_catcher') ).addClass('filterButton');
 		$('<div class="btn-group pull-right">' +
 			'<button class="btn btn-primary">Fractions</button>' + 
-			'<button class="btn btn-primary dropdown-toggle openFilters" id="dLabel" data-target="#" data-toggle="dropdown"><span class="caret"></span></button>' +
+			'<button class="btn btn-primary dropdown-toggle openFilters" id="dLabel" data-target="#" data-toggle="dropdown">' + 
+			'<span class="caret"></span></button>' +
 			'<ul id="filtersList" class="dropdown-menu triple" role="menu" aria-labelledby="dLabel"><li></li></ul>' + 
 			'</div>&nbsp;').insertAfter('.ColVis');
 
@@ -585,10 +585,9 @@ var GryphonDashboard = (function(GryphonDashboard, $, undefined){
 	            'sSwfPath': './swf/copy_csv_xls_pdf.swf'
 	        },
 			'oColReorder': {
-				'aiOrder': [ 8, 0, 1, 4, 5, 6, 7, 2, 3 ]
+				'aiOrder': [ 0, 1, 4, 5, 6, 7, 2, 3 ]
 			},
 			'aoColumnDefs': [
-				{ 'sWidth': '30px', 			'aTargets': [ 8 ] },
 				{ 'sWidth': '75px', 			'aTargets': [ 0, 1 ] },
 				{ 'sWidth': '125px', 			'aTargets': [ 2 ] },
 				{ 'asSorting': [ 'desc' ], 		'aTargets': [ 0, 1 ] },
