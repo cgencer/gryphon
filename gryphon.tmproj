@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>frontend/express/public/javascripts/client/management.js</string>
+	<string>frontend/express/public/javascripts/client/dashboard.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -22,7 +22,7 @@
 			<key>filename</key>
 			<string>../makina_MANAGEMENT/management_calls.txt</string>
 			<key>lastUsed</key>
-			<date>2013-04-11T09:08:51Z</date>
+			<date>2013-05-01T12:59:57Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -73,7 +73,7 @@
 					<key>filename</key>
 					<string>frontend/express/public/stylesheets/client/management.css</string>
 					<key>lastUsed</key>
-					<date>2013-04-24T09:48:07Z</date>
+					<date>2013-05-01T13:24:42Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -100,7 +100,7 @@
 					<key>filename</key>
 					<string>frontend/express/views/login.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-01T13:52:11Z</date>
+					<date>2013-05-01T11:57:22Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -112,13 +112,13 @@
 					<key>filename</key>
 					<string>frontend/express/views/management.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-24T09:48:19Z</date>
+					<date>2013-05-01T18:40:25Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>frontend/express/views/dashboard.html</string>
 					<key>lastUsed</key>
-					<date>2013-04-24T09:48:03Z</date>
+					<date>2013-05-01T13:25:11Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -133,7 +133,7 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/login.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-11T11:19:53Z</date>
+							<date>2013-05-01T13:25:13Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
@@ -145,15 +145,15 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/management.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-29T22:03:39Z</date>
-							<key>selected</key>
-							<true/>
+							<date>2013-05-01T21:12:00Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/client/dashboard.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-10T13:39:08Z</date>
+							<date>2013-05-01T21:12:00Z</date>
+							<key>selected</key>
+							<true/>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -232,7 +232,7 @@
 							<key>filename</key>
 							<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
 							<key>lastUsed</key>
-							<date>2013-04-04T08:14:13Z</date>
+							<date>2013-05-01T11:56:24Z</date>
 						</dict>
 					</array>
 					<key>expanded</key>
@@ -253,7 +253,7 @@
 					<key>filename</key>
 					<string>loxo scripts/GetCommandPaths.js</string>
 					<key>lastUsed</key>
-					<date>2013-04-10T14:40:51Z</date>
+					<date>2013-05-01T14:49:34Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -265,7 +265,7 @@
 					<key>filename</key>
 					<string>loxo scripts/GetMngObjectSet.js</string>
 					<key>lastUsed</key>
-					<date>2013-04-11T11:20:08Z</date>
+					<date>2013-05-01T12:59:45Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -277,7 +277,7 @@
 					<key>filename</key>
 					<string>loxo scripts/GetCommandDictionary.js</string>
 					<key>lastUsed</key>
-					<date>2013-04-11T09:02:44Z</date>
+					<date>2013-05-01T13:21:38Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -325,14 +325,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>44</integer>
+				<integer>29</integer>
 				<key>line</key>
-				<integer>190</integer>
+				<integer>217</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>160</integer>
+			<integer>197</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>20</integer>
+				<key>line</key>
+				<integer>217</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>217</integer>
+			</dict>
 		</dict>
 		<key>frontend/express/gryphon.js</key>
 		<dict>
@@ -355,7 +371,7 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>131</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -381,23 +397,23 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>49</integer>
+				<integer>28</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>12</integer>
+			<integer>13</integer>
 		</dict>
 		<key>frontend/express/public/javascripts/client/management.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>32</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>374</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -423,9 +439,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>255</integer>
+				<integer>5</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -445,20 +461,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>1998</integer>
-		</dict>
-		<key>frontend/express/public/stylesheets/client/management.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>frontend/express/public/stylesheets/ui/gryphonStyles.css</key>
 		<dict>
@@ -490,20 +492,6 @@
 				<integer>352</integer>
 			</dict>
 		</dict>
-		<key>frontend/express/views/dashboard.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>86</integer>
-				<key>line</key>
-				<integer>13</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2</integer>
-		</dict>
 		<key>frontend/express/views/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -518,20 +506,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>frontend/express/views/login.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>51</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>frontend/express/views/management.html</key>
 		<dict>
 			<key>caret</key>
@@ -539,26 +513,70 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>404</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>357</integer>
+			<integer>147</integer>
+		</dict>
+		<key>loxo scripts/GetCommandDictionary.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>153</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>119</integer>
+		</dict>
+		<key>loxo scripts/GetCommandPaths.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>loxo scripts/GetMngObjectSet.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>32</integer>
+				<integer>24</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>3</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>4</integer>
+				<key>line</key>
+				<integer>24</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>24</integer>
+			</dict>
 		</dict>
 		<key>loxo scripts/GetMngTableSet.js</key>
 		<dict>
@@ -577,18 +595,17 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>frontend/express/views/login.html</string>
 		<string>frontend/express/public/javascripts/client/login.js</string>
-		<string>frontend/express/views/dashboard.html</string>
-		<string>frontend/express/public/stylesheets/client/management.css</string>
 		<string>frontend/express/public/javascripts/client/management.js</string>
+		<string>frontend/express/public/javascripts/client/dashboard.js</string>
 		<string>frontend/express/views/management.html</string>
+		<string>loxo scripts/GetCommandPaths.js</string>
+		<string>loxo scripts/GetCommandDictionary.js</string>
 		<string>loxo scripts/GetMngTableSet.js</string>
 		<string>loxo scripts/GetMngObjectSet.js</string>
 		<string>../makina_MANAGEMENT/management_calls.txt</string>
 		<string>frontend/express/gryphon.js</string>
 		<string>frontend/express/public/javascripts/widgets/filterTable/view.js</string>
-		<string>frontend/express/public/javascripts/client/dashboard.js</string>
 		<string>frontend/express/public/javascripts/cuteNSexy/cutesexy.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
@@ -650,6 +667,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{207, 0}, {1223, 878}}</string>
+	<string>{{173, 0}, {1223, 878}}</string>
 </dict>
 </plist>

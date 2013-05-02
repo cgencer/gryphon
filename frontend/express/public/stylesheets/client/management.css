@@ -64,3 +64,6 @@ input.ui-pg-input {
 .ui-autocomplete {
 	font-size:0.8em;
 }
+.modal input.pull-right, .modal div.btn-group {
+	margin-right:10px;
+}

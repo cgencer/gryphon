@@ -307,19 +307,18 @@ registerActionId		"0"
 	};
 	function nfillinRoles (rp) {
 		cache['roles'] = rp;
-		toIns = $('#userTypeButtons');
 		for(var i in cache['roles']) {
 			$('<button type="button" alt="' + cache['roles'][i].roleId + '" title="roleId" ' +
-			'class="btn btn-small buttonToSelect btn-primary">' + cache['roles'][i].description + '</button>').insertAfter( toIns );
-			toIns = $('button.buttonToSelect[alt="' + cache['roles'][i].roleId + '"]');
+			'class="btn btn-small buttonToSelect btn-primary">' + cache['roles'][i].description + 
+			'</button>').appendTo( $('#userTypeButtons') );
 		}
 
-		if(type(r) == 'object') {
-			_role = r;
-		}else if(type(r) == 'array') {
-			for(var ri in r) {
-				if(r[ri].roleId === '0.00000C@ROLE'){
-					_role = r[ri];
+		if(type(rp) == 'object') {
+			_role = rp;
+		}else if(type(rp) == 'array') {
+			for(var ri in rp) {
+				if(rp[ri].roleId === '0.00000C@ROLE'){
+					_role = rp[ri];
 				}
 			}
 		}
@@ -406,20 +405,23 @@ registerActionId		"0"
 		flags['selected_'+fld] = false;
 		flags['dialog_'+fld] = false;
 		theField = 'input.' + frm + '[name="' + fld + '"]';
-		lookFor = '';
 
 		switch (fld) {
 			case 'organization':
-				lookFor = 'orgName';
+				itemsToSave = ['orgId'];
+				useFormItem = 'orgName';
 				break;
 			case 'userName':
-				lookFor = 'name';
+				itemsToSave = ['username', 'userId', 'password', 'email', 'primaryRole'];
+				useFormItem = 'name';
 				break;
 			case 'campaign':
-				lookFor = 'name';
+				itemsToSave = ['campId'];
+				useFormItem = 'name';
 				break;
 			case 'channel':
-				lookFor = 'channelKeyName';
+				itemsToSave = ['channelId'];
+				useFormItem = 'channelKeyName';
 				break;
 		}
 
@@ -436,7 +438,7 @@ registerActionId		"0"
 			flags['selected_'+fld] = false;
 
 /*
-			if(_.indexOf(_.pluck(recSet, lookFor), $(theField).val()) == -1) {
+			if(_.indexOf(_.pluck(recSet, useFormItem), $(theField).val()) == -1) {
 				if(!flags['selected_'+fld]) {
 					openPopup();
 				}
@@ -466,16 +468,10 @@ registerActionId		"0"
 		function openPopup () {
 			$('#dialog').html( $(popUp).html() );
 			$('#dialog').dialog({
-				'autoOpen': true,
-				'draggable': false,
-				'title': '',
-				'dialogClass': 'no-close',
-				'modal': true,
-				'width': $(theField).width(),
+				'autoOpen': true,	'draggable': false,		'title': '',
+				'dialogClass': 'no-close',	'modal': true,	'width': $(theField).width(),
 				'position': { 
-					'my': 'left top', 
-					'at': 'left bottom', 
-					'of': $(theField) 
+					'my': 'left top', 	'at': 'left bottom', 'of': $(theField) 
 				},
 				'buttons': [{
 					'text': 'OK',
@@ -503,33 +499,15 @@ console.log('from closelist '+flags['selected_'+fld]);
 			if(bindToNext != null) {
 				$('#'+bindToNext['by']).val( ui.item[bindToNext['by']] );
 			}
-			switch (fld) {
-				case 'organization':
-					$(theField).val( ui.item.orgName );
-					saveToForm (saveTo, ui.item, ['orgId']);
-					break;
-				case 'userName':
-					$(theField).val( ui.item.name );
-					// these are the form items to save the real results to
-					saveToForm (saveTo, ui.item, ['username', 'userId', 'password', 'email', 'primaryRole']);
-					break;
-				case 'campaign':
-					$(theField).val( ui.item.name );
-					saveToForm (saveTo, ui.item, ['campId']);
-					break;
-				case 'channel':
-					$(theField).val( ui.item.channelKeyName );
-					saveToForm (saveTo, ui.item, ['channelId']);
-					break;
-			}
+
+			$(theField).val( ui.item[useFormItem] );
+			saveToForm (saveTo, ui.item, itemsToSave);
 
 			if(bindToNext != null) {
 				pl = {};
 				pl[bindToNext.by] = $('#'+bindToNext.by).val();
 				cuteNSexy.runChainedEvents([{'cmd': bindToNext.cmd, 'payload': pl, 'success': bindToNext.fn}]);
 			}
-console.log('just inited '+flags['selected_'+fld]);
-
 			return false;
 		};
 
@@ -538,50 +516,35 @@ console.log('just inited '+flags['selected_'+fld]);
 			fn = $(this).attr('alt');
 			
 			flags[fld] = false;
+			obj = _.values(getDataObject( $('form#' + fn).children('input[name="object"]').val() ))[0];
+			theCmd = $('form#' + fn).children('input[name="cmd"]').val() + $('form#' + fn).children('input[name="type"]').val();
+
 			switch (fld) {
 				case 'organization': 									// create a new organization upon filling + blur
-					obj = _.values(getDataObject('OrgInfo'))[0];
-					obj['orgName'] = $(this).val();
-					obj['description'] = $(this).val();
-
-					theCmd = 'AddUpdateOrganization';
-					theForm = 'orgForm';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
+					obj['orgName'] 		= $(this).val();
+					obj['description'] 	= $(this).val();
 					break;
-
 				case 'userName':
-					obj = _.values(getDataObject('UserInfo'))[0];
-					obj.name = $(this).val();
-					obj.username = $(this).val().latinise().replace(/\s/, '');
-					obj.description = $(this).val();
-					obj.password = '123456';
-					obj.primaryRole = _role;
-					obj.email = $('#email').val();
-
-					theCmd = 'AddUpdateUser';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
+					obj['name'] 		= $(this).val();
+					obj['username'] 	= $(this).val().latinise().replace(/\s/, '');
+					obj['description'] 	= $(this).val();
+					obj['password'] 	= '123456';
+					obj['primaryRole'] 	= _role;
+					obj['email'] 		= $('#email').val();
 					break;
-
 				case 'campaign':
-					obj = _.values(getDataObject('CampaignInfo'))[0];
-
-					theCmd = 'AddUpdateCampaign';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
-					theCmd = '';
-					theLoad = '';
+					theCmd 				= '';
+					theLoad 			= '';
 					break;
-
 				case 'channel':
-					obj = _.values(getDataObject('ChannelInfo'))[0];
-
-					theCmd = 'AddUpdateChannel';
-					theLoad = {'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, theForm)};
-					theCmd = '';
-					theLoad = '';
+					theCmd 				= '';
+					theLoad 			= '';
 					break;
-			}
+			}			
 			if(!flags['selected_'+fld] && $(this).val() != '') {
-				cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': 	theLoad,
+				cuteNSexy.runChainedEvents([{
+					'cmd': theCmd, 'payload': 
+					{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, fn)},
 					'success': 	function () {
 
 					} 
@@ -604,7 +567,6 @@ console.log('just inited '+flags['selected_'+fld]);
 		}
 
 		if(yesCall) {								// ensure its an old added company, new ones dont need autocompleted
-			console.log('>>>input.' + frm + '[name="' + fld + '"]');
 			$(theField).autocomplete({
 				'minLength': 	0,
 				'source': 		recSet,
@@ -821,7 +783,6 @@ console.log('just inited '+flags['selected_'+fld]);
 
 	return {
 		'createdUser': createdUser,
-		'addedOrga': addedOrga
 	}
 
 }(window.GryphonManagement = window.GryphonManagement || {}, jQuery));
