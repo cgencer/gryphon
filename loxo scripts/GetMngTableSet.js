@@ -11,7 +11,7 @@ function run(request, response){
 				{'name': 'orgId', 			'index': 'orgId', 			'width': 20}, 
 				{'name': 'orgName', 		'index': 'orgName', 		'width': 200}, 
 				{'name': 'description', 	'index': 'description', 	'width': 200}, 
-				{'name': 'level', 			'index': 'level', 			'width': 120}, 
+				{'name': 'orgLevel', 		'index': 'orgLevel', 			'width': 120}, 
 			]
 		}, 
 		{
@@ -28,7 +28,7 @@ function run(request, response){
 				{'name': 'userId', 			'index': 'userId', 			'width': 20}, 
 				{'name': 'name', 			'index': 'name', 			'width': 200}, 
 				{'name': 'email', 			'index': 'email', 			'width': 200}, 
-				{'name': 'primaryRole', 	'index': 'primaryRole', 	'width': 120}, 
+				{'name': 'visibleName', 	'index': 'visibleName', 	'width': 120}, 
 			]
 		}, 
 		{
@@ -122,7 +122,7 @@ function run(request, response){
 			'colNames': ['Id', 'Name', 'Channel', 'Campaign', 'Description'],
 			'colModel': [
 				{'name': 'makilinkId', 	'index': 'makilinkId', 	'width': 20}, 
-				{'name': 'tags', 		'index': 'tags', 		'width': 200}, 
+				{'name': 'makilinkName', 'index': 'makilinkName', 	'width': 200}, 
 				{'name': 'makiLink', 	'index': 'makiLink', 	'width': 200, 'align':'right'}, 
 				{'name': 'campId', 		'index': 'campId', 		'width': 120, 'align':'right'}, 
 				{'name': 'description', 'index': 'description', 'width': 120, 'align':'right'}, 

@@ -179,7 +179,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', 'button.addNew' , function (e) {
 			$('#'+whichTable+'Modal').modal('show');
 		});
-		$(document).on('click', '.ui-th-column' , function (e) {
+		$(document).on('click', '.ui-jqgrid-sortable' , function (e) {
 			console.log('sorted...');
 			onSort();
 		});
@@ -192,9 +192,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 		$(document).on('click', '.saveButton' , function (e) {
 			e.preventDefault();
-
+/*
+	TODO on management of makilinks: put makilinkName into the tags object
+*/
 			ui = $.toJSON(_.values(getDataObject( $('form#' + $(this).attr('alt')).children('input[name="object"]').val() ) )[0]);
-			mn = $('form#' + $(this).attr('alt')).children('input[name="modal"]').val();
 
 			$('input.formCopy').each( function (i, v) {
 				$('form#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
@@ -211,7 +212,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			theCmd = $('form#' + $(this).attr('alt')).children('input[name="cmd"]').val() + 
 			$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
 
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { $('#'+mn).modal('hide'); }}]);
+			mn = $('form#' + $(this).attr('alt')).children('input[name="modal"]').val();
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { 
+				$('#'+mn).modal('hide'); 
+			}}]);
 		});
 
 
@@ -285,11 +289,15 @@ registerActionId		"0"
 			_role = rp;
 		}else if(type(rp) == 'array') {
 			for(var ri in rp) {
-				if(rp[ri].roleId === '0.00000C@ROLE'){
+				if(rp[ri].roleName.toLowerCase().indexOf('developer') > -1){
 					_role = rp[ri];
 				}
 			}
 		}
+
+
+
+
 	};
 	function nfillinCampaigns (rp) {
 		cache['camps'] = rp;
@@ -333,7 +341,6 @@ registerActionId		"0"
 	function fillinApps (appSet) {
 		apps = appSet;
 		$('#sideBarApps').empty();
-
 		$('#sideBarApps').append(	'<div class="accordion-group sources">' +
 									'<div class="accordion-heading">' +
 									'<input type="text" id="searchApp" placeholder="[ filter ]" value="" /></div></div>');
@@ -362,14 +369,16 @@ registerActionId		"0"
 	function fillinMakilinks (set) {
 		$('#manager').jqGrid('clearGridData');
 		for(var i in set) {
-			$('#manager').jqGrid('addRowData', i, set[i]);
+			console.dir(cleanResponse(set[i]));
+			
+			$('#manager').jqGrid('addRowData', i, cleanResponse(set[i]));
 			onSort();
 		}
 	};
 	function fillinUsersofOrga (set) {
 		$('#manager').jqGrid('clearGridData');
 		for(var i in set) {
-			$('#manager').jqGrid('addRowData', i, set[i]);
+			$('#manager').jqGrid('addRowData', i, cleanResponse(set[i]));
 			onSort();
 		}
 	};
@@ -659,12 +668,8 @@ console.log('from closelist '+flags['selected_'+fld]);
 		$(into).jqGrid({
 			'datatype': 'local', 'colNames': cn, 'colModel': cm, 'caption': ts.caption,
 			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 
-			'onHeaderClick': function (gstate) { 
-				onSort(); 
-			}, 
-			'onSortCol': function (i, c, or) { 
-				onSort(); 
-			},
+			'onHeaderClick': onSort, 
+			'onSortCol': onSort,
 		});
 		f = '';
 		switch (menuPath) {
@@ -713,37 +718,18 @@ console.log('from closelist '+flags['selected_'+fld]);
 		}
 
 
-
+		platformNames = ['Unknown', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
+		userTypeNames = _.pluck(cache['roles'], 'description');
+		trackNames = ['none', 'via UI', 'via Makilink', 'via SDK']; 
 
 		if(type(ts.command) === 'string') {
 
 			cuteNSexy.runChainedEvents([ 
 				{'cmd': ts.command, 'payload': pl, 'success': function (set) {
 				for(var i in set) {
-					if(type(set[i].platform) != 'undefined') {
-						switch (set[i].platform) {
-							case 0:
-								plName = 'Unknown';
-								break;
-							case 1:
-								plName = 'IOS';
-								break;
-							case 2:
-								plName = 'Android';
-								break;
-							case 3:
-								plName = 'Windows';
-								break;
-							case 4:
-								plName = 'Symbian';
-								break;
-							case 5:
-								plName = 'Tizen';
-								break;
-						}
-						set[i].platform = plName;
-					}
-					$(into).jqGrid('addRowData', i, set[i]);
+
+
+					$(into).jqGrid('addRowData', i, cleanResponse(set[i]));
 				}
 				$(into).jqGrid();
 				onSort();
@@ -770,6 +756,50 @@ console.log('from closelist '+flags['selected_'+fld]);
 			tsIndex++;
 		}
 	};
+
+	function cleanResponse (obj) {
+		obj = flatten(obj);
+
+		if(type(obj.platform) != 'undefined') { 		obj.platform 		= platformNames[ Number(obj.platform) ]; }
+		if(type(obj.viewTrack) != 'undefined') { 		obj.viewTrack 		= platformNames[ Number(obj.viewTrack) ]; }
+		if(type(obj.clickTrack) != 'undefined') { 		obj.clickTrack 		= platformNames[ Number(obj.clickTrack) ]; }
+		if(type(obj.installTrack) != 'undefined') { 	obj.installTrack 	= platformNames[ Number(obj.installTrack) ]; }
+		if(type(obj.actionTrack) != 'undefined') { 		obj.viewTrack 		= platformNames[ Number(obj.actionTrack) ]; }
+		if(type(obj.start) != 'undefined') { 			obj.start 			= new XDate(parseDMY(obj.start)).toString('d MMM yyyy'); }
+		if(type(obj.end) != 'undefined') { 				obj.end 			= new XDate(parseDMY(obj.end)).toString('d MMM yyyy'); }
+
+		if(whichTable === 'managementMakilinks') {
+			if(type(obj.tags) == 'array') {
+				for(var i in obj.tags) {
+					if(i === 'makilinkName') {
+						obj['makilinkName'] = obj.tags[i];
+					}
+				}
+			}
+		}
+		return obj;
+	}
+	
+	function flatten(obj, includePrototype, into, prefix) {
+	    into = into || {};
+	    prefix = prefix || "";
+
+	    for (var k in obj) {
+	        if (includePrototype || obj.hasOwnProperty(k)) {
+	            var prop = obj[k];
+	            if (prop && typeof prop === "object" &&
+	                !(prop instanceof Date || prop instanceof RegExp)) {
+	                flatten(prop, includePrototype, into, prefix + k + "_");
+	            }
+	            else {
+	                into[prefix + k] = prop;
+	            }
+	        }
+	    }
+
+	    return into;
+	}
+	
 	function type (o) {
 		var types = {
 		    'undefined'        : 'undefined',
