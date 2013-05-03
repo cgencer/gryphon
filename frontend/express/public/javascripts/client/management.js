@@ -90,6 +90,16 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('.clonedRow form input[name="description"]').val( $(this).val() );
 		});
 		// =====================================================================================================
+		$(document).on('keypress', '#searchApp' , function () {
+			searchFor = $(this).val().toLowerCase();
+			$('div.accordion-group.appNames').each( function (i, v) {
+				if($(this).attr('alt').indexOf(searchFor) > -1) {
+					$(this).css('display', 'block');
+				}else{
+					$(this).css('display', 'none');
+				}
+			})
+		});
 
 		$(document).on('click', '.subLinks.appLinks' , function () {
 //			$('div#sideBarApps.accordion').collapse('toggle');
@@ -365,6 +375,11 @@ registerActionId		"0"
 	function fillinApps (appSet) {
 		apps = appSet;
 		$('#sideBarApps').empty();
+
+		$('#sideBarApps').append(	'<div class="accordion-group sources">' +
+									'<div class="accordion-heading">' +
+									'<input type="text" id="searchApp" placeholder="Org Name" value="" /></div></div>');
+
 		for(var a in appSet) {
 			an = appSet[a].appname;
 			cn = '';
@@ -377,7 +392,7 @@ registerActionId		"0"
 */
 //			an = an.replace(/\s*[android|ios]/i, '');
 			an = (an.length > 20) ? an.substr(0, 20) + '...' : an;
-			$('#sideBarApps').append(	'<div class="accordion-group sources">' +
+			$('#sideBarApps').append(	'<div class="accordion-group sources appNames" alt="' + an.toLowerCase() + '">' +
 										'<div class="accordion-heading subLinks appLinks ' + cn + '" id="' + appSet[a].appId + '">' +
 										'<a href="#App" alt="' + appSet[a].appId + '">' + an + '</a></div></div>');
 		}

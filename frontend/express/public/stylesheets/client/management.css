@@ -67,3 +67,10 @@ input.ui-pg-input {
 .modal input.pull-right, .modal div.btn-group {
 	margin-right:10px;
 }
+#searchApp {
+	width:135px;
+	height:20px;
+	font-size:14px;
+	border:none;
+	background-color:#999999;
+}
