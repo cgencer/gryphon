@@ -75,22 +75,22 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', 'button.buttonToSelect' , function () {
 			$('input[name="' + $(this).attr('title') + '"]').val($(this).attr('alt'));
 		});
-		$(document).on('change', '.formCopy' , function () {
+		$(document).on('change keypress', '.formCopy' , function () {
 			$('#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
 			$('#' + $(this).attr('alt') + ' input[name="command"]').val( 2 );
 		});
 		// both of these are needed for the multiple copying of apps rows into their appforms 
-		$(document).on('change', '.formCopyMultiple' , function () {
+		$(document).on('change keypress', '.formCopyMultiple' , function () {
 			$('form#appForm_' + $(this).parents('tr').attr('alt') + ' input[name="marketUrl"]').val( $(this).val() );
 		});
 		$(document).on('click', 'button.buttonToSelectMultiple' , function () {
 			$('form#appForm_' + $(this).parents('tr').attr('alt') + ' input[name="' + $(this).attr('title') + '"]').val( $(this).attr('alt') );
 		});
-		$(document).on('change', '#description' , function () {
+		$(document).on('change keypress', '#description' , function () {
 			$('.clonedRow form input[name="description"]').val( $(this).val() );
 		});
 		// =====================================================================================================
-		$(document).on('keypress', '#searchApp' , function () {
+		$(document).on('change keypress', '#searchApp' , function () {
 			searchFor = $(this).val().toLowerCase();
 			$('div.accordion-group.appNames').each( function (i, v) {
 				if($(this).attr('alt').indexOf(searchFor) > -1) {
@@ -125,11 +125,11 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			}
 			createTableset(whichTable, '#manager', {});
 		});
-		$(document).on('change', '#orgPulldown' , function () {
+		$(document).on('change keypress', '#orgPulldown' , function () {
 			console.log('changed orga...');
 			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}]);
 		});
-		$(document).on('change', '#campPulldown' , function () {
+		$(document).on('change keypress', '#campPulldown' , function () {
 			console.log('changed campaign... >'+$("#campPulldown").val());
 			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}]);
 		});
@@ -391,7 +391,7 @@ registerActionId		"0"
 			}
 */
 //			an = an.replace(/\s*[android|ios]/i, '');
-			an = (an.length > 20) ? an.substr(0, 20) + '...' : an;
+			an = (an.length > 20) ? an.substr(0, 15) + '...' : an;
 			$('#sideBarApps').append(	'<div class="accordion-group sources appNames" alt="' + an.toLowerCase() + '">' +
 										'<div class="accordion-heading subLinks appLinks ' + cn + '" id="' + appSet[a].appId + '">' +
 										'<a href="#App" alt="' + appSet[a].appId + '">' + an + '</a></div></div>');
