@@ -78,4 +78,5 @@ input.ui-pg-input {
 	overflow-y: scroll;
 	overflow-x: hidden;
 	height:250px;
+	scrollbar-base-color:#999999;
 }

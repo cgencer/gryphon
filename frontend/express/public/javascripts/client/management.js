@@ -40,6 +40,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var tsIndex = 0;
 	var theLoad = {};
 	var whichTable = '';
+	var whichId = '';
 	var whichApp = '';
 	var theModal = '';
 	var userDidSelect = false;
@@ -117,9 +118,9 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
 			$('#whichTable').val(whichTable);
+			whichId = $(this).attr('alt');
+			$('#whichId').val(whichId);
 
-			
-			console.log('whattafuck! '+whichTable);
 			if(whichTable === 'managementMakilinks' && whichApp === '') {
 				$('.selector').accordion( "option", "active", 2 );
 			}
@@ -233,32 +234,16 @@ registerActionId		"0"
 */
 		$(document).on('click', '.editButton' , function () {
 			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
-
+//			theId = selObj[whichId];
 			console.dir(selObj);
-			populate($(this).attr('title'), $(this).attr('alt'), selObj);
+			populate( $(this).attr('title'), $(this).attr('alt'), selObj );
 			$('#'+$(this).attr('alt')+'Modal').modal('show');
 		});
 	});
 
 	function onSort () {
-		w = $('#whichTable').val();
-		f = '';
-		switch (w) {
-			case 'managementOrganizations':
-				f = 'orgForm';
-				break;
-			case 'managementUsers':
-				f = 'userForm';
-				break;
-			case 'managementApps':
-				f = 'appForm';
-				break;
-			case 'managementMakilinks':
-				f = 'makilinkForm';
-				break;
-		}
 		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
-			$(this).html('<button class="btn btn-primary editButton" title="' + f + '" alt="' + w + '" type="button">Edit</button>');
+			$(this).html('<button class="btn btn-primary editButton" title="' + $('#whichId').val() + '" alt="' + $('#whichTable').val() + '" type="button">Edit</button>');
 		});
 	};
 	function getDataObject (w) {
@@ -271,37 +256,10 @@ registerActionId		"0"
 		return r;
 	};
 	function populate(frmH, frmM, data) {
-
 		$.each(data, function(key, value){
 			$('input[name="' + key + '"]', '#'+frmH).val( value );
 			$('input.'+frmM+'[name="' + key + '"]').val( value );
 		});
-
-		if(type(data.platform) != 'undefined') {
-			var plNo;
-			switch (data.platform) {
-				case 'Unknown':
-					plNo = 0;
-					break;
-				case 'IOS':
-					plNo = 1;
-					break;
-				case 'Android':
-					plNo = 2;
-					break;
-				case 'Windows':
-					plNo = 3;
-					break;
-				case 'Symbian':
-					plNo = 4;
-					break;
-				case 'Tizen':
-					plNo = 5;
-					break;
-			}
-			$('select#platform', frmH).val(plNo);
-		}
-
 	};
 	function saveToForm (st, obj, arr) {
 		for(i in arr) {
@@ -378,7 +336,7 @@ registerActionId		"0"
 
 		$('#sideBarApps').append(	'<div class="accordion-group sources">' +
 									'<div class="accordion-heading">' +
-									'<input type="text" id="searchApp" placeholder="Org Name" value="" /></div></div>');
+									'<input type="text" id="searchApp" placeholder="[ filter ]" value="" /></div></div>');
 
 		for(var a in appSet) {
 			an = appSet[a].appname;
@@ -526,6 +484,22 @@ console.log('from closelist '+flags['selected_'+fld]);
 			return false;
 		};
 
+		function fillInData (theObj, frm) {
+			stred = $.toJSON(theObj);
+			console.log(stred);
+
+			allKeys = getMatches(stred, new RegExp(',"([a-zA-Z]+)":"', 'g'), 1);
+
+			$(frm).children('input').each( function (i, v) {
+				k = $(this).attr('name');
+				m = $(this).attr('value');
+				stred = stred.replace(',"['+k+']+":(["]{2})', ',"'+k+'":"'+m+'"');
+			});
+
+			console.log(stred);
+			return $.evalJSON(stred);
+		};
+
 		$(document).on('blur', theField, function (e) {
 			// was: input.managementApps[name="userName"]
 			fn = $(this).attr('alt');
@@ -533,33 +507,51 @@ console.log('from closelist '+flags['selected_'+fld]);
 			flags[fld] = false;
 			obj = _.values(getDataObject( $('form#' + fn).children('input[name="object"]').val() ))[0];
 			theCmd = $('form#' + fn).children('input[name="cmd"]').val() + $('form#' + fn).children('input[name="type"]').val();
+			theKey = $('form#' + fn).children('input[name="key"]').val();
 
 			switch (fld) {
 				case 'organization': 									// create a new organization upon filling + blur
-					obj['orgName'] 		= $(this).val();
-					obj['description'] 	= $(this).val();
+					var infoObj = {
+						'orgName': 		$(this).val(),
+						'description': 	$(this).val(),
+					}
 					break;
 				case 'userName':
-					obj['name'] 		= $(this).val();
-					obj['username'] 	= $(this).val().latinise().replace(/\s/, '');
-					obj['description'] 	= $(this).val();
-					obj['password'] 	= '123456';
-					obj['primaryRole'] 	= _role;
-					obj['email'] 		= $('#email').val();
+					var infoObj = {
+						'name': 		$(this).val(),
+						'username': 	$(this).val().latinise().replace(/\s/, ''),
+						'description': 	$(this).val(),
+						'password': 	'123456',
+						'primaryRole': 	_role,
+						'email': 		$('#email').val(),
+					}
 					break;
 				case 'campaign':
+					var infoObj = {
+					}
 					theCmd 				= '';
 					theLoad 			= '';
 					break;
 				case 'channel':
+					var infoObj = {
+					}
 					theCmd 				= '';
 					theLoad 			= '';
 					break;
-			}			
+				case 'makilink':
+					var infoObj = {
+					}
+					break;
+			}
+			for(var i in infoObj) {
+				obj[i] = infoObj[i];
+			}
+//			obj[theKey] = 
+
 			if(!flags['selected_'+fld] && $(this).val() != '') {
 				cuteNSexy.runChainedEvents([{
 					'cmd': theCmd, 'payload': 
-					{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillinData(obj, fn)},
+					{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillInData (obj, fn)},
 					'success': 	function () {
 
 					} 
@@ -631,21 +623,6 @@ console.log('from closelist '+flags['selected_'+fld]);
 		return arr;
 	};
 
-	function fillInData (theObj, frm) {
-		stred = $.toJSON(theObj);
-		console.log(stred);
-
-		allKeys = getMatches(stred, new RegExp(',"([a-zA-Z]+)":"', 'g'), 1);
-
-		$(frm).children('input').each( function (i, v) {
-			k = $(this).attr('name');
-			m = $(this).attr('value');
-			stred = stred.replace(',"['+k+']+":(["]{2})', ',"'+k+'":"'+m+'"');
-		});
-
-		console.log(stred);
-		return $.evalJSON(stred);
-	};
 	function getMatches(string, regex, index) {
 	    index || (index = 1);
 	    var matches = [];
@@ -689,6 +666,22 @@ console.log('from closelist '+flags['selected_'+fld]);
 				onSort(); 
 			},
 		});
+		f = '';
+		switch (menuPath) {
+			case 'managementOrganizations':
+				f = 'orgId';
+				break;
+			case 'managementUsers':
+				f = 'userId';
+				break;
+			case 'managementApps':
+				f = 'appId';
+				break;
+			case 'managementMakilinks':
+				f = 'makilinkId';
+				break;
+		}
+		$(into).hideCol([f]);
 
 		// FILTER / SEARCH
 		if(menuPath === 'managementMakilinks' || menuPath === 'managementApps') {

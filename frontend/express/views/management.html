@@ -41,6 +41,7 @@
 <body>
 	<input type="hidden" id="whichTable" value="" />
 	<input type="hidden" id="whichForm" value="" />
+	<input type="hidden" id="theId" value="" />
 	<input type="hidden" id="userId" value="" />
 	<input type="hidden" id="orgId" value="" />
 	<input type="hidden" id="appId" value="" />
@@ -126,28 +127,28 @@
 								<div class="accordion" id="sideBarManagement">
 
 									<div class="accordion-group sources">
-										<div class="accordion-heading subLinks managementLinks" id="managementOrganizations">
+										<div class="accordion-heading subLinks managementLinks" id="managementOrganizations" alt="orgId">
 											<a href="#managementOrganizations">
 												Organizations
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading subLinks managementLinks" id="managementUsers">
+										<div class="accordion-heading subLinks managementLinks" id="managementUsers" alt="userId">
 											<a href="#managementUsers">
 											Users
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading subLinks managementLinks" id="managementApps">
+										<div class="accordion-heading subLinks managementLinks" id="managementApps" alt="appId">
 											<a href="#managementApps">
 											Apps
 											</a>
 										</div>
 									</div>
 									<div class="accordion-group sources">
-										<div class="accordion-heading subLinks managementLinks"  id="managementMakilinks">
+										<div class="accordion-heading subLinks managementLinks"  id="managementMakilinks" alt="makilinkId">
 											<a href="#managementMakilinks">
 											Makilinks
 											</a>
@@ -186,6 +187,7 @@
 				<input type="hidden" name="type" 			value="Organization" />
 				<input type="hidden" name="object" 			value="OrgInfo" />
 				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
+				<input type="hidden" name="key" 			value="orgId" />
 
 				<input type="hidden" name="countlyHostId" 	value="mkui1.nmdapps.com" />
 				<input type="hidden" name="command" 		value="1" />
@@ -241,6 +243,7 @@
 				<input type="hidden" name="type" 			value="Organization" />
 				<input type="hidden" name="object" 			value="OrgInfo" />
 				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
+				<input type="hidden" name="key" 			value="userId" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="username" 		value="" />
@@ -320,6 +323,7 @@
 				<input type="hidden" name="type" 			value="App" />
 				<input type="hidden" name="object" 			value="AppInfo" />
 				<input type="hidden" name="modal" 			value="managementAppsModal" />
+				<input type="hidden" name="key" 			value="appId" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="orgId" 			value="" />
@@ -339,6 +343,7 @@
 				<input type="hidden" name="type" 			value="User" />
 				<input type="hidden" name="object" 			value="UserInfo" />
 				<input type="hidden" name="modal" 			value="managementAppsModal" />
+				<input type="hidden" name="key" 			value="userId" />
 
 				<input type="hidden" name="username" 		value="" />
 				<input type="hidden" name="name" 			value="" />
@@ -401,6 +406,7 @@
 				<input type="hidden" name="type" 			value="App" />
 				<input type="hidden" name="object" 			value="AppInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
+				<input type="hidden" name="key" 			value="appId" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="channelId" 		value="" />
@@ -414,6 +420,7 @@
 				<input type="hidden" name="type" 			value="Channel" />
 				<input type="hidden" name="object" 			value="ChannelInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
+				<input type="hidden" name="key" 			value="channelId" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="installTrack" 	value="" />
@@ -427,6 +434,7 @@
 				<input type="hidden" name="type" 			value="Makilink" />
 				<input type="hidden" name="object" 			value="MakilinkInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
+				<input type="hidden" name="key" 			value="makiLinkId" />
 
 				<input type="hidden" name="command" 		value="1" />
 				<input type="hidden" name="backEndUrl"		value="" />
