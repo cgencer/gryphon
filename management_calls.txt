@@ -1,0 +1,430 @@
+Management / Organizations
+
+	-> ListOrganizations
+
+					{"request":{ "_type": "ListOrganizationsRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+
+		response:	[infoList] [hostList=null]
+			each row:
+					_type				"OrgInfo"
+					description			"Nomad A.Ş."
+					numberOfApps		448
+					numberOfUsers		448
+					orgId				"0.00001V@ORG"
+					orgName				"Nomad"
+		
+	on edit: AddUpdateOrganization
+
+					{"request":
+							{ "_type": "AddUpdateOrganizationRequest", 
+							"callTag": "", 
+							"registerId": "", 
+							"session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", 
+							"verb": "", 
+							"countlyHostId": "mkui1.nmdapps.com", 
+							"command": 1, 
+							"info": { 
+									"_type": "OrgInfo", 
+									"description": "Nomad A.Ş.", 
+									"orgId": "0.00001V@ORG", 
+									"orgName": "Nomad" } }}
+
+=================================================
+Management / Users
+
+	-> ListRoles:
+
+					{"request":{ "_type": "ListRolesRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+
+		response:	[infoList]
+			each row:
+					_type						"RoleInfo"
+					description					"Application User"
+					numberOfUsers				0
+					roleId						"0.00000B@ROLE"
+					roleName					"APP_USER"
+					verbs						null
+					visibleName					"AppUser"
+					
+	-> do ListOrganizations
+	
+	-> ListUsers:
+	
+					{"request":{ "_type": "ListUsersRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "orgId": "0.00001V@ORG", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+					
+		response:	[infoList]
+			each row:
+					_type					"UserInfo"
+					email					"umutgokcen@nomadcommerce.com"
+					name					"Umut Gökcen YILMAZ"
+					orgId					"0.00001V@ORG"
+					password				"password"
+					primaryRole				null
+					userId					"0.00001J@USER"
+					username				"umutgokcen"
+					
+=================================================
+
+Management / User Roles for Apps
+
+	-> do ListOrganizations
+
+	-> ListRoles:
+	
+					{"request":{ "_type": "ListRolesRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+
+		response:	[infoList]
+			each row:
+					_type					"RoleInfo"
+					description				"Application User"
+					numberOfUsers			0
+					roleId					"0.00000B@ROLE"
+					roleName				"APP_USER"
+					verbs					null
+					visibleName				"AppUser"
+			
+					
+	-> ListApps:
+	
+					{"request":{ "_type": "ListAppsRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+					
+		response:	[infoList]
+			each row:
+					_type				"AppInfo"
+					appId				"0.00001V@APP"
+					appToken			null
+					appType				0
+					appname				"Makina Test Application"
+					countlyApiKey		"0e77607d70b3f136a0204489754a4298"
+					countlyAppId		"50feaad4a72286a972000004"
+					countlyAppKey		"dfb6f40a509fa264ec744cd91a87d1f1d4b349c9"
+					countlyUrl			"http://mkui1.nmdapps.com"
+					description			"IOS SDK Test Application"
+					googleAnalyticsKey	"MO-37936843-1"
+					iconUrl				""
+					marketUrl			"https://itunes.apple.co...ectory/id514312350?mt=8"
+					platform			1
+					registerActionId	"0"
+					
+	-> ListUserRoleMatch:
+	
+					{"request":{ "_type": "ListUserRoleMatchRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "appId": "0.00001V@APP", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+					
+		response:	[infoList]
+		
+			each row:
+					_type				"UserRoleMatchInfo"
+					appId				"0.00001V@APP"
+					matchId				"0.00001J@USER_0.00001V@APP"
+					status				"OK"
+					visibleMessage		"Free List"
+					roleInfo	{}
+								_type					"RoleInfo"
+								description				"Application Developer"
+								numberOfUsers			0
+								roleId					"0.00000C@ROLE"
+								roleName				"APP_DEVELOPER"
+								verbs					null
+								visibleName				"AppDeveloper"
+					userInfo	{}
+								_type					"UserInfo"
+								email					"umutgokcen@nomadcommerce.com"
+								name					"Umut Gökcen YILMAZ"
+								orgId					"0.00001V@ORG"
+								password				"password"
+								primaryRole				null
+								userId					"0.00001J@USER"
+								username				"umutgokcen"
+					
+	>> on editing each row:
+		get user details with List Users
+		save with: AddUpdateUserRoleMatch:
+		
+								{"request":{ "_type": "AddUpdateUserRoleMatchRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "command": 1, "info": { "_type": "UserRoleMatchInfo", "appId": "0.00001V@APP", "roleInfo": { "_type": "RoleInfo", "description": "Application Developer", "numberOfUsers": 0, "roleId": "0.00000C@ROLE", "roleName": "APP_DEVELOPER", "verbs": null, "visibleName": "AppDeveloper" }, "userInfo": { "_type": "UserInfo", "email": "umutgokcen@nomadcommerce.com", "name": "Umut Gökcen YILMAZ", "orgId": "0.00001V@ORG", "password": "password", "primaryRole": null, "userId": "0.00001J@USER", "username": "umutgokcen" } } }}
+					
+			response:
+			
+								{"AddUpdateUserRoleMatchResult":{"_type":"AddUpdateUserRoleMatchResponse","callbackTag":"","status":"","visibleMessage":"","info":null}}
+								
+=================================================
+
+Management / User Token for Apps
+
+	-> do ListOrganizations
+
+	-> do ListApps
+
+	-> AppWizListUserTokens:	(on each application change)
+	
+								{"request":{ "_type": "AppWizListUserTokensRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "appId": "0.00001V@APP", "userId": null }}
+
+		response:	[infoList]
+			each row:
+					_type						"UserTokenInfo"
+					description					null
+					email						"umutgokcen@nomadcommerce.com"
+					name						"Umut Gökcen YILMAZ"
+					token						"4BF8B1B3AE5D431C86E598B09D022493@03E4"
+					userId						"0.00001J@USER"
+
+		on "Assign New Token to this Application":
+		
+			Organization pulldown retrieves ListUsers with the selected org id
+
+			on save:
+			
+								{"request":{ "_type": "AppWizGetTokenRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "appId": "0.00001V@APP", "orgId": "0.00001V@ORG", "userId": "0.00001Y@USER" }}
+					
+				response:		[countlyHost]
+					each row:
+								_type					"CountlyHostInfo"
+								apiKey					"0e77607d70b3f136a0204489754a4298"
+								apiUser					"demo"
+								apiUserPass				"demo"
+								appCount				15
+								countlyHostId			"mkui1.nmdapps.com"
+								description				"Azure Countly"
+								hostUrl					"http://mkui1.nmdapps.com"
+								selected				false
+								userCount				12	
+
+
+
+			{"request":{ 
+					"_type": "AddUpdateAppRequest", 
+					"callTag": "", 
+					"registerId": "", 
+					"session": "6ff841b3-e317-493a-b1c2-06a24a7c4002", 
+					"verb": "", 
+					"command": 1, 
+					"countlyHostId": "mkui1.nmdapps.com", 
+					"info": { 
+							"_type": "AppInfo", 
+							"appId": "", 
+							"appToken": "", 
+							"appType": 0, 
+							"appname": "arwgrwgqrg", 
+							"countlyApiKey": "", 
+							"countlyAppKey": "", 
+							"countlyUrl": "", 
+							"description": "sdfghsghsg", 
+							"iconUrl": "", 
+							"marketUrl": "fgasfga", 
+							"googleAnalyticsKey": "sfgsfdg", 
+							"platform": "2", 
+							"registerActionId": "0" 
+					} 
+			}}
+
+
+=================================================
+
+Management / Applications
+
+	-> do ListApps
+
+=================================================
+
+Management / Roles
+
+	-> do ListRoles		(refresh on save)
+
+	on "Create a new user role":	AddUpdateRole:
+
+								{"request":{ "_type": "AddUpdateRoleRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "command": 1, "info": { "_type": "RoleInfo", "description": "sdfgs", "numberOfUsers": "2", "roleId": "", "roleName": "sdfs", "verbs": null, "visibleName": "sdfgs" } }}
+								
+		response:
+		
+{"AddUpdateRoleResult":{"_type":"AddUpdateRoleResponse","callbackTag":"","status":"","visibleMessage":"","info":null}}
+								
+=================================================
+
+Management / Channels
+
+	-> ListChannel:		(on save do refresh)
+
+								{"request":{ "_type": "ListChannelRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+
+		response:		[infoList]
+			each row:
+						_type					"ChannelInfo"
+						actionTrack				3
+						channelId				"0.000009@CHANNEL"
+						channelKeyName			"Test1"
+						clickTrack				2
+						description				"Test Channel"
+						installTrack			3
+						viewTrack				1
+
+	on each row: edit: AddUpdateChannel:
+
+						{"request":{ "_type": "AddUpdateChannelRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "",
+							"command": 1, 
+							"info": { "_type": "ChannelInfo", 
+								"actionTrack": "3", 
+								"appId": "", 
+								"channelId": "0.000009@CHANNEL", 
+								"channelKeyName": "Test1", 
+								"clickTrack": "2", 
+								"description": "Test Channel", 
+								"installTrack": "1", 
+								"viewTrack": "1" } }}
+
+		result:		[info]
+					_type					"ChannelInfo"
+					actionTrack				3
+					channelId				"0.000009@CHANNEL"
+					channelKeyName			"Test1"
+					clickTrack				2
+					description				"Test Channel"
+					installTrack			1
+					viewTrack				1
+
+=================================================
+
+Management / Campaigns
+
+	-> do ListRoles
+	
+	-> do ListChannel
+
+	-> ListCampaign:
+
+					{"request":{ "_type": "ListCampaignRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "applicationId": "0.00001V@APP", "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+					
+		response:			[infoList]
+			each row:
+							_type					"CampaignInfo"
+							appId					"0.00001V@APP"
+							campId					"0.000020@CAMP"
+							campaignType			0
+							channelId				"0.000009@CHANNEL"
+							name					"Makina Test Campaign"
+							parentCampId			""
+							postbackOnAction		""
+							postbackOnClick			""
+							postbackOnInstall		""
+							postbackOnView			""
+							status					true
+							start		{}
+									_type				"MDate"
+									date				"01012013"
+									time				"000000"
+									zone				"+0000"
+							end			{}
+									_type				"MDate"
+									date				"01012013"
+									time				"000000"
+									zone				"+0000"
+
+	on each row: edit+save: AddUpdateCampaign			with command: 1 (on request objects topmost level)
+
+		send one CampaignInfo object (as above)
+		
+			response:		[info] is the same CampaignInfo object sent
+
+	on "Assign a new Campaign to this Application": AddUpdateCampaign
+
+	on "Delete" on each editing:	AddUpdateCampaign		with command: 2 (on request objects topmost level)
+
+=================================================
+
+Management / Makilinks
+
+	-> do ListApps
+
+	-> do ListCampaign		to populate the Campaign pulldown
+
+	-> ListMakilinks:
+
+							{"request":{ "_type": "ListMakilinksRequest", "callTag": "", "registerId": "", "session": "2772a0e2-40c3-48db-af11-c5da8d1b2791", "verb": "", "campaignId": "0.000020@CAMP", "routerEnable": false, "pager": { "_type": "Pager", "orderBy": "", "pageNum": 1, "pageSize": 1, "sort": "" } }}
+							
+		response:			[infoList]
+			each row:
+							_type						"MakilinkInfo"
+							backEndUrl					"https://itunes.apple.co...ectory/id514312350?mt=8"
+							campId						"0.000020@CAMP"
+							makiHumanKey				"1YG2V"
+							makiLink					"http://mklnk.nmdapps.com/makilink/track/1YG2V"
+							makilinkBackEnd				1
+							makilinkFrontEnd			0
+							makilinkId					"0.00001Y@MAKILINK"
+							status						true
+							tags						[ ]
+
+	on each row: edit+save:	AddUpdateMakilink
+
+			send makilink object +appId +userId +sesion +[any tag objects]
+			tagObject 					{ "_type": "MakiTagInfo", "tagName": "", "tagValue": "" }
+
+=================================================
+
+Management / Actions
+
+	-> do ListApps
+
+	-> ListActions:
+
+						request object +Session +appId
+
+			result:		[infoList]
+
+=================================================
+
+create a new token for a user
+
+	{"request":{ 
+			"_type": "AppWizGetTokenRequest", 
+			"callTag": "", 
+			"registerId": "", 
+			"session": "e3131d92-20ec-4d23-a221-e715eb047071", 
+			"verb": "", 
+			"appId": "0.00001V@APP", 
+			"orgId": "0.00001V@ORG", 
+			"userId": "0.00001Y@USER" 
+	}}
+
+the response is
+
+	{"AppWizGetTokenResult":
+		{"_type":"AppWizGetTokenResponse",
+		"callbackTag":"",
+		"status":"OK",
+		"visibleMessage":"",
+		"countlyHost":{
+			"_type":"CountlyHostInfo",
+			"apiKey":null,
+			"apiUser":null,
+			"apiUserPass":null,
+			"appCount":0,
+			"countlyHostId":null,
+			"description":null,
+			"hostUrl":null,
+			"selected":false,
+			"userCount":0
+			},
+		"token":"A5938ADD342A4E0F93805D7CE0B1A101@03E4"}}
+
+
+AppWizListUserTokensResponse lists all tokens for an app
+
+	{"request":{ 
+		"_type": "AppWizListUserTokensRequest", 
+		"callTag": "", 
+		"registerId": "", 
+		"session": "e3131d92-20ec-4d23-a221-e715eb047071", 
+		"verb": "", 
+		"appId": "0.00001V@APP", 
+		"userId": null }}
+
+the response is infoList
+
+	_type				"UserTokenInfo"
+	description			null
+	email				"umutgokcen@nomadcommerce.com"
+	name				"Umut Gökcen YILMAZ"
+	token				"4BF8B1B3AE5D431C86E598B09D022493@03E4"
+	userId				"0.00001J@USER"
+
+
+
