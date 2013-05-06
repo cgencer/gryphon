@@ -23,10 +23,12 @@ Management / Organizations
 							"verb": "", 
 							"countlyHostId": "mkui1.nmdapps.com", 
 							"command": 1, 
+							
 							"info": { 
 									"_type": "OrgInfo", 
 									"description": "Nomad A.Ş.", 
 									"orgId": "0.00001V@ORG", 
+									orgLevel: 
 									"orgName": "Nomad" } }}
 
 =================================================

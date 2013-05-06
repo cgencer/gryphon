@@ -222,7 +222,7 @@ console.log('___> '+cmd);
 			switch (src) {
 				case 'handsome':
 					theURL = 'http://mkevt.nmdapps.com/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data);
-//					theURL = 'http://192.168.10.17/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data);
+					theURL = 'http://192.168.10.13/makinaweb/' + cmd + '/?request=' + JSON.stringify(payLoad.data);
 					_urlM = theURL;
 					break;
 				case 'loxodonta':

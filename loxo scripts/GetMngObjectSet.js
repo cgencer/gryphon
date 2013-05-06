@@ -9,10 +9,10 @@ function run(request, response){
 */
 	response.objectSet = [
 		{'OrgInfo': { 
-						'_type': 'OrgInfo', 'description': '', 'orgId': '', 'orgName': ''}
+						'_type': 'OrgInfo', 'description': '', 'orgId': '', 'orgName': '', 'orgLevel': ''}
 		},
 		{'UserInfo': {
-						'_type': 'UserInfo', 'description': '', 'orgId': '', 'password': '', 'userId': '', 'username':'',
+						'_type': 'UserInfo', 'description': '', 'orgId': '', 'password': '', 'userId': '', 'name': '', 'email': '', 'username': '',
 						'primaryRole': {'[INJECT]': 'RoleInfo'} }
 		},
 		{'RoleInfo': {

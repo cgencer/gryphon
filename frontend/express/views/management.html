@@ -183,18 +183,18 @@
 		<div class="modal-body">
 
 			<form id="orgForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="Organization" />
 				<input type="hidden" name="object" 			value="OrgInfo" />
 				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
 				<input type="hidden" name="key" 			value="orgId" />
 
-				<input type="hidden" name="countlyHostId" 	value="mkui1.nmdapps.com" />
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="orgId" 			value="" />
-				<input type="hidden" name="orgName" 		value="" />
-				<input type="hidden" name="orgType" 		value="" />
-				<input type="hidden" name="description" 	value="" />
+				<input type="hidden" name="countlyHostId" 	class="toSave" value="mkui1.nmdapps.com" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="orgId" 			class="toSave" value="" />
+				<input type="hidden" name="orgName" 		class="toSave" value="" />
+				<input type="hidden" name="orgLevel" 		class="toSave" value="" />
+				<input type="hidden" name="description" 	class="toSave" value="" />
 			</form>
 
 			<div class="control-group span8">
@@ -215,12 +215,12 @@
 				<label class="control-label span2" for="orgType">Type</label>
 				<div class="controls pull-right">
 					<div class="btn-group" data-toggle="buttons-radio">
-						<button type="button" alt="0" title="orgType" class="btn btn-small buttonToSelect btn-primary">None</button>
-						<button type="button" alt="1" title="orgType" class="btn btn-small buttonToSelect btn-primary">Agency</button>
-						<button type="button" alt="2" title="orgType" class="btn btn-small buttonToSelect btn-primary">Client</button>
-						<button type="button" alt="3" title="orgType" class="btn btn-small buttonToSelect btn-primary">App Dev</button>
-						<button type="button" alt="4" title="orgType" class="btn btn-small buttonToSelect btn-primary">Network</button>
-						<button type="button" alt="5" title="orgType" class="btn btn-small buttonToSelect btn-primary">Publisher</button>
+						<button type="button" alt="0" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">None</button>
+						<button type="button" alt="1" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Agency</button>
+						<button type="button" alt="2" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Client</button>
+						<button type="button" alt="3" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">App Dev</button>
+						<button type="button" alt="4" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Network</button>
+						<button type="button" alt="5" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Publisher</button>
 					</div>
 				</div>
 			</div>
@@ -239,28 +239,19 @@
 		</div>
 		<div class="modal-body">
 			<form id="userForm">
-				<input type="hidden" name="command"			value="AddUpdate" />
-				<input type="hidden" name="type" 			value="Organization" />
-				<input type="hidden" name="object" 			value="OrgInfo" />
-				<input type="hidden" name="modal" 			value="managementOrganizationsModal" />
+
+				<input type="hidden" name="type" 			value="User" />
+				<input type="hidden" name="object" 			value="UserInfo" />
+				<input type="hidden" name="modal" 			value="managementUsersModal" />
 				<input type="hidden" name="key" 			value="userId" />
 
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="username" 		value="" />
-				<input type="hidden" name="name" 			value="" />
-				<input type="hidden" name="email"	 		value="" />
-				<input type="hidden" name="orgId" 			value="" />
-				<input type="hidden" name="userId" 			value="" />
-				<input type="hidden" name="password" 		value="" />
-
-				<input type="hidden" name="primaryRole" 	value="" />
-				<input type="hidden" name="description" 	value="" />
-				<input type="hidden" name="roleId" 			value="" />
-				<input type="hidden" name="roleName" 		value="" />
-				<input type="hidden" name="visibleName" 	value="" />
-				<input type="hidden" name="visibleName" 	value="" />
-				<input type="hidden" name="verbs" 			value="" />
-				<input type="hidden" name="numberOfUsers" 	value="" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="username" 		class="toSave" value="" />
+				<input type="hidden" name="name" 			class="toSave" value="" />
+				<input type="hidden" name="email"	 		class="toSave" value="" />
+				<input type="hidden" name="orgId" 			class="toSave" value="" />
+				<input type="hidden" name="userId" 			class="toSave" value="" />
+				<input type="hidden" name="password" 		class="toSave" value="" />
 			</form>
 
 
@@ -308,7 +299,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary saveButton">Save changes</button>
+			<button class="btn btn-primary saveButton" alt="userForm">Save changes</button>
 		</div>
 	</div>
 
@@ -319,38 +310,38 @@
 		</div>
 		<div class="modal-body">
 			<form id="appForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="App" />
 				<input type="hidden" name="object" 			value="AppInfo" />
 				<input type="hidden" name="modal" 			value="managementAppsModal" />
 				<input type="hidden" name="key" 			value="appId" />
 
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="orgId" 			value="" />
-				<input type="hidden" name="appId" 			value="" />
-				<input type="hidden" name="appToken" 		value="" />
-				<input type="hidden" name="appType" 		value="" />
-				<input type="hidden" name="appname" 		value="" />
-				<input type="hidden" name="description"	 	value="" />
-				<input type="hidden" name="iconUrl"	 		value="" />
-				<input type="hidden" name="marketUrl" 		value="" />
-				<input type="hidden" name="platform" 		value="" />
-				<input type="hidden" name="googleAnalyticsKey" value="" />
-				<input type="hidden" name="registerActionId" value="" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="orgId" 			class="toSave" value="" />
+				<input type="hidden" name="appId" 			class="toSave" value="" />
+				<input type="hidden" name="appToken" 		class="toSave" value="" />
+				<input type="hidden" name="appType" 		class="toSave" value="" />
+				<input type="hidden" name="appname" 		class="toSave" value="" />
+				<input type="hidden" name="description"	 	class="toSave" value="" />
+				<input type="hidden" name="iconUrl"	 		class="toSave" value="" />
+				<input type="hidden" name="marketUrl" 		class="toSave" value="" />
+				<input type="hidden" name="platform" 		class="toSave" value="" />
+				<input type="hidden" name="googleAnalyticsKey" class="toSave" value="" />
+				<input type="hidden" name="registerActionId" class="toSave" value="" />
 			</form>
 			<form id="userForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="User" />
 				<input type="hidden" name="object" 			value="UserInfo" />
 				<input type="hidden" name="modal" 			value="managementAppsModal" />
 				<input type="hidden" name="key" 			value="userId" />
 
-				<input type="hidden" name="username" 		value="" />
-				<input type="hidden" name="name" 			value="" />
-				<input type="hidden" name="email"	 		value="" />
-				<input type="hidden" name="orgId" 			value="" />
-				<input type="hidden" name="password" 		value="" />
-				<input type="hidden" name="primaryRole" 	value="" />
+				<input type="hidden" name="username" 		class="toSave" value="" />
+				<input type="hidden" name="name" 			class="toSave" value="" />
+				<input type="hidden" name="email"	 		class="toSave" value="" />
+				<input type="hidden" name="orgId" 			class="toSave" value="" />
+				<input type="hidden" name="password" 		class="toSave" value="" />
+				<input type="hidden" name="primaryRole" 	class="toSave" value="" />
 			</form>
 
 					<table>
@@ -402,48 +393,48 @@
 		</div>
 		<div class="modal-body">
 			<form id="appForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="App" />
 				<input type="hidden" name="object" 			value="AppInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
 				<input type="hidden" name="key" 			value="appId" />
 
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="channelId" 		value="" />
-				<input type="hidden" name="campId" 			value="" />
-				<input type="hidden" name="description"	 	value="" />
-				<input type="hidden" name="marketURL" 		value="" />
-				<input type="hidden" name="platform" 		value="" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="channelId" 		class="toSave" value="" />
+				<input type="hidden" name="campId" 			class="toSave" value="" />
+				<input type="hidden" name="description"	 	class="toSave" value="" />
+				<input type="hidden" name="marketURL" 		class="toSave" value="" />
+				<input type="hidden" name="platform" 		class="toSave" value="" />
 			</form>
 			<form id="channelForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="Channel" />
 				<input type="hidden" name="object" 			value="ChannelInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
 				<input type="hidden" name="key" 			value="channelId" />
 
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="installTrack" 	value="" />
-				<input type="hidden" name="clickTrack" 		value="" />
-				<input type="hidden" name="viewTrack" 		value="" />
-				<input type="hidden" name="actionTrack" 	value="" />
-				<input type="hidden" name="channelId" 		value="" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="installTrack" 	class="toSave" value="" />
+				<input type="hidden" name="clickTrack" 		class="toSave" value="" />
+				<input type="hidden" name="viewTrack" 		class="toSave" value="" />
+				<input type="hidden" name="actionTrack" 	class="toSave" value="" />
+				<input type="hidden" name="channelId" 		class="toSave" value="" />
 			</form>
 			<form id="makilinkForm">
-				<input type="hidden" name="cmd"				value="AddUpdate" />
+
 				<input type="hidden" name="type" 			value="Makilink" />
 				<input type="hidden" name="object" 			value="MakilinkInfo" />
 				<input type="hidden" name="modal" 			value="managementMakilinksModal" />
 				<input type="hidden" name="key" 			value="makiLinkId" />
 
-				<input type="hidden" name="command" 		value="1" />
-				<input type="hidden" name="backEndUrl"		value="" />
-				<input type="hidden" name="campId"		 	value="" />
-				<input type="hidden" name="makiHumanKey"	value="" />
-				<input type="hidden" name="makiLink"		value="" />
-				<input type="hidden" name="makilinkBackEnd" value="" />
-				<input type="hidden" name="makilinkFrontEnd" value="" />
-				<input type="hidden" name="makilinkName"	value="" />
+				<input type="hidden" name="command" 		class="toSave" value="1" />
+				<input type="hidden" name="backEndUrl"		class="toSave" value="" />
+				<input type="hidden" name="campId"		 	class="toSave" value="" />
+				<input type="hidden" name="makiHumanKey"	class="toSave" value="" />
+				<input type="hidden" name="makiLink"		class="toSave" value="" />
+				<input type="hidden" name="makilinkBackEnd" class="toSave" value="" />
+				<input type="hidden" name="makilinkFrontEnd" class="toSave" value="" />
+				<input type="hidden" name="makilinkName"	class="toSave" value="" />
 			</form>
 
 			<input type="hidden" id="channelId" value="" />

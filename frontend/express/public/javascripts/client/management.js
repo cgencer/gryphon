@@ -91,7 +91,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('.clonedRow form input[name="description"]').val( $(this).val() );
 		});
 		// =====================================================================================================
-		$(document).on('change keypress', '#searchApp' , function () {
+		$(document).on('change keypress blur', '#searchApp' , function () {
 			searchFor = $(this).val().toLowerCase();
 			$('div.accordion-group.appNames').each( function (i, v) {
 				if($(this).attr('alt').indexOf(searchFor) > -1) {
@@ -126,8 +126,9 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			}
 			createTableset(whichTable, '#manager', {});
 		});
-		$(document).on('change keypress', '#orgPulldown' , function () {
+		$(document).on('change', '#orgPulldown' , function () {
 			console.log('changed orga...');
+			$('#orgId').val( $(this).val() );
 			cuteNSexy.runChainedEvents([{'cmd': 'ListUsers', 'payload': {'orgId': $("#orgPulldown").val()}, 'success': fillinUsersofOrga}]);
 		});
 		$(document).on('change keypress', '#campPulldown' , function () {
@@ -195,28 +196,70 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 /*
 	TODO on management of makilinks: put makilinkName into the tags object
 */
+			formpointer = '#' + $(this).parents('div.modal').attr('id') + ' form#' + $(this).attr('alt');
+			console.log(formpointer);
 			ui = $.toJSON(_.values(getDataObject( $('form#' + $(this).attr('alt')).children('input[name="object"]').val() ) )[0]);
 
-			$('input.formCopy').each( function (i, v) {
-				$('form#' + $(this).attr('alt') + ' input[name="' + $(this).attr('name') + '"]').val( $(this).val() );
+			$('div#' + $(this).parents('div.modal').attr('id') + ' input.formCopy').each( function (i, v) {
+				$(formpointer + ' input[name="' + $(v).attr('name') + '"]').val( $(v).val() );
 			});
 
-			$('form#' + $(this).attr('alt')).children('input').each( function (ii, vv) {
-				console.log( $(this).attr('name') + ' = '+ $(this).val() );
-
-				rexp = new RegExp(',["]{1}([' + $(this).attr('name') + ']*)["]{1}:["]{2}', 'g');
-				ui = ui.replace(rexp, ',"$1":"' + $(this).val() + '"');
-
+			$(formpointer + ' input.toSave').each( function (i, v) {
+				rexp = new RegExp(',["]{1}([' + $(v).attr('name') + ']+)["]{1}:["]{2}', 'g');
+				ui = ui.replace(rexp, ',"$1":"' + $(v).val() + '"');
 			});
 
-			theCmd = $('form#' + $(this).attr('alt')).children('input[name="cmd"]').val() + 
-			$('form#' + $(this).attr('alt')).children('input[name="type"]').val();
+			switch ($(this).attr('alt')) {				// overwrite with specific values
+				case 'orgForm':
+					var infoObj = {
+						'description': 	'',
+					}
+					break;
+				case 'userForm':
+					var infoObj = {
+						'username': 	$(formpointer + ' input[name="name"]').val().latinise().replace(/\s/, ''),
+						'primaryRole': 	_role,
+					}
+					break;
+			}
+			for(var io in infoObj) {
+				ui = ui.replace(new RegExp(',"([' + io + ']+)":["]{2}', 'g'), ',"$1":"' + infoObj[io] + '"');
+			}
+			ui = ui.replace(new RegExp(',"([orgId]+)":["]{2}', 'g'), ',"orgId":"' + $('#orgId').val() + '"');
 
-			mn = $('form#' + $(this).attr('alt')).children('input[name="modal"]').val();
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'payload': {'info': $.evalJSON(ui)}, 'success': function () { 
-				$('#'+mn).modal('hide'); 
+			theCmd = 'AddUpdate' + $(formpointer + ' input[name="type"]').val();
+
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'isReal': true, 'payload': {
+					'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': $.evalJSON(ui)
+				}, 'success': function () { 
+				$(formpointer + ' input[name="modal"]').val().modal('hide'); 
 			}}]);
 		});
+
+/*
+		{"callTag":"",
+		"registerId":"",
+		"verb":"",
+		"session":"52c44ed2-5b8d-451c-99c0-db748dcd7f40",
+		"callbackTag":"ZTU0YjRmOTQtZGQwZi00NzAwLThkZmQtM2NhOWU2NDAyOGM1",
+		"countlyHostId":"mkui1.nmdapps.com",
+		"command":1,
+		"info":{
+			"_type":"UserInfo",
+			"description":"",
+			"orgId":"",
+			"password":"sdfgsdfg",
+			"userId":"",
+			"username":"",
+			"primaryRole":{
+				"_type":"RoleInfo",
+				"description":"",
+				"numberOfUsers":0,
+				"roleId":"0.00000B@ROLE",
+				"roleName":"",
+				"verbs":"",
+				"visibleName":""}},"_type":"AddUpdateOrganizationRequest"}
+*/
 
 
 /*
@@ -509,7 +552,7 @@ console.log('from closelist '+flags['selected_'+fld]);
 			return $.evalJSON(stred);
 		};
 
-		$(document).on('blur', theField, function (e) {
+		$(document).on('xlur', theField, function (e) {
 			// was: input.managementApps[name="userName"]
 			fn = $(this).attr('alt');
 			
@@ -558,13 +601,15 @@ console.log('from closelist '+flags['selected_'+fld]);
 //			obj[theKey] = 
 
 			if(!flags['selected_'+fld] && $(this).val() != '') {
+
 				cuteNSexy.runChainedEvents([{
-					'cmd': theCmd, 'payload': 
+					'cmd': theCmd, 'isReal': true, 'payload': 
 					{'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': fillInData (obj, fn)},
 					'success': 	function () {
 
 					} 
 				}]);
+
 //				flags['selected_'+fld] = false;
 			}
 		});
