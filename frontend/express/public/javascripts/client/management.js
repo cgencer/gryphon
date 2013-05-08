@@ -54,8 +54,8 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var apps = [];
 	var camps = [];
 	XDate.parsers.push(parseDMY);
-	platformNames = ['Unknown', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
-	trackNames = ['none', 'via UI', 'via Makilink', 'via SDK']; 
+	platformNames = ['None', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
+	trackNames = ['None', 'via UI', 'via Makilink', 'via SDK']; 
 	orglevels = ['None', 'Agency', 'Client', 'App Dev', 'Network', 'Publisher'];
 	roleNames = [];
 
@@ -321,9 +321,12 @@ registerActionId		"0"
 			if(_.indexOf(_.keys(data), s) > -1) {
 				if(_.isNaN(Number(data[s]))) {
 					idx = _.indexOf(selectors[s], data[s]);
+//					platformNames = ['None', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
+
+console.info('index is '+idx);
 					$('button[title="' + s + '"]').eq( idx ).addClass('active');
 				}else{
-					$('button[title="' + s + '"]').eq( Number(data[s]) ).addClass('active');
+					$('button[title="' + s + '"]').eq( Number(data[s])-1 ).addClass('active');
 				}
 			}
 		}
@@ -331,12 +334,26 @@ registerActionId		"0"
 			$('button[title="roleId"]').eq( _.indexOf(roleNames, data.primaryRole_visibleName)-1 ).addClass('active');
 		}
 	};
-	
+
 	function onSort () {
 		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
-			
 			$(this).html('<button class="btn btn-primary editButton" title="' + $('#whichId').val() + '" alt="' + $('#whichTable').val() + '" type="button">Edit</button>');
 		});
+		if($('#whichTable').val() == 'managementApps') {
+			$('[aria-describedby="manager_tokens"]').each( function (i, v) {
+			//
+				selObj = _.omit($("#manager").jqGrid('getRowData', i), 'editButton');
+				for(var i in cache['apps']) {
+					if(cache['apps'][i].appId == selObj.appId) {
+						if(cache['apps'][i].userTokens.length == 1) {
+							$(this).html( '<div class="userAppToken" alt="' + cache['apps'][i].userTokens[0].token + '">' + cache['apps'][i].userTokens[0].name + '</div>' );
+						}else if(cache['apps'][i].userTokens.length > 1) {
+							$(this).html('<button class="btn btn-primary tokenButton" title="' + selObj.appId + '" alt="' + $('#whichTable').val() + '" type="button">Show Tokens</button>');
+						}
+					}
+				}
+			});
+		}
 	};
 	function getDataObject (w) {
 		r = {}
@@ -419,6 +436,7 @@ registerActionId		"0"
 
 	function fillinApps (appSet) {
 		apps = appSet;
+		cache['apps'] = appSet;
 		$('#sideBarApps').empty();
 		$('#sideBarApps').append(	'<div class="accordion-group sources">' +
 									'<div class="accordion-heading">' +
@@ -815,7 +833,6 @@ console.log('from closelist '+flags['selected_'+fld]);
 			cuteNSexy.runChainedEvents([ 
 				{'cmd': ts.command, 'payload': pl, 'success': function (set) {
 				for(var i in set) {
-
 
 					$(into).jqGrid('addRowData', i, cleanResponse(set[i]));
 				}

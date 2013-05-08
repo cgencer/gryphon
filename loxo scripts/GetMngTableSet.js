@@ -57,12 +57,12 @@ function run(request, response){
 			'command': 'ListApps',
 			'manage': 'AddUpdateApp',
 			'caption': 'Management / Applications',
-			'colNames': ['Id', 'Name', 'Platform', 'App Token', 'Description', 'URL'],
+			'colNames': ['Id', 'Name', 'Platform', 'Token Owners', 'Description', 'URL'],
 			'colModel': [
 		{'name': 'appId',	 		'index': 'appId', 			'width': 20}, 
 		{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
 		{'name': 'platform', 		'index': 'platform', 		'width':  60,}, 
-		{'name': 'appToken', 		'index': 'appToken', 		'width': 120, 	'align':'right'}, 
+		{'name': 'tokens',	 		'index': 'tokens', 			'width': 120, 	'align':'center'}, 
 		{'name': 'description', 	'index': 'description', 	'width': 200}, 
 		{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
 			]
