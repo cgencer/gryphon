@@ -39,6 +39,7 @@
 </head>
 
 <body>
+	<input type="hidden" id="whichId" value="" />
 	<input type="hidden" id="whichTable" value="" />
 	<input type="hidden" id="whichForm" value="" />
 	<input type="hidden" id="theId" value="" />
@@ -214,7 +215,7 @@
 			<div class="control-group span8">
 				<label class="control-label span2" for="orgType">Type</label>
 				<div class="controls pull-right">
-					<div class="btn-group" data-toggle="buttons-radio">
+					<div class="btn-group" alt="orgLevel" data-toggle="buttons-radio">
 						<button type="button" alt="0" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">None</button>
 						<button type="button" alt="1" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Agency</button>
 						<button type="button" alt="2" title="orgLevel" class="btn btn-small buttonToSelect btn-primary">Client</button>
@@ -252,6 +253,7 @@
 				<input type="hidden" name="orgId" 			class="toSave" value="" />
 				<input type="hidden" name="userId" 			class="toSave" value="" />
 				<input type="hidden" name="password" 		class="toSave" value="" />
+				<input type="hidden" name="roleId" 			class="toSave" value="" />
 			</form>
 
 
@@ -264,7 +266,7 @@
 			</div>
 
 			<div class="control-group span8">
-				<label class="control-label span3" for="name">User Name</label>
+				<label class="control-label span3" for="name">Name</label>
 				<div class="controls">
 					<input type="text" name="name" class="formCopy managementUsers span4 pull-right" 
 					alt="userForm" placeholder="User Name" value="" /><br />
@@ -288,9 +290,9 @@
 			</div>
 
 			<div class="control-group span8">
-				<label class="control-label span2" for="usertype">Type</label>
+				<label class="control-label span2" for="usertype">User Type</label>
 				<div class="controls pull-right">
-					<div class="btn-group" id="userTypeButtons" data-toggle="buttons-radio">
+					<div class="btn-group" alt="roleName" id="userTypeButtons" data-toggle="buttons-radio">
 					</div>
 				</div>
 			</div>
@@ -353,7 +355,7 @@
 					</tr>
 					<tr id="cloneMe" alt="">
 							<td colspan="2" class="injectForm">
-								<div class="btn-group pull-right" data-toggle="buttons-radio">
+								<div class="btn-group pull-right" alt="platform" data-toggle="buttons-radio">
 									<button type="button" class="btn btn-small btn-primary disabled">Platform</button>
 									<button type="button" alt="1" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">IOS</button>
 									<button type="button" alt="2" title="platform" class="btn btn-small btn-primary buttonToSelectMultiple">Android</button>
@@ -492,28 +494,28 @@
 	</div>
 
 	<div id="addChannelPopup" style="display:none;">
-		<div class="btn-group pull-right" data-toggle="buttons-radio" id="installTrack">
+		<div class="btn-group pull-right" data-toggle="buttons-radio" alt="installTrack" id="installTrack">
 			<button type="button" class="btn btn-small btn-primary disabled">Install Track</button>
 			<button type="button" alt="0" title="installTrack" class="btn btn-small btn-primary buttonToSelect">None</button>
 			<button type="button" alt="1" title="installTrack" class="btn btn-small btn-primary buttonToSelect">UI</button>
 			<button type="button" alt="2" title="installTrack" class="btn btn-small btn-primary buttonToSelect">SDK</button>
 			<button type="button" alt="3" title="installTrack" class="btn btn-small btn-primary buttonToSelect">Makilink</button>
 		</div>
-		<div class="btn-group pull-right" data-toggle="buttons-radio" id="clickTrack">
+		<div class="btn-group pull-right" data-toggle="buttons-radio" alt="clickTrack" id="clickTrack">
 			<button type="button" class="btn btn-small btn-primary disabled">Click Track</button>
 			<button type="button" alt="0" title="clickTrack" class="btn btn-small btn-primary buttonToSelect">None</button>
 			<button type="button" alt="1" title="clickTrack" class="btn btn-small btn-primary buttonToSelect">UI</button>
 			<button type="button" alt="2" title="clickTrack" class="btn btn-small btn-primary buttonToSelect">SDK</button>
 			<button type="button" alt="3" title="clickTrack" class="btn btn-small btn-primary buttonToSelect">Makilink</button>
 		</div>
-		<div class="btn-group pull-right" data-toggle="buttons-radio" id="viewTrack">
+		<div class="btn-group pull-right" data-toggle="buttons-radio" alt="viewTrack" id="viewTrack">
 			<button type="button" class="btn btn-small btn-primary disabled">View Track</button>
 			<button type="button" alt="0" title="viewTrack" class="btn btn-small btn-primary buttonToSelect">None</button>
 			<button type="button" alt="1" title="viewTrack" class="btn btn-small btn-primary buttonToSelect">UI</button>
 			<button type="button" alt="2" title="viewTrack" class="btn btn-small btn-primary buttonToSelect">SDK</button>
 			<button type="button" alt="3" title="viewTrack" class="btn btn-small btn-primary buttonToSelect">Makilink</button>
 		</div>
-		<div class="btn-group pull-right" data-toggle="buttons-radio" id="actionTrack">
+		<div class="btn-group pull-right" data-toggle="buttons-radio" alt="actionTrack" id="actionTrack">
 			<button type="button" class="btn btn-small btn-primary disabled">Action Track</button>
 			<button type="button" alt="0" title="actionTrack" class="btn btn-small btn-primary buttonToSelect">None</button>
 			<button type="button" alt="1" title="actionTrack" class="btn btn-small btn-primary buttonToSelect">UI</button>

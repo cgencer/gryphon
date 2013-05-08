@@ -54,6 +54,10 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var apps = [];
 	var camps = [];
 	XDate.parsers.push(parseDMY);
+	platformNames = ['Unknown', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
+	trackNames = ['none', 'via UI', 'via Makilink', 'via SDK']; 
+	orglevels = ['None', 'Agency', 'Client', 'App Dev', 'Network', 'Publisher'];
+	roleNames = [];
 
 	$(document).ready(function() {
 
@@ -105,7 +109,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('click', '.subLinks.appLinks' , function () {
 //			$('div#sideBarApps.accordion').collapse('toggle');
 			whichApp = $(this).attr('id');
-			console.info(whichApp+' selected');
+			$('#appId').val(whichApp);
 			if(whichApp != '') {
 				cuteNSexy.runChainedEvents([
 					{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': nfillinCampaigns},
@@ -118,6 +122,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
 			whichTable = $(this).attr('id');
 			$('#whichTable').val(whichTable);
+
 			whichId = $(this).attr('alt');
 			$('#whichId').val(whichId);
 
@@ -197,6 +202,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	TODO on management of makilinks: put makilinkName into the tags object
 */
 			formpointer = '#' + $(this).parents('div.modal').attr('id') + ' form#' + $(this).attr('alt');
+			elementspointer = '#' + $(this).parents('div.modal').attr('id');
 			console.log(formpointer);
 			ui = $.toJSON(_.values(getDataObject( $('form#' + $(this).attr('alt')).children('input[name="object"]').val() ) )[0]);
 
@@ -209,58 +215,33 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 				ui = ui.replace(rexp, ',"$1":"' + $(v).val() + '"');
 			});
 
+			for (var r in cache['roles']) {
+				if(cache['roles'][r].roleId == $('input[name="roleId"]').val()) {
+					theRole = cache['roles'][r];
+				}
+			}
 			switch ($(this).attr('alt')) {				// overwrite with specific values
-				case 'orgForm':
-					var infoObj = {
-						'description': 	'',
-					}
-					break;
 				case 'userForm':
 					var infoObj = {
-						'username': 	$(formpointer + ' input[name="name"]').val().latinise().replace(/\s/, ''),
-						'primaryRole': 	_role,
+						'username': $(elementspointer + ' input[name="name"]').val().latinise().replace(/\s/g, ''),
 					}
 					break;
 			}
+			infoObj = $.extend({}, infoObj, theRole);
 			for(var io in infoObj) {
 				ui = ui.replace(new RegExp(',"([' + io + ']+)":["]{2}', 'g'), ',"$1":"' + infoObj[io] + '"');
 			}
-			ui = ui.replace(new RegExp(',"([orgId]+)":["]{2}', 'g'), ',"orgId":"' + $('#orgId').val() + '"');
+
+			ui = ui.replace('"orgId":""', '"orgId":"' + $('#orgId').val() + '"');
+			ui = ui.replace('"userId":""', '"userId":"' + $('#userId').val() + '"');
 
 			theCmd = 'AddUpdate' + $(formpointer + ' input[name="type"]').val();
 
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'isReal': true, 'payload': {
-					'countlyHostId': 'mkui1.nmdapps.com', 'command': 1, 'info': $.evalJSON(ui)
-				}, 'success': function () { 
-				$(formpointer + ' input[name="modal"]').val().modal('hide'); 
-			}}]);
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'success': weSavedOurSouls, 'payload': {
+					'command': 1, 'info': $.evalJSON(ui)
+				}
+			}]);
 		});
-
-/*
-		{"callTag":"",
-		"registerId":"",
-		"verb":"",
-		"session":"52c44ed2-5b8d-451c-99c0-db748dcd7f40",
-		"callbackTag":"ZTU0YjRmOTQtZGQwZi00NzAwLThkZmQtM2NhOWU2NDAyOGM1",
-		"countlyHostId":"mkui1.nmdapps.com",
-		"command":1,
-		"info":{
-			"_type":"UserInfo",
-			"description":"",
-			"orgId":"",
-			"password":"sdfgsdfg",
-			"userId":"",
-			"username":"",
-			"primaryRole":{
-				"_type":"RoleInfo",
-				"description":"",
-				"numberOfUsers":0,
-				"roleId":"0.00000B@ROLE",
-				"roleName":"",
-				"verbs":"",
-				"visibleName":""}},"_type":"AddUpdateOrganizationRequest"}
-*/
-
 
 /*
 _type					"AppInfo"
@@ -279,17 +260,81 @@ marketUrl				"asdgasdga"
 platform				5
 registerActionId		"0"
 */
-		$(document).on('click', '.editButton' , function () {
+		$(document).on('click', '.editButton' , function (e) {
+
+			elementspointer = $('#' + $(this).attr('alt') + 'Modal');
+			if($(this).attr('alt') === 'managementOrganizations') {formpointer = $('#' + $(this).attr('alt') + 'Modal form#orgForm');}
+			if($(this).attr('alt') === 'managementUsers') {formpointer = $('#' + $(this).attr('alt') + 'Modal form#userForm');}
+			if($(this).attr('alt') === 'managementApps') {formpointer = $('#' + $(this).attr('alt') + 'Modal form#appForm');}
+			if($(this).attr('alt') === 'managementMakilinks') {makilinkForm = $('#' + $(this).attr('alt') + 'Modal form#makilinkForm');}
+
+			// copy all
+			$('div#' + $(this).parents('div.modal').attr('id') + ' input.formCopy').each( function (i, v) {
+				$(formpointer + ' input[name="' + $(v).attr('name') + '"]').val( $(v).val() );
+			});
+
 			selObj = _.omit($("#manager").jqGrid('getRowData', $('#manager').jqGrid('getGridParam','selrow')), 'editButton');
 //			theId = selObj[whichId];
+			if(type(selObj.orgId) != 'undefined') { $('#orgId').val(selObj.orgId); }
+			if(type(selObj.userId) != 'undefined') { $('#userId').val(selObj.userId); }
+			if(type(selObj.appId) != 'undefined') { $('#appId').val(selObj.appId); }
+			if(type(selObj.makilinkId) != 'undefined') { $('#makilinkId').val(selObj.makilinkId); }
+
+			if($(this).attr('alt') === 'managementUsers') {
+				for(var r in cache['roles']) {
+					if(cache['roles'][r].visibleName == selObj.primaryRole_visibleName) {
+						selObj.roleId = cache['roles'][r].roleId;
+						selObj.roleNo = r;
+						$('input[name="roleId"]').val(selObj.roleId);
+					}
+				}
+			}
 			console.dir(selObj);
+
 			populate( $(this).attr('title'), $(this).attr('alt'), selObj );
+
 			$('#'+$(this).attr('alt')+'Modal').modal('show');
 		});
 	});
 
+	function weSavedOurSouls (p, c) {
+		console.info('heya!');
+		console.dir(p);
+		$('.modal').modal('hide'); 
+		createTableset($('#whichTable').val(), '#manager', {});
+	}
+
+	function populate(frmH, frmM, data) {
+		$.each(data, function(key, value){
+			$('input[name="' + key + '"]', '#'+frmH).val( value );
+			$('input.'+frmM+'[name="' + key + '"]').val( value );
+		});
+		// select the radio button
+		bgname = $('div.btn-group').attr('alt');
+		var selectors = {
+			'platform': platformNames,
+			'trackNames': trackNames,
+			'orgLevel': orglevels,
+		}
+		$('div.btn-group button').removeClass('active');
+		for(var s in selectors) {
+			if(_.indexOf(_.keys(data), s) > -1) {
+				if(_.isNaN(Number(data[s]))) {
+					idx = _.indexOf(selectors[s], data[s]);
+					$('button[title="' + s + '"]').eq( idx ).addClass('active');
+				}else{
+					$('button[title="' + s + '"]').eq( Number(data[s]) ).addClass('active');
+				}
+			}
+		}
+		if(type(data.primaryRole_visibleName) != 'undefined') {
+			$('button[title="roleId"]').eq( _.indexOf(roleNames, data.primaryRole_visibleName)-1 ).addClass('active');
+		}
+	};
+	
 	function onSort () {
 		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
+			
 			$(this).html('<button class="btn btn-primary editButton" title="' + $('#whichId').val() + '" alt="' + $('#whichTable').val() + '" type="button">Edit</button>');
 		});
 	};
@@ -301,12 +346,6 @@ registerActionId		"0"
 			};
 		}
 		return r;
-	};
-	function populate(frmH, frmM, data) {
-		$.each(data, function(key, value){
-			$('input[name="' + key + '"]', '#'+frmH).val( value );
-			$('input.'+frmM+'[name="' + key + '"]').val( value );
-		});
 	};
 	function saveToForm (st, obj, arr) {
 		for(i in arr) {
@@ -323,8 +362,9 @@ registerActionId		"0"
 	function nfillinRoles (rp) {
 		cache['roles'] = rp;
 		for(var i in cache['roles']) {
+//			roleNames.push(cache['roles'][i].visibleName);
 			$('<button type="button" alt="' + cache['roles'][i].roleId + '" title="roleId" ' +
-			'class="btn btn-small buttonToSelect btn-primary">' + cache['roles'][i].description + 
+			'class="btn btn-small buttonToSelect btn-primary">' + cache['roles'][i].visibleName + 
 			'</button>').appendTo( $('#userTypeButtons') );
 		}
 
@@ -337,10 +377,6 @@ registerActionId		"0"
 				}
 			}
 		}
-
-
-
-
 	};
 	function nfillinCampaigns (rp) {
 		cache['camps'] = rp;
@@ -742,14 +778,21 @@ console.log('from closelist '+flags['selected_'+fld]);
 			$('input#gs_editButton, input#gs_appToken, input#gs_marketUrl').remove();
 		}
 
+		$('button.addNew').remove();		// remove the buttons first (on edit, it duplicates)
 		$('.ui-jqgrid-titlebar').append('<button class="btn btn-small btn-primary pull-right addNew" type="button">Add New</button>');
 
 		// EXTRA PULLDOWNA FOR NARROWING DOWN
 		if(menuPath === 'managementUsers') {
-			$('.ui-jqgrid-title').append(' for <select name="orgPulldown" id="orgPulldown" class=""><option value="">[ select org ]</option></select>');
+			$('#orgPulldown').remove();
+			$('#manager').jqGrid('clearGridData');
+			if($('#orgId').val() != ''){pl.orgId = $('#orgId').val();}
+			$('.ui-jqgrid-title').append('<select name="orgPulldown" id="orgPulldown" class=""><option value="">[ select org ]</option></select>');
 		}
 		if(menuPath === 'managementMakilinks') {
-			$('.ui-jqgrid-title').append(' for <select name="campPulldown" id="campPulldown" class=""><option value="">[ select campaign ]</option></select>');
+			$('#campPulldown').remove();
+			$('#manager').jqGrid('clearGridData');
+			if($('#campId').val() != ''){pl.campId = $('#campId').val();}
+			$('.ui-jqgrid-title').append('<select name="campPulldown" id="campPulldown" class=""><option value="">[ select campaign ]</option></select>');
 		}
 		if(cache['orgs'].length > 0) {
 			for(var o in cache['orgs']) {
@@ -761,11 +804,11 @@ console.log('from closelist '+flags['selected_'+fld]);
 				$('#campPulldown').append('<option value="' + cache['camps'][o]['campId'] + '">' + cache['camps'][o]['name'] + '</option>');
 			}
 		}
+		// preselect the dropdown, if previously selected
+		if($('#orgId').val() != ''){$('#orgPulldown').val($('#orgId').val());}
+		if($('#campId').val() != ''){$('#campPulldown').val($('#campId').val());}
 
-
-		platformNames = ['Unknown', 'IOS', 'Android', 'Windows', 'Symbian', 'Tizen']; 
 		userTypeNames = _.pluck(cache['roles'], 'description');
-		trackNames = ['none', 'via UI', 'via Makilink', 'via SDK']; 
 
 		if(type(ts.command) === 'string') {
 
@@ -805,11 +848,12 @@ console.log('from closelist '+flags['selected_'+fld]);
 	function cleanResponse (obj) {
 		obj = flatten(obj);
 
+		if(type(obj.orgLevel) != 'undefined') { 		obj.orgLevel 		= orglevels[ Number(obj.orgLevel) ]; }
 		if(type(obj.platform) != 'undefined') { 		obj.platform 		= platformNames[ Number(obj.platform) ]; }
-		if(type(obj.viewTrack) != 'undefined') { 		obj.viewTrack 		= platformNames[ Number(obj.viewTrack) ]; }
-		if(type(obj.clickTrack) != 'undefined') { 		obj.clickTrack 		= platformNames[ Number(obj.clickTrack) ]; }
-		if(type(obj.installTrack) != 'undefined') { 	obj.installTrack 	= platformNames[ Number(obj.installTrack) ]; }
-		if(type(obj.actionTrack) != 'undefined') { 		obj.viewTrack 		= platformNames[ Number(obj.actionTrack) ]; }
+		if(type(obj.viewTrack) != 'undefined') { 		obj.viewTrack 		= trackNames[ Number(obj.viewTrack) ]; }
+		if(type(obj.clickTrack) != 'undefined') { 		obj.clickTrack 		= trackNames[ Number(obj.clickTrack) ]; }
+		if(type(obj.installTrack) != 'undefined') { 	obj.installTrack 	= trackNames[ Number(obj.installTrack) ]; }
+		if(type(obj.actionTrack) != 'undefined') { 		obj.viewTrack 		= trackNames[ Number(obj.actionTrack) ]; }
 		if(type(obj.start) != 'undefined') { 			obj.start 			= new XDate(parseDMY(obj.start)).toString('d MMM yyyy'); }
 		if(type(obj.end) != 'undefined') { 				obj.end 			= new XDate(parseDMY(obj.end)).toString('d MMM yyyy'); }
 

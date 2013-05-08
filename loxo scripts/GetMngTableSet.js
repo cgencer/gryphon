@@ -16,11 +16,7 @@ function run(request, response){
 		}, 
 		{
 			'path': 'managementUsers', 
-			'command': [
-				{'cmd': 'ListRoles', 'payload': '', 'grab': ''},
-				{'cmd': 'ListOrganizations', 'payload': '', 'grab': 'orgId', 'select': '[FIRST]'},
-				{'cmd': 'ListUsers', 'payload': '', 'grab': '[WHOLE]'}
-			],
+			'command': 'ListUsers',
 			'manage': 'AddUpdateUser',
 			'caption': 'Management / Users',
 			'colNames': ['Id', 'Username', 'Email', 'User Type'],
@@ -28,7 +24,7 @@ function run(request, response){
 				{'name': 'userId', 			'index': 'userId', 			'width': 20}, 
 				{'name': 'name', 			'index': 'name', 			'width': 200}, 
 				{'name': 'email', 			'index': 'email', 			'width': 200}, 
-				{'name': 'visibleName', 	'index': 'visibleName', 	'width': 120}, 
+				{'name': 'primaryRole_visibleName', 	'index': 'primaryRole_visibleName', 	'width': 100}, 
 			]
 		}, 
 		{

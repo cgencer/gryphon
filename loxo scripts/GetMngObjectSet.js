@@ -17,7 +17,7 @@ function run(request, response){
 		},
 		{'RoleInfo': {
 						'_type': 'RoleInfo', 'description': '', 'numberOfUsers': 0, 'roleId': '', 
-						'roleName': '', 'verbs': '', 'visibleName': ''}
+						'roleName': '', 'verbs': {'[INJECT]': 'VerbInfo'}, 'visibleName': ''}
 		},
 		{'UserRoleMatchInfo': {
 						'_type': 'UserRoleMatchInfo', 'appId': '', 'roleInfo': {'[INJECT]': 'RoleInfo'}, 'userInfo': {'[INJECT]': 'UserInfo'} }
@@ -36,6 +36,9 @@ function run(request, response){
 		},
 		{'MakiTagInfo': {
 					'_type': 'MakiTagInfo', 'tagName': '', 'tagValue': ''}
+		},
+		{'VerbInfo': { 
+						'_type': 'VerbInfo', 'verbName': '', 'verbId': '', 'visibleName': '', 'description': ''}
 		},
 		{'MakilinkInfo': {
 					'_type': 'MakilinkInfo', 'backEndUrl': '', 'campId': '', 'makilinkId': null, 

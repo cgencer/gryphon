@@ -317,7 +317,6 @@ console.log('___> '+cmd);
 					realCallbackF( _e );
 				}
 			}
-
 			$.event.trigger({'type': cmd + "ReceivedAndProccessedChainedSet", 'message': '', 'time': new Date()});
 			return checkFlag;
 		};
