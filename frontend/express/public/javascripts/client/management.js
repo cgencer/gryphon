@@ -46,7 +46,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var userDidSelect = false;
 	var selectOrgFlag = false;
 	var newOrgFlag = false;
-	var flags = [];
+	var flags = {'addedApp':false, 'addedOrg': false};
 	var _ts = this;
 	var _role = {};
 	var cache = {'orgs':{},'apps':{},'camps':{},'channels':{}};
@@ -235,9 +235,17 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 			ui = ui.replace('"orgId":""', '"orgId":"' + $('#orgId').val() + '"');
 			ui = ui.replace('"userId":""', '"userId":"' + $('#userId').val() + '"');
 
-			theCmd = 'AddUpdate' + $(formpointer + ' input[name="type"]').val();
+			if(whichTable === 'managementApps') {
+				flags['addedApp'] = true;
+				theCmd = 'AddUpdateApp';
+			}else if(whichTable === 'managementOrganizations') {
+				flags['addedOrg'] = true;
+				theCmd = 'AddUpdateOrganization';
+			}else {
+				theCmd = 'AddUpdate' + $(formpointer + ' input[name="type"]').val();
+			}
 
-			cuteNSexy.runChainedEvents([{'cmd': theCmd, 'success': weSavedOurSouls, 'payload': {
+			cuteNSexy.runChainedEvents([{'cmd': theCmd, isReal: true, 'success': weSavedOurSouls, 'payload': {
 					'command': 1, 'info': $.evalJSON(ui)
 				}
 			}]);
@@ -298,7 +306,14 @@ registerActionId		"0"
 	});
 
 	function weSavedOurSouls (p, c) {
-		console.info('heya!');
+		if(whichTable === 'managementApps') {
+			cuteNSexy.runChainedEvents([{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps}]);
+		}else if(whichTable === 'managementOrganizations') {
+			cuteNSexy.runChainedEvents([{'cmd': 'ListOrganizations', 'payload': {}, 'success': nfillinOrganizations}]);
+		}else {
+			theCmd = 'AddUpdate' + $(formpointer + ' input[name="type"]').val();
+		}
+
 		console.dir(p);
 		$('.modal').modal('hide'); 
 		createTableset($('#whichTable').val(), '#manager', {});
@@ -332,6 +347,20 @@ console.info('index is '+idx);
 		}
 		if(type(data.primaryRole_visibleName) != 'undefined') {
 			$('button[title="roleId"]').eq( _.indexOf(roleNames, data.primaryRole_visibleName)-1 ).addClass('active');
+		}
+	};
+
+	function dblClickRow (rowid, iRow, iCol, e) {
+		if(whichTable === 'managementMakilinks') {
+			console.log('double clicked');
+			selObj = _.omit($("#manager").jqGrid('getRowData', rowid, 'editButton'));
+			for(var i in cache['apps']) {
+				if(cache['apps'][i].appId == selObj.appId) {
+					if(cache['apps'][i].userTokens.length == 1) {
+						console.info(cache['apps'][i].userTokens[0].token);
+					}
+				}
+			}
 		}
 	};
 
@@ -371,6 +400,7 @@ console.info('index is '+idx);
 	};
 	function nfillinOrganizations (rp) {
 		cache['orgs'] = rp;
+		flags['addedOrg'] = false;
 		createAutoCompletes (cache['orgs'], 'managementApps', 'organization', 'userForm', 'addOrgPopup', true, {'cmd': 'ListUsers', 'by': 'orgId', 'fn': nfillinUsers});
 	};
 	function nfillinUsers (rp) {
@@ -437,6 +467,7 @@ console.info('index is '+idx);
 	function fillinApps (appSet) {
 		apps = appSet;
 		cache['apps'] = appSet;
+		flags['addedApp'] = false;
 		$('#sideBarApps').empty();
 		$('#sideBarApps').append(	'<div class="accordion-group sources">' +
 									'<div class="accordion-heading">' +
@@ -769,6 +800,7 @@ console.log('from closelist '+flags['selected_'+fld]);
 			'pager': '#thePager', 'altclass': 'tesla', 'rowNum': 20, 
 			'onHeaderClick': onSort, 
 			'onSortCol': onSort,
+			'ondblClickRow': dblClickRow,
 		});
 		f = '';
 		switch (menuPath) {
@@ -830,16 +862,33 @@ console.log('from closelist '+flags['selected_'+fld]);
 
 		if(type(ts.command) === 'string') {
 
-			cuteNSexy.runChainedEvents([ 
-				{'cmd': ts.command, 'payload': pl, 'success': function (set) {
-				for(var i in set) {
-
-					$(into).jqGrid('addRowData', i, cleanResponse(set[i]));
+			if(whichTable === 'managementApps' && !flags['addedApp']) {
+				if(cache['apps'].length > 0) {
+					for(var i in cache['apps']) {
+						$(into).jqGrid('addRowData', i, cleanResponse(cache['apps'][i]));
+					}
+					onSort();
 				}
-				$(into).jqGrid();
-				onSort();
+			}else if(whichTable === 'managementOrganizations' && !flags['addedOrg']) {
+				if(cache['apps'].length > 0) {
+					for(var i in cache['apps']) {
+						$(into).jqGrid('addRowData', i, cleanResponse(cache['apps'][i]));
+					}
+					onSort();
+				}
+			}else{
+
+				cuteNSexy.runChainedEvents([ 
+					{'cmd': ts.command, 'payload': pl, 'success': function (set) {
+					for(var i in set) {
+
+						$(into).jqGrid('addRowData', i, cleanResponse(set[i]));
+					}
+					onSort();
 				
-			} } ]);
+				} } ]);
+
+			}
 			
 		}else if(type(ts.command) === 'array') {
 
