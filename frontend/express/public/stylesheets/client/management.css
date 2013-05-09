@@ -80,3 +80,6 @@ input.ui-pg-input {
 	height:250px;
 	scrollbar-base-color:#999999;
 }
+#TokensModal {
+	padding:10px;
+}

@@ -27,6 +27,7 @@
 	<script language="javascript" type="text/javascript" src="/javascripts/utils/amplify.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/cuteNSexy/cutesexy.js"></script>
 	<script language="javascript" type="text/javascript" src="/javascripts/client/management.js"></script>
+	<script language="javascript" type="text/javascript" src="/javascripts/utils/jquery.zclip.js"></script>
 
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/stylesheets/ui/uniform/themes/default/css/uniform.default.css" />
 	<link rel="stylesheet" type="text/css" charset="utf-8" href="/javascripts/dom/jqueryui-makina/css/makina/jquery-ui-1.9.2.custom.css">
@@ -176,6 +177,31 @@
 		</div>
 	</div>
 
+	<div id="TokensModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="tokensModal" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+			<h3 id="tokensModal">Tokens</h3>
+		</div>
+		<div class="modal-body">
+			<table width="100%">
+				<thead>
+				<tr>
+					<td>Created by</td>
+					<td>Description</td>
+					<td>Token</td>
+					<td></td>
+				</tr>
+				</thead>
+				<tbody id="tokenRows">
+				
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div>
+	</div>
+	
 	<div id="managementOrganizationsModal" class="modal medium hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>

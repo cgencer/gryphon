@@ -22,7 +22,7 @@ var Gryphon = (function(Gryphon, undefined){
 		next();
 	});
 
-	app.listen(8080);
+	app.listen(80);
 
 	function login (req, res) {
 		if(req.params.formSent === 'true'){

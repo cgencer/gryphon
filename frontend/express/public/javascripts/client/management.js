@@ -63,7 +63,23 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 		objectSets = amplify.store('objectset');
 		tableSets = amplify.store('tableset');
-
+/*
+		$.clipboardReady( function () {
+			$('a.copyTokenButton').click( function () {
+				console.log('clicked');
+				$.clipboard( "You clicked on a link and copied this text!" );
+				return false;
+			});
+		}, { swfpath: './swf/jquery.clipboard.swf', debug: true } );
+*/
+		$('a.copyTokenButton').zclip({
+			'path': 	'./swf/ZeroClipboard.swf',
+			'copy': 	'text', //$(this).attr('title'),
+//			afterCopy: 	function () {
+//				console.log('clicked');
+//			}
+		});
+	
 		cuteNSexy.runChainedEvents([
 			{'cmd': 'ListOrganizations', 'payload': {}, 'success': nfillinOrganizations},
 			{'cmd': 'ListApps', 'payload': {}, 'success': fillinApps},
@@ -75,6 +91,12 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 //			$('#managementModal').clone().appendTo('body').attr('id', $(this).attr('id')+'Modal');
 		});
 
+		// =====================================================================================================
+		// copy to pastebuffer
+		if(whichTable === 'managementApps') {
+
+				
+		}
 		// =====================================================================================================
 		// copy of the form elements to the virtual elements
 		$(document).on('click', 'button.buttonToSelect' , function () {
@@ -139,6 +161,24 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		$(document).on('change keypress', '#campPulldown' , function () {
 			console.log('changed campaign... >'+$("#campPulldown").val());
 			cuteNSexy.runChainedEvents([{'cmd': 'ListMakilinks', 'payload': {'campaignId': $("#campPulldown").val(), 'routerEnable': false}, 'success': fillinMakilinks}]);
+		});
+		$(document).on('click', '.showTokens' , function () {
+			var appid = $(this).attr('title');
+			var row = '<tr><td>#####</td><td>%%%%%</td><td>+++++</td><td><a class="btn btn-primary copyTokenButton" title="+++++" alt="+++++" type="button">Copy Token</button></td></tr>';
+			$('#tokenRows').empty();
+			for (var a in cache['apps']) {
+				if(cache['apps'][a].appId == appid) {
+					for(var i in cache['apps'][a].userTokens) {
+						var rc = row;
+						rc = rc.replace(/[#]{5}/g, cache['apps'][a].userTokens[i].name);
+						rc = rc.replace(/[%]{5}/g, cache['apps'][a].userTokens[i].description);
+						rc = rc.replace(/[+]{5}/g, cache['apps'][a].userTokens[i].token);
+						$('#tokenRows').append(rc);
+					}
+					tset = "";
+				}
+			}
+			$('#TokensModal').modal('show');
 		});
 		$(document).on('click', '.addRow' , function () {
 
@@ -366,7 +406,22 @@ console.info('index is '+idx);
 
 	function onSort () {
 		$('[aria-describedby="manager_editButton"]').each( function (i, v) {
-			$(this).html('<button class="btn btn-primary editButton" title="' + $('#whichId').val() + '" alt="' + $('#whichTable').val() + '" type="button">Edit</button>');
+			var gtb = '';
+			rowObj = _.omit($("#manager").jqGrid('getRowData', i), 'editButton');
+			if(whichTable == 'managementApps') {
+				for(var i in cache['apps']) {
+					if(cache['apps'][i].appId == rowObj.appId) {
+//						console.log(rowObj.appId);
+						if(cache['apps'][i].userTokens.length == 1) {
+							gtb = '&nbsp;&nbsp;<a class="btn btn-primary copyTokenButton" title="' + cache['apps'][i].userTokens[0].token + 
+								'" alt="' + $('#whichTable').val() + '">Copy Token</a>';
+						}else if(cache['apps'][i].userTokens.length > 1) {
+							gtb = '&nbsp;&nbsp;<a class="btn btn-primary showTokens" title="' + rowObj.appId + '" alt="' + $('#whichTable').val() + '" type="button">Show Tokens</a>'
+						}
+					}
+				}
+			}
+			$(this).html('<button class="btn btn-primary editButton" title="' + $('#whichId').val() + '" alt="' + $('#whichTable').val() + '" type="button">Edit</button>' + gtb);
 		});
 		if($('#whichTable').val() == 'managementApps') {
 			$('[aria-describedby="manager_tokens"]').each( function (i, v) {
@@ -377,7 +432,7 @@ console.info('index is '+idx);
 						if(cache['apps'][i].userTokens.length == 1) {
 							$(this).html( '<div class="userAppToken" alt="' + cache['apps'][i].userTokens[0].token + '">' + cache['apps'][i].userTokens[0].name + '</div>' );
 						}else if(cache['apps'][i].userTokens.length > 1) {
-							$(this).html('<button class="btn btn-primary tokenButton" title="' + selObj.appId + '" alt="' + $('#whichTable').val() + '" type="button">Show Tokens</button>');
+							$(this).html('<small>[ multiple ]</small>');
 						}
 					}
 				}
@@ -783,7 +838,7 @@ console.log('from closelist '+flags['selected_'+fld]);
 			cn = ts.colNames;
 			cn.push('');
 			cm = ts.colModel;
-			cm.push({'width':50, 'name': 'editButton'});
+			cm.push({'width':145, 'name': 'editButton'});
 		}else{
 			cn = ts.colNames;
 			cm = ts.colModel;
