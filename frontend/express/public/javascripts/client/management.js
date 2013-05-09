@@ -46,7 +46,7 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 	var userDidSelect = false;
 	var selectOrgFlag = false;
 	var newOrgFlag = false;
-	var flags = {'addedApp':false, 'addedOrg': false};
+	var flags = {'addedApp':false, 'addedOrg': false, 'itCameFromTheManagementMakilinks': false};
 	var _ts = this;
 	var _role = {};
 	var cache = {'orgs':{},'apps':{},'camps':{},'channels':{}};
@@ -129,16 +129,23 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 		});
 
 		$(document).on('click', '.subLinks.appLinks' , function () {
-//			$('div#sideBarApps.accordion').collapse('toggle');
+			$('div#collapseApps.accordion-body').collapse('hide');
+
 			whichApp = $(this).attr('id');
 			$('#appId').val(whichApp);
+
 			if(whichApp != '') {
 				cuteNSexy.runChainedEvents([
 					{'cmd': 'ListCampaign', 'payload': {'applicationId': whichApp}, 'success': nfillinCampaigns},
 				]);
 			}
-//			$('#sideBarApps').collapse('toggle');
-//			$('#sideBarManagement').collapse('show');
+
+			if(flags['itCameFromTheManagementMakilinks']) {
+				$('div#collapseFive.accordion-body').collapse('show');
+				$('div#collapseApps.accordion-body').collapse('hide');
+				createTableset('managementMakilinks', '#manager', {});
+				flags['itCameFromTheManagementMakilinks'] = false;
+			}
 		});
 		$(document).on('click', '.subLinks.managementLinks' , function () {
 			$('#rightSide').html('<table id="manager"></table><div id="thePager"></div>');
@@ -147,11 +154,16 @@ var GryphonManagement = (function(GryphonManagement, $, undefined){
 
 			whichId = $(this).attr('alt');
 			$('#whichId').val(whichId);
+			if(whichTable == 'managementMakilinks' && whichApp == '') {
+				flags['itCameFromTheManagementMakilinks'] = true;
+				$('div#collapseFive.accordion-body').collapse('hide');
+				$('div#collapseApps.accordion-body').collapse('show');
 
-			if(whichTable === 'managementMakilinks' && whichApp === '') {
-				$('.selector').accordion( "option", "active", 2 );
+				$('#rightSide').append( $("#alertSelectApp").clone() );
+				$('#alertSelectApp').show();
+			}else{
+				createTableset(whichTable, '#manager', {});
 			}
-			createTableset(whichTable, '#manager', {});
 		});
 		$(document).on('change', '#orgPulldown' , function () {
 			console.log('changed orga...');
