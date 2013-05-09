@@ -28,31 +28,6 @@ function run(request, response){
 			]
 		}, 
 		{
-			'path': 'managementUserRolesforApps', 
-			'command': 'ListUserRoleMatch',
-			'manage': 'AddUpdateUserRoleMatch',
-			'caption': 'Management / User Roles for Apps',
-			'colNames': ['Role Key Name', 'Full Name', 'Username', 'Email'],
-			'colModel': [
-		{'name': 'description', 	'index': 'description', 		'width': 200}, 
-		{'name': 'numberOfApps', 	'index': 'numberOfApps', 		'width':  40, 	'align':'right'}, 
-		{'name': 'numberOfUsers', 	'index': 'numberOfUsers', 		'width':  40, 	'align':'right'}, 
-		{'name': 'orgId', 			'index': 'orgId', 				'width': 120, 	'align':'right'}, 
-			]
-		}, 
-		{
-			'path': 'managementUserTokenforApps', 
-			'command': 'AppWizListUserTokens',
-			'manage': {'add': {'cmd': 'AppWizGetToken', 'data': {'appId':'', 'orgId': '', 'userId': ''}}},
-			'caption': 'Management / User Token for Apps',
-			'colNames': ['Full Name', 'Email', 'Token'],
-			'colModel': [
-				{'name': 'name', 			'index': 'name', 		'width': 200}, 
-				{'name': 'email', 			'index': 'email', 		'width':  40, 	'align':'right'}, 
-				{'name': 'token', 			'index': 'token', 		'width':  40, 	'align':'right'}, 
-			]
-		}, 
-		{
 			'path': 'managementApps', 
 			'command': 'ListApps',
 			'manage': 'AddUpdateApp',
@@ -60,11 +35,11 @@ function run(request, response){
 			'colNames': ['Id', 'Name', 'Platform', 'Token Owners', 'Description', 'URL'],
 			'colModel': [
 		{'name': 'appId',	 		'index': 'appId', 			'width': 20}, 
-		{'name': 'appname', 		'index': 'appname', 		'width': 200}, 
+		{'name': 'appname', 		'index': 'appname', 		'width': 170}, 
 		{'name': 'platform', 		'index': 'platform', 		'width':  60,}, 
 		{'name': 'tokens',	 		'index': 'tokens', 			'width': 120, 	'align':'center'}, 
-		{'name': 'description', 	'index': 'description', 	'width': 200}, 
-		{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 200}
+		{'name': 'description', 	'index': 'description', 	'width': 150}, 
+		{'name': 'marketUrl', 		'index': 'marketUrl', 		'width': 140}
 			]
 		}, 
 		{
